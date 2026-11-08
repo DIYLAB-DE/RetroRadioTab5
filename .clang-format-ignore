@@ -1,0 +1,7 @@
+# Fremde, erzeugte und eingebettete Dateien bleiben unverändert.
+referenz/*
+src/fonts/*
+include/fonts/*
+include/images/*
+include/index_html_gz.h
+include/IconShapeData.h

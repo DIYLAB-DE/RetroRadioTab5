@@ -1,0 +1,7 @@
+# Name, Type, SubType, Offset, Size, Flags
+# NVS, PHY und C6-Referenzimage entsprechen der am 08.10.2026 gelesenen Gerätetabelle.
+nvs, data, nvs, 0x9000, 0x6000,
+phy_init, data, phy, 0xf000, 0x1000,
+slave_fw, data, 0x40, 0x310000, 0x200000,
+stations, data, 0x80, 0x510000, 0x10000,
+factory, app, factory, 0x520000, 0xae0000,

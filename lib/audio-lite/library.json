@@ -1,0 +1,27 @@
+{
+  "name": "audio-lite",
+  "version": "0.1.0",
+  "description": "Arduino-freier Ersatz für ESP32-audioI2S 3.4.7, reduziert auf den Funktionsumfang, den das RetroRadio-Projekt tatsächlich benutzt. Nutzt intern ausschließlich ESP-IDF-APIs und baut trotzdem im Arduino-Framework.",
+  "keywords": "audio, i2s, esp32, esp32-s3, mp3, aac, flac, vorbis, streaming",
+  "authors": [
+    {
+      "name": "schreibfaul1",
+      "url": "https://github.com/schreibfaul1/ESP32-audioI2S"
+    },
+    {
+      "name": "audio-lite",
+      "maintainer": true
+    }
+  ],
+  "license": "GPL-3.0",
+  "dependencies": {},
+  "frameworks": [
+    "arduino"
+  ],
+  "platforms": "espressif32",
+  "headers": "Audio.h",
+  "build": {
+    "srcDir": "src",
+    "includeDir": "src"
+  }
+}

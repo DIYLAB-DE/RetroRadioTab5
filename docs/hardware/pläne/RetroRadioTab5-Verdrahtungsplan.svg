@@ -1,0 +1,617 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="1414" viewBox="0 0 2000 1414">
+<rect width="2000" height="1414" fill="#ffffff"/>
+<text x="60.0" y="64.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="40" font-weight="800" fill="#111111" text-anchor="start">Verdrahtung Tab5 M5-Bus &lt;-&gt; M5Stamp Pico</text>
+<text x="120.0" y="150.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="30" font-weight="700" fill="#222222" text-anchor="start">Tab5: M5-Bus</text>
+<rect x="120.0" y="170.0" width="600.0" height="42.0" rx="6" fill="#2d7be5"/>
+<text x="132.0" y="197.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="start">FUNKTION</text>
+<text x="232.0" y="197.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="start">PIN</text>
+<text x="332.0" y="197.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="start">LINKS</text>
+<text x="432.0" y="197.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="start">RECHTS</text>
+<text x="532.0" y="197.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="start">PIN</text>
+<text x="632.0" y="197.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="700" fill="#ffffff" text-anchor="start">FUNKTION</text>
+<rect x="120.0" y="212.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="220.0" y="212.0" width="100.0" height="44.0" rx="0" fill="#000000" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="241.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">GND</text>
+<rect x="520.0" y="212.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="241.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G16</text>
+<rect x="620.0" y="212.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="634.0" y="241.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">GPIO</text>
+<rect x="320.0" y="212.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="326.0" y="217.0" width="88.0" height="34.0" rx="4" fill="#5e5e5e" stroke="#1a1a1a" stroke-width="5"/>
+<text x="338.0" y="241.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">1</text>
+<rect x="420.0" y="212.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="426.0" y="217.0" width="88.0" height="34.0" rx="4" fill="#5e5e5e" stroke="#ff8a00" stroke-width="5"/>
+<text x="438.0" y="241.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">2</text>
+<rect x="120.0" y="256.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="220.0" y="256.0" width="100.0" height="44.0" rx="0" fill="#000000" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="285.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">GND</text>
+<rect x="520.0" y="256.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="285.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G17</text>
+<rect x="620.0" y="256.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="634.0" y="285.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">PB_IN</text>
+<rect x="320.0" y="256.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="328.0" y="263.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="338.0" y="285.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">3</text>
+<rect x="420.0" y="256.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="426.0" y="261.0" width="88.0" height="34.0" rx="4" fill="#5e5e5e" stroke="#f2c200" stroke-width="5"/>
+<text x="438.0" y="285.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">4</text>
+<rect x="120.0" y="300.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="220.0" y="300.0" width="100.0" height="44.0" rx="0" fill="#000000" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="329.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">GND</text>
+<rect x="520.0" y="300.0" width="100.0" height="44.0" rx="0" fill="#9e9e9e" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="329.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">RST</text>
+<rect x="620.0" y="300.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="634.0" y="329.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">EN</text>
+<rect x="320.0" y="300.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="328.0" y="307.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="338.0" y="329.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">5</text>
+<rect x="420.0" y="300.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="428.0" y="307.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="438.0" y="329.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">6</text>
+<rect x="120.0" y="344.0" width="100.0" height="44.0" rx="0" fill="#00bfe3" stroke="#ffffff" stroke-width="1.5"/>
+<text x="134.0" y="373.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">MOSI</text>
+<rect x="220.0" y="344.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="373.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G18</text>
+<rect x="520.0" y="344.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="373.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G45</text>
+<rect x="620.0" y="344.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="634.0" y="373.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">GPIO</text>
+<rect x="320.0" y="344.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="326.0" y="349.0" width="88.0" height="34.0" rx="4" fill="#5e5e5e" stroke="#2e9e3e" stroke-width="5"/>
+<text x="338.0" y="373.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">7</text>
+<rect x="420.0" y="344.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="428.0" y="351.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="438.0" y="373.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">8</text>
+<rect x="120.0" y="388.0" width="100.0" height="44.0" rx="0" fill="#00bfe3" stroke="#ffffff" stroke-width="1.5"/>
+<text x="134.0" y="417.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">MISO</text>
+<rect x="220.0" y="388.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="417.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G19</text>
+<rect x="520.0" y="388.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="417.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G52</text>
+<rect x="620.0" y="388.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="634.0" y="417.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">PB_OUT</text>
+<rect x="320.0" y="388.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="328.0" y="395.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="338.0" y="417.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">9</text>
+<rect x="420.0" y="388.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="428.0" y="395.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="438.0" y="417.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">10</text>
+<rect x="120.0" y="432.0" width="100.0" height="44.0" rx="0" fill="#00bfe3" stroke="#ffffff" stroke-width="1.5"/>
+<text x="134.0" y="461.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">SCK</text>
+<rect x="220.0" y="432.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="461.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G5</text>
+<rect x="520.0" y="432.0" width="100.0" height="44.0" rx="0" fill="#b22222" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="461.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">3V3</text>
+<rect x="620.0" y="432.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="320.0" y="432.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="328.0" y="439.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="338.0" y="461.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">11</text>
+<rect x="420.0" y="432.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="426.0" y="437.0" width="88.0" height="34.0" rx="4" fill="#5e5e5e" stroke="#ff3b3b" stroke-width="3" stroke-dasharray="7 5"/>
+<text x="438.0" y="461.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">12</text>
+<rect x="120.0" y="476.0" width="100.0" height="44.0" rx="0" fill="#2db039" stroke="#ffffff" stroke-width="1.5"/>
+<text x="134.0" y="505.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">RXD0</text>
+<rect x="220.0" y="476.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="505.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G38</text>
+<rect x="520.0" y="476.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="505.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G37</text>
+<rect x="620.0" y="476.0" width="100.0" height="44.0" rx="0" fill="#2db039" stroke="#ffffff" stroke-width="1.5"/>
+<text x="634.0" y="505.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">TXD0</text>
+<rect x="320.0" y="476.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="328.0" y="483.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="338.0" y="505.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">13</text>
+<rect x="420.0" y="476.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="428.0" y="483.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="438.0" y="505.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">14</text>
+<rect x="120.0" y="520.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="134.0" y="549.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">PC_RX</text>
+<rect x="220.0" y="520.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="549.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G7</text>
+<rect x="520.0" y="520.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="549.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G6</text>
+<rect x="620.0" y="520.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="634.0" y="549.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">PC_TX</text>
+<rect x="320.0" y="520.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="326.0" y="525.0" width="88.0" height="34.0" rx="4" fill="#5e5e5e" stroke="#1e63d6" stroke-width="5"/>
+<text x="338.0" y="549.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">15</text>
+<rect x="420.0" y="520.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="426.0" y="525.0" width="88.0" height="34.0" rx="4" fill="#5e5e5e" stroke="#8e3ccb" stroke-width="5"/>
+<text x="438.0" y="549.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">16</text>
+<rect x="120.0" y="564.0" width="100.0" height="44.0" rx="0" fill="#234a66" stroke="#ffffff" stroke-width="1.5"/>
+<text x="134.0" y="593.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">Int SDA</text>
+<rect x="220.0" y="564.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="593.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G31</text>
+<rect x="520.0" y="564.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="593.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G32</text>
+<rect x="620.0" y="564.0" width="100.0" height="44.0" rx="0" fill="#234a66" stroke="#ffffff" stroke-width="1.5"/>
+<text x="634.0" y="593.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">Int SCL</text>
+<rect x="320.0" y="564.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="328.0" y="571.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="338.0" y="593.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">17</text>
+<rect x="420.0" y="564.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="428.0" y="571.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="438.0" y="593.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">18</text>
+<rect x="120.0" y="608.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="134.0" y="637.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">GPIO</text>
+<rect x="220.0" y="608.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="637.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G3</text>
+<rect x="520.0" y="608.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="637.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G4</text>
+<rect x="620.0" y="608.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="634.0" y="637.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">GPIO</text>
+<rect x="320.0" y="608.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="328.0" y="615.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="338.0" y="637.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">19</text>
+<rect x="420.0" y="608.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="428.0" y="615.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="438.0" y="637.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">20</text>
+<rect x="120.0" y="652.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="134.0" y="681.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">GPIO</text>
+<rect x="220.0" y="652.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="681.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G2</text>
+<rect x="520.0" y="652.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="681.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G48</text>
+<rect x="620.0" y="652.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="634.0" y="681.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">GPIO</text>
+<rect x="320.0" y="652.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="328.0" y="659.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="338.0" y="681.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">21</text>
+<rect x="420.0" y="652.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="428.0" y="659.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="438.0" y="681.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">22</text>
+<rect x="120.0" y="696.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="134.0" y="725.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">GPIO</text>
+<rect x="220.0" y="696.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="725.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G47</text>
+<rect x="520.0" y="696.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="725.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G35</text>
+<rect x="620.0" y="696.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="634.0" y="725.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">GPIO</text>
+<rect x="320.0" y="696.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="328.0" y="703.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="338.0" y="725.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">23</text>
+<rect x="420.0" y="696.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="428.0" y="703.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="438.0" y="725.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">24</text>
+<rect x="120.0" y="740.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="220.0" y="740.0" width="100.0" height="44.0" rx="0" fill="#ffa500" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="769.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">HVIN</text>
+<rect x="520.0" y="740.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="769.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">G51</text>
+<rect x="620.0" y="740.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<text x="634.0" y="769.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#2c3e50" text-anchor="start">GPIO</text>
+<rect x="320.0" y="740.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="326.0" y="745.0" width="88.0" height="34.0" rx="4" fill="#5e5e5e" stroke="#ff3b3b" stroke-width="3" stroke-dasharray="7 5"/>
+<text x="338.0" y="769.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">25</text>
+<rect x="420.0" y="740.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="428.0" y="747.0" width="84.0" height="30.0" rx="2" fill="#5e5e5e"/>
+<text x="438.0" y="769.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">26</text>
+<rect x="120.0" y="784.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="220.0" y="784.0" width="100.0" height="44.0" rx="0" fill="#ffa500" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="813.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">HVIN</text>
+<rect x="520.0" y="784.0" width="100.0" height="44.0" rx="0" fill="#b22222" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="813.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">5V</text>
+<rect x="620.0" y="784.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="320.0" y="784.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="326.0" y="789.0" width="88.0" height="34.0" rx="4" fill="#5e5e5e" stroke="#ff3b3b" stroke-width="3" stroke-dasharray="7 5"/>
+<text x="338.0" y="813.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">27</text>
+<rect x="420.0" y="784.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="426.0" y="789.0" width="88.0" height="34.0" rx="4" fill="#5e5e5e" stroke="#d0021b" stroke-width="5"/>
+<text x="438.0" y="813.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">28</text>
+<rect x="120.0" y="828.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="220.0" y="828.0" width="100.0" height="44.0" rx="0" fill="#ffa500" stroke="#ffffff" stroke-width="1.5"/>
+<text x="234.0" y="857.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">HVIN</text>
+<rect x="520.0" y="828.0" width="100.0" height="44.0" rx="0" fill="#a0207f" stroke="#ffffff" stroke-width="1.5"/>
+<text x="534.0" y="857.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">BAT</text>
+<rect x="620.0" y="828.0" width="100.0" height="44.0" rx="0" fill="#f2f4f6" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="320.0" y="828.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="326.0" y="833.0" width="88.0" height="34.0" rx="4" fill="#5e5e5e" stroke="#ff3b3b" stroke-width="3" stroke-dasharray="7 5"/>
+<text x="338.0" y="857.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">29</text>
+<rect x="420.0" y="828.0" width="100.0" height="44.0" rx="0" fill="#3c3c3c" stroke="#ffffff" stroke-width="1.5"/>
+<rect x="426.0" y="833.0" width="88.0" height="34.0" rx="4" fill="#5e5e5e" stroke="#ff3b3b" stroke-width="3" stroke-dasharray="7 5"/>
+<text x="438.0" y="857.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="700" fill="#ffffff" text-anchor="start">30</text>
+<text x="1004.0" y="150.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="30" font-weight="700" fill="#222222" text-anchor="start">M5Stamp Pico</text>
+<path d="M1390.0,207.6 L1698.0,207.6 L1720.0,229.6 L1720.0,653.6 L1698.0,675.6 L1390.0,675.6 L1368.0,653.6 L1368.0,229.6 Z" fill="#141414"/>
+<rect x="1420.0" y="211.6" width="288.0" height="116.0" rx="4" fill="#b9bcc0" stroke="#8d9196" stroke-width="2"/>
+<rect x="1548.0" y="215.6" width="152.0" height="64.0" rx="3" fill="#d4d6d9"/>
+<text x="1564.0" y="311.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="16" font-weight="700" fill="#55595e" text-anchor="start">ANTENNE</text>
+<rect x="1512.0" y="327.6" width="152.0" height="112.0" rx="4" fill="#262626" stroke="#444444" stroke-width="2"/>
+<text x="1588.0" y="379.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="17" font-weight="700" fill="#9a9a9a" text-anchor="middle">ESP32-</text>
+<text x="1588.0" y="399.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="17" font-weight="700" fill="#9a9a9a" text-anchor="middle">PICO-D4</text>
+<rect x="1429.6" y="351.6" width="54.4" height="80.0" rx="3" fill="#cfcfcf"/>
+<circle cx="1456.8" cy="391.6" r="16.0" fill="#3a3a3a"/>
+<text x="1456.8" y="455.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#9a9a9a" text-anchor="middle">G39</text>
+<rect x="1420.0" y="481.2" width="68.0" height="70.4" rx="3" fill="#f4f4f4"/>
+<text x="1453.6" y="575.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#9a9a9a" text-anchor="middle">LED G27</text>
+<circle cx="1544.0" cy="515.6" r="40.0" fill="#c9a63a"/>
+<circle cx="1544.0" cy="515.6" r="14.4" fill="#ffffff"/>
+<rect x="1381.6" y="226.8" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1394.4" cy="239.6" r="6.4" fill="#f6f0d8"/>
+<circle cx="1361.6" cy="239.6" r="7.2" fill="#1e88e5"/>
+<rect x="1381.6" y="277.2" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1394.4" cy="290.0" r="6.4" fill="#f6f0d8"/>
+<circle cx="1361.6" cy="290.0" r="7.2" fill="#1e88e5"/>
+<rect x="1381.6" y="327.6" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1394.4" cy="340.4" r="6.4" fill="#f6f0d8"/>
+<circle cx="1361.6" cy="340.4" r="7.2" fill="#1e88e5"/>
+<rect x="1381.6" y="378.0" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1394.4" cy="390.8" r="6.4" fill="#f6f0d8"/>
+<circle cx="1361.6" cy="390.8" r="7.2" fill="#1e88e5"/>
+<rect x="1681.6" y="378.0" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1694.4" cy="390.8" r="6.4" fill="#f6f0d8"/>
+<circle cx="1725.6" cy="390.8" r="7.2" fill="#1e88e5"/>
+<rect x="1381.6" y="428.4" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1394.4" cy="441.2" r="6.4" fill="#f6f0d8"/>
+<circle cx="1361.6" cy="441.2" r="7.2" fill="#1e88e5"/>
+<rect x="1681.6" y="428.4" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1694.4" cy="441.2" r="6.4" fill="#f6f0d8"/>
+<circle cx="1725.6" cy="441.2" r="7.2" fill="#1e88e5"/>
+<rect x="1381.6" y="478.8" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1394.4" cy="491.6" r="6.4" fill="#f6f0d8"/>
+<circle cx="1361.6" cy="491.6" r="7.2" fill="#1e88e5"/>
+<rect x="1681.6" y="478.8" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1694.4" cy="491.6" r="6.4" fill="#f6f0d8"/>
+<circle cx="1725.6" cy="491.6" r="7.2" fill="#1e88e5"/>
+<rect x="1381.6" y="529.2" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1394.4" cy="542.0" r="6.4" fill="#f6f0d8"/>
+<circle cx="1361.6" cy="542.0" r="7.2" fill="#1e88e5"/>
+<rect x="1681.6" y="529.2" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1694.4" cy="542.0" r="6.4" fill="#f6f0d8"/>
+<circle cx="1725.6" cy="542.0" r="7.2" fill="#1e88e5"/>
+<rect x="1381.6" y="579.6" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1394.4" cy="592.4" r="6.4" fill="#f6f0d8"/>
+<circle cx="1361.6" cy="592.4" r="7.2" fill="#1e88e5"/>
+<rect x="1681.6" y="579.6" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1694.4" cy="592.4" r="6.4" fill="#f6f0d8"/>
+<circle cx="1725.6" cy="592.4" r="7.2" fill="#1e88e5"/>
+<rect x="1381.6" y="630.0" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1394.4" cy="642.8" r="6.4" fill="#f6f0d8"/>
+<circle cx="1361.6" cy="642.8" r="7.2" fill="#1e88e5"/>
+<rect x="1681.6" y="630.0" width="25.6" height="25.6" rx="3" fill="#d8b84a"/>
+<circle cx="1694.4" cy="642.8" r="6.4" fill="#f6f0d8"/>
+<circle cx="1725.6" cy="642.8" r="7.2" fill="#1e88e5"/>
+<rect x="1455.2" y="611.6" width="25.6" height="60.0" rx="3" fill="#d8b84a"/>
+<circle cx="1468.0" cy="639.6" r="6.4" fill="#f6f0d8"/>
+<circle cx="1468.0" cy="682.0" r="7.2" fill="#1e88e5"/>
+<rect x="1504.8" y="611.6" width="25.6" height="60.0" rx="3" fill="#d8b84a"/>
+<circle cx="1517.6" cy="639.6" r="6.4" fill="#f6f0d8"/>
+<circle cx="1517.6" cy="682.0" r="7.2" fill="#1e88e5"/>
+<rect x="1555.2" y="611.6" width="25.6" height="60.0" rx="3" fill="#d8b84a"/>
+<circle cx="1568.0" cy="639.6" r="6.4" fill="#f6f0d8"/>
+<circle cx="1568.0" cy="682.0" r="7.2" fill="#1e88e5"/>
+<rect x="1604.8" y="611.6" width="25.6" height="60.0" rx="3" fill="#d8b84a"/>
+<circle cx="1617.6" cy="639.6" r="6.4" fill="#f6f0d8"/>
+<circle cx="1617.6" cy="682.0" r="7.2" fill="#1e88e5"/>
+<rect x="1004.0" y="220.4" width="105.6" height="38.4" rx="7" fill="#ffc700"/>
+<text x="1056.8" y="249.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#2a2a2a" text-anchor="middle">DAC2</text>
+<rect x="1126.4" y="220.4" width="107.2" height="38.4" rx="7" fill="#0a14e8"/>
+<text x="1180.0" y="249.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">MOSI</text>
+<rect x="1249.6" y="220.4" width="88.0" height="38.4" rx="7" fill="#9a9a9a"/>
+<text x="1293.6" y="249.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">G26</text>
+<rect x="1004.0" y="270.8" width="105.6" height="38.4" rx="7" fill="#f3b6cd"/>
+<text x="1056.8" y="300.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#2a2a2a" text-anchor="middle">ADC</text>
+<rect x="1126.4" y="270.8" width="107.2" height="38.4" rx="7" fill="#0a14e8"/>
+<text x="1180.0" y="300.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">MISO</text>
+<rect x="1249.6" y="270.8" width="88.0" height="38.4" rx="7" fill="#a6c91f"/>
+<text x="1293.6" y="300.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">G36</text>
+<rect x="1126.4" y="321.2" width="107.2" height="38.4" rx="7" fill="#0a14e8"/>
+<text x="1180.0" y="350.4" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">SCK</text>
+<rect x="1249.6" y="321.2" width="88.0" height="38.4" rx="7" fill="#9a9a9a" stroke="#ff8a00" stroke-width="5"/>
+<text x="1293.6" y="350.4" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">G18</text>
+<rect x="1126.4" y="371.6" width="107.2" height="38.4" rx="7" fill="#0a14e8"/>
+<text x="1180.0" y="400.8" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">CS</text>
+<rect x="1249.6" y="371.6" width="88.0" height="38.4" rx="7" fill="#9a9a9a" stroke="#f2c200" stroke-width="5"/>
+<text x="1293.6" y="400.8" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">G19</text>
+<rect x="1126.4" y="422.0" width="107.2" height="38.4" rx="7" fill="#8b0a9e"/>
+<text x="1180.0" y="451.2" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">SDA</text>
+<rect x="1249.6" y="422.0" width="88.0" height="38.4" rx="7" fill="#9a9a9a" stroke="#2e9e3e" stroke-width="5"/>
+<text x="1293.6" y="451.2" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">G21</text>
+<rect x="1126.4" y="472.4" width="107.2" height="38.4" rx="7" fill="#8b0a9e"/>
+<text x="1180.0" y="501.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">SCL</text>
+<rect x="1249.6" y="472.4" width="88.0" height="38.4" rx="7" fill="#9a9a9a" stroke="#1e63d6" stroke-width="5"/>
+<text x="1293.6" y="501.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">G22</text>
+<rect x="1126.4" y="522.8" width="107.2" height="38.4" rx="7" fill="#ffc700"/>
+<text x="1180.0" y="552.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#2a2a2a" text-anchor="middle">DAC1</text>
+<rect x="1249.6" y="522.8" width="88.0" height="38.4" rx="7" fill="#9a9a9a" stroke="#8e3ccb" stroke-width="5"/>
+<text x="1293.6" y="552.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">G25</text>
+<rect x="1249.6" y="573.2" width="88.0" height="38.4" rx="7" fill="#c8173d" stroke="#d0021b" stroke-width="5"/>
+<text x="1293.6" y="602.4" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">5V</text>
+<rect x="1249.6" y="623.6" width="88.0" height="38.4" rx="7" fill="#2a2a2a" stroke="#1a1a1a" stroke-width="5"/>
+<text x="1293.6" y="652.8" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">GND</text>
+<rect x="1750.4" y="371.6" width="88.0" height="38.4" rx="7" fill="#c8173d"/>
+<text x="1794.4" y="400.8" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">3V3</text>
+<rect x="1750.4" y="422.0" width="88.0" height="38.4" rx="7" fill="#9a9a9a"/>
+<text x="1794.4" y="451.2" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">G1</text>
+<rect x="1854.4" y="422.0" width="107.2" height="38.4" rx="7" fill="#0a9a48"/>
+<text x="1908.0" y="451.2" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">Tx0</text>
+<rect x="1750.4" y="472.4" width="88.0" height="38.4" rx="7" fill="#9a9a9a"/>
+<text x="1794.4" y="501.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">G3</text>
+<rect x="1854.4" y="472.4" width="107.2" height="38.4" rx="7" fill="#0a9a48"/>
+<text x="1908.0" y="501.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">Rx0</text>
+<rect x="1750.4" y="522.8" width="88.0" height="38.4" rx="7" fill="#4a4a4a"/>
+<text x="1794.4" y="552.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">EN</text>
+<rect x="1750.4" y="573.2" width="88.0" height="38.4" rx="7" fill="#9a9a9a"/>
+<text x="1794.4" y="602.4" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">G0</text>
+<rect x="1750.4" y="623.6" width="88.0" height="38.4" rx="7" fill="#2a2a2a"/>
+<text x="1794.4" y="652.8" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">GND</text>
+<rect x="1346.4" y="756.8" width="88.0" height="38.4" rx="7" fill="#2a2a2a" stroke="#1a1a1a" stroke-width="5"/>
+<text x="1390.4" y="786.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">GND</text>
+<rect x="1450.4" y="756.8" width="86.4" height="38.4" rx="7" fill="#c8173d" stroke="#d0021b" stroke-width="5"/>
+<text x="1493.6" y="786.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">5V</text>
+<rect x="1553.6" y="756.8" width="88.0" height="38.4" rx="7" fill="#9a9a9a" stroke="#8b5a2b" stroke-width="5"/>
+<text x="1597.6" y="786.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">G32</text>
+<rect x="1657.6" y="756.8" width="88.0" height="38.4" rx="7" fill="#9a9a9a" stroke="#7a7a7a" stroke-width="5"/>
+<text x="1701.6" y="786.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#ffffff" text-anchor="middle">G33</text>
+<rect x="1553.6" y="806.4" width="88.0" height="38.4" rx="7" fill="#f3b6cd"/>
+<text x="1597.6" y="835.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#2a2a2a" text-anchor="middle">ADC</text>
+<rect x="1657.6" y="806.4" width="88.0" height="38.4" rx="7" fill="#f3b6cd"/>
+<text x="1701.6" y="835.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="28" font-weight="600" fill="#2a2a2a" text-anchor="middle">ADC</text>
+<path d="M1949.6,368.8 L1965.6,368.8 L1965.6,664.8 L1949.6,664.8" fill="none" stroke="#555555" stroke-width="3"/>
+<text x="1764.4" y="720.8" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="600" fill="#444444" text-anchor="start">Programmieradapter</text>
+<text x="1764.4" y="744.8" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="600" fill="#444444" text-anchor="start">nur bei gezogenem</text>
+<text x="1764.4" y="768.8" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="600" fill="#444444" text-anchor="start">Jumper anstecken</text>
+<rect x="1060.0" y="900.0" width="84.0" height="24.0" rx="3" fill="#f3b6cd"/>
+<text x="1102.0" y="946.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#333333" text-anchor="middle">ADC</text>
+<rect x="1160.0" y="900.0" width="84.0" height="24.0" rx="3" fill="#ffc700"/>
+<text x="1202.0" y="946.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#333333" text-anchor="middle">DAC</text>
+<rect x="1260.0" y="900.0" width="84.0" height="24.0" rx="3" fill="#8b0a9e"/>
+<text x="1302.0" y="946.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#333333" text-anchor="middle">I2C</text>
+<rect x="1360.0" y="900.0" width="84.0" height="24.0" rx="3" fill="#0a9a48"/>
+<text x="1402.0" y="946.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#333333" text-anchor="middle">UART</text>
+<rect x="1460.0" y="900.0" width="84.0" height="24.0" rx="3" fill="#a6c91f"/>
+<text x="1502.0" y="946.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#333333" text-anchor="middle">IN-ONLY</text>
+<rect x="1560.0" y="900.0" width="84.0" height="24.0" rx="3" fill="#9a9a9a"/>
+<text x="1602.0" y="946.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#333333" text-anchor="middle">IN/OUT</text>
+<rect x="1660.0" y="900.0" width="84.0" height="24.0" rx="3" fill="#0a14e8"/>
+<text x="1702.0" y="946.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#333333" text-anchor="middle">SPI</text>
+<rect x="1760.0" y="900.0" width="84.0" height="24.0" rx="3" fill="#c8173d"/>
+<text x="1802.0" y="946.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#333333" text-anchor="middle">POWER</text>
+<rect x="1860.0" y="900.0" width="84.0" height="24.0" rx="3" fill="#2a2a2a"/>
+<text x="1902.0" y="946.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="15" font-weight="700" fill="#333333" text-anchor="middle">GND</text>
+<path d="M726.0,234.0 L940.0,234.0 L940.0,340.4 L1120.4,340.4" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M726.0,234.0 L940.0,234.0 L940.0,340.4 L1120.4,340.4" fill="none" stroke="#ff8a00" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="726.0" cy="234.0" r="8" fill="#ff8a00" stroke="#ffffff" stroke-width="2.5"/>
+<circle cx="1120.4" cy="340.4" r="8" fill="#ff8a00" stroke="#ffffff" stroke-width="2.5"/>
+<text x="1108.4" y="330.4" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="17" font-weight="800" fill="#ff8a00" text-anchor="end">BCLK</text>
+<path d="M726.0,278.0 L900.0,278.0 L900.0,390.8 L1120.4,390.8" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M726.0,278.0 L900.0,278.0 L900.0,390.8 L1120.4,390.8" fill="none" stroke="#f2c200" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="726.0" cy="278.0" r="8" fill="#f2c200" stroke="#ffffff" stroke-width="2.5"/>
+<circle cx="1120.4" cy="390.8" r="8" fill="#f2c200" stroke="#ffffff" stroke-width="2.5"/>
+<text x="1108.4" y="380.8" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="17" font-weight="800" fill="#b08c00" text-anchor="end">WS</text>
+<path d="M726.0,542.0 L1120.4,542.0" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M726.0,542.0 L1120.4,542.0" fill="none" stroke="#8e3ccb" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="726.0" cy="542.0" r="8" fill="#8e3ccb" stroke="#ffffff" stroke-width="2.5"/>
+<circle cx="1120.4" cy="542.0" r="8" fill="#8e3ccb" stroke="#ffffff" stroke-width="2.5"/>
+<text x="1108.4" y="532.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="17" font-weight="800" fill="#8e3ccb" text-anchor="end">RX</text>
+<path d="M726.0,806.0 L760.0,806.0 L760.0,592.4 L1243.6,592.4" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M726.0,806.0 L760.0,806.0 L760.0,592.4 L1243.6,592.4" fill="none" stroke="#d0021b" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="726.0" cy="806.0" r="8" fill="#d0021b" stroke="#ffffff" stroke-width="2.5"/>
+<circle cx="1243.6" cy="592.4" r="8" fill="#d0021b" stroke="#ffffff" stroke-width="2.5"/>
+<text x="1231.6" y="582.4" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="17" font-weight="800" fill="#d0021b" text-anchor="end">5V</text>
+<path d="M114.0,234.0 L58.0,234.0 L58.0,938.0 L860.0,938.0 L860.0,642.8 L1243.6,642.8" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M114.0,234.0 L58.0,234.0 L58.0,938.0 L860.0,938.0 L860.0,642.8 L1243.6,642.8" fill="none" stroke="#1a1a1a" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="114.0" cy="234.0" r="8" fill="#1a1a1a" stroke="#ffffff" stroke-width="2.5"/>
+<circle cx="1243.6" cy="642.8" r="8" fill="#1a1a1a" stroke="#ffffff" stroke-width="2.5"/>
+<text x="1231.6" y="632.8" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="17" font-weight="800" fill="#1a1a1a" text-anchor="end">GND</text>
+<path d="M114.0,366.0 L78.0,366.0 L78.0,918.0 L830.0,918.0 L830.0,441.2 L1120.4,441.2" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M114.0,366.0 L78.0,366.0 L78.0,918.0 L830.0,918.0 L830.0,441.2 L1120.4,441.2" fill="none" stroke="#2e9e3e" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="114.0" cy="366.0" r="8" fill="#2e9e3e" stroke="#ffffff" stroke-width="2.5"/>
+<circle cx="1120.4" cy="441.2" r="8" fill="#2e9e3e" stroke="#ffffff" stroke-width="2.5"/>
+<text x="1108.4" y="431.2" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="17" font-weight="800" fill="#2e9e3e" text-anchor="end">DATEN</text>
+<path d="M114.0,542.0 L98.0,542.0 L98.0,898.0 L800.0,898.0 L800.0,491.6 L1120.4,491.6" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M114.0,542.0 L98.0,542.0 L98.0,898.0 L800.0,898.0 L800.0,491.6 L1120.4,491.6" fill="none" stroke="#1e63d6" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="114.0" cy="542.0" r="8" fill="#1e63d6" stroke="#ffffff" stroke-width="2.5"/>
+<circle cx="1120.4" cy="491.6" r="8" fill="#1e63d6" stroke="#ffffff" stroke-width="2.5"/>
+<text x="1108.4" y="481.6" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="17" font-weight="800" fill="#1e63d6" text-anchor="end">TX</text>
+<rect x="747.0" y="680.0" width="26.0" height="40.0" rx="5" fill="#ffffff" stroke="#d0021b" stroke-width="3"/>
+<circle cx="760.0" cy="691.0" r="4" fill="#d0021b"/>
+<circle cx="760.0" cy="709.0" r="4" fill="#d0021b"/>
+<text x="738.0" y="700.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="15" font-weight="800" fill="#d0021b" text-anchor="middle" transform="rotate(-90 738.0 700.0)">Jumper</text>
+<rect x="1760.0" y="205.0" width="190.0" height="135.0" rx="10" fill="#f6f8fa" stroke="#2c3e50" stroke-width="2"/>
+<text x="1772.0" y="233.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="800" fill="#111111" text-anchor="start">TOSLINK-Sender</text>
+<text x="1772.0" y="255.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="600" fill="#555555" text-anchor="start">Cliff FCR684208T</text>
+<text x="1776.0" y="290.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="800" fill="#e75480" text-anchor="start">Daten</text>
+<text x="1776.0" y="318.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="800" fill="#d0021b" text-anchor="start">VCC 3,3 V</text>
+<text x="1934.0" y="332.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="800" fill="#1a1a1a" text-anchor="end">GND</text>
+<path d="M1361.6,239.6 L1361.6,186.0 L1745.0,186.0 L1745.0,285.0 L1760.0,285.0" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1361.6,239.6 L1361.6,186.0 L1745.0,186.0 L1745.0,285.0 L1760.0,285.0" fill="none" stroke="#e75480" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1361.6" cy="239.6" r="8" fill="#e75480" stroke="#ffffff" stroke-width="2.5"/>
+<circle cx="1760.0" cy="285.0" r="8" fill="#e75480" stroke="#ffffff" stroke-width="2.5"/>
+<path d="M1725.6,390.8 L1736.0,390.8 L1736.0,313.0 L1760.0,313.0" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1725.6,390.8 L1736.0,390.8 L1736.0,313.0 L1760.0,313.0" fill="none" stroke="#d0021b" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1725.6" cy="390.8" r="8" fill="#d0021b" stroke="#ffffff" stroke-width="2.5"/>
+<circle cx="1760.0" cy="313.0" r="8" fill="#d0021b" stroke="#ffffff" stroke-width="2.5"/>
+<path d="M1725.6,642.8 L1738.0,642.8 L1738.0,694.0 L1975.0,694.0 L1975.0,327.0 L1950.0,327.0" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1725.6,642.8 L1738.0,642.8 L1738.0,694.0 L1975.0,694.0 L1975.0,327.0 L1950.0,327.0" fill="none" stroke="#1a1a1a" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1725.6" cy="642.8" r="8" fill="#1a1a1a" stroke="#ffffff" stroke-width="2.5"/>
+<circle cx="1950.0" cy="327.0" r="8" fill="#1a1a1a" stroke="#ffffff" stroke-width="2.5"/>
+<rect x="880.0" y="690.0" width="430.0" height="190.0" rx="12" fill="#eef2f5" stroke="#2c3e50" stroke-width="2.5"/>
+<rect x="888.0" y="698.0" width="414.0" height="174.0" rx="8" fill="none" stroke="#b8c0c8" stroke-width="1.5"/>
+<rect x="1214.0" y="788.0" width="64.0" height="64.0" rx="5" fill="#262626" stroke="#444444" stroke-width="2"/>
+<circle cx="1224.0" cy="798.0" r="3.5" fill="#9a9a9a"/>
+<text x="1246.0" y="816.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="16" font-weight="700" fill="#d0d0d0" text-anchor="middle">QN</text>
+<text x="1246.0" y="836.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="16" font-weight="700" fill="#d0d0d0" text-anchor="middle">8007</text>
+<rect x="1207.0" y="796.0" width="7.0" height="4.0" rx="1" fill="#b9b9b9"/>
+<rect x="1278.0" y="796.0" width="7.0" height="4.0" rx="1" fill="#b9b9b9"/>
+<rect x="1222.0" y="781.0" width="4.0" height="7.0" rx="1" fill="#b9b9b9"/>
+<rect x="1222.0" y="852.0" width="4.0" height="7.0" rx="1" fill="#b9b9b9"/>
+<rect x="1207.0" y="805.0" width="7.0" height="4.0" rx="1" fill="#b9b9b9"/>
+<rect x="1278.0" y="805.0" width="7.0" height="4.0" rx="1" fill="#b9b9b9"/>
+<rect x="1231.0" y="781.0" width="4.0" height="7.0" rx="1" fill="#b9b9b9"/>
+<rect x="1231.0" y="852.0" width="4.0" height="7.0" rx="1" fill="#b9b9b9"/>
+<rect x="1207.0" y="814.0" width="7.0" height="4.0" rx="1" fill="#b9b9b9"/>
+<rect x="1278.0" y="814.0" width="7.0" height="4.0" rx="1" fill="#b9b9b9"/>
+<rect x="1240.0" y="781.0" width="4.0" height="7.0" rx="1" fill="#b9b9b9"/>
+<rect x="1240.0" y="852.0" width="4.0" height="7.0" rx="1" fill="#b9b9b9"/>
+<rect x="1207.0" y="823.0" width="7.0" height="4.0" rx="1" fill="#b9b9b9"/>
+<rect x="1278.0" y="823.0" width="7.0" height="4.0" rx="1" fill="#b9b9b9"/>
+<rect x="1249.0" y="781.0" width="4.0" height="7.0" rx="1" fill="#b9b9b9"/>
+<rect x="1249.0" y="852.0" width="4.0" height="7.0" rx="1" fill="#b9b9b9"/>
+<rect x="1207.0" y="832.0" width="7.0" height="4.0" rx="1" fill="#b9b9b9"/>
+<rect x="1278.0" y="832.0" width="7.0" height="4.0" rx="1" fill="#b9b9b9"/>
+<rect x="1258.0" y="781.0" width="4.0" height="7.0" rx="1" fill="#b9b9b9"/>
+<rect x="1258.0" y="852.0" width="4.0" height="7.0" rx="1" fill="#b9b9b9"/>
+<rect x="1207.0" y="841.0" width="7.0" height="4.0" rx="1" fill="#b9b9b9"/>
+<rect x="1278.0" y="841.0" width="7.0" height="4.0" rx="1" fill="#b9b9b9"/>
+<rect x="1267.0" y="781.0" width="4.0" height="7.0" rx="1" fill="#b9b9b9"/>
+<rect x="1267.0" y="852.0" width="4.0" height="7.0" rx="1" fill="#b9b9b9"/>
+<path d="M955.0,340.4 L955.0,690.0" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M955.0,340.4 L955.0,690.0" fill="none" stroke="#ff8a00" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="955.0" cy="340.4" r="8" fill="#ff8a00" stroke="#ffffff" stroke-width="2.5"/>
+<rect x="946.0" y="692.0" width="18.0" height="24.0" rx="3" fill="#d8b84a" stroke="#8a7430" stroke-width="1"/>
+<circle cx="955.0" cy="704.0" r="4" fill="#f6f0d8"/>
+<text x="955.0" y="736.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="13" font-weight="800" fill="#ff8a00" text-anchor="middle">BCK</text>
+<path d="M985.0,390.8 L985.0,690.0" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M985.0,390.8 L985.0,690.0" fill="none" stroke="#f2c200" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="985.0" cy="390.8" r="8" fill="#f2c200" stroke="#ffffff" stroke-width="2.5"/>
+<rect x="976.0" y="692.0" width="18.0" height="24.0" rx="3" fill="#d8b84a" stroke="#8a7430" stroke-width="1"/>
+<circle cx="985.0" cy="704.0" r="4" fill="#f6f0d8"/>
+<text x="985.0" y="736.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="13" font-weight="800" fill="#b08c00" text-anchor="middle">WCK</text>
+<path d="M1015.0,441.2 L1015.0,690.0" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1015.0,441.2 L1015.0,690.0" fill="none" stroke="#2e9e3e" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1015.0" cy="441.2" r="8" fill="#2e9e3e" stroke="#ffffff" stroke-width="2.5"/>
+<rect x="1006.0" y="692.0" width="18.0" height="24.0" rx="3" fill="#d8b84a" stroke="#8a7430" stroke-width="1"/>
+<circle cx="1015.0" cy="704.0" r="4" fill="#f6f0d8"/>
+<text x="1015.0" y="736.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="13" font-weight="800" fill="#2e9e3e" text-anchor="middle">DAT</text>
+<text x="985.0" y="758.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="700" fill="#555555" text-anchor="middle">J2 (I2S-Eingang)</text>
+<path d="M1468.0,682.0 L1468.0,698.0 L1310.0,698.0" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1468.0,682.0 L1468.0,698.0 L1310.0,698.0" fill="none" stroke="#1a1a1a" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1468.0" cy="682.0" r="8" fill="#1a1a1a" stroke="#ffffff" stroke-width="2.5"/>
+<rect x="1284.0" y="692.0" width="24.0" height="12.0" rx="2" fill="#d8b84a" stroke="#8a7430" stroke-width="1"/>
+<text x="1276.0" y="703.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="800" fill="#1a1a1a" text-anchor="end">GND</text>
+<path d="M1517.6,682.0 L1517.6,714.0 L1310.0,714.0" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1517.6,682.0 L1517.6,714.0 L1310.0,714.0" fill="none" stroke="#d0021b" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1517.6" cy="682.0" r="8" fill="#d0021b" stroke="#ffffff" stroke-width="2.5"/>
+<rect x="1284.0" y="708.0" width="24.0" height="12.0" rx="2" fill="#d8b84a" stroke="#8a7430" stroke-width="1"/>
+<text x="1276.0" y="719.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="800" fill="#d0021b" text-anchor="end">VCC 5 V</text>
+<path d="M1568.0,682.0 L1568.0,730.0 L1310.0,730.0" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1568.0,682.0 L1568.0,730.0 L1310.0,730.0" fill="none" stroke="#8b5a2b" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1568.0" cy="682.0" r="8" fill="#8b5a2b" stroke="#ffffff" stroke-width="2.5"/>
+<rect x="1284.0" y="724.0" width="24.0" height="12.0" rx="2" fill="#d8b84a" stroke="#8a7430" stroke-width="1"/>
+<text x="1276.0" y="735.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="800" fill="#8b5a2b" text-anchor="end">SDA</text>
+<path d="M1617.6,682.0 L1617.6,746.0 L1310.0,746.0" fill="none" stroke="#ffffff" stroke-width="11" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M1617.6,682.0 L1617.6,746.0 L1310.0,746.0" fill="none" stroke="#7a7a7a" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1617.6" cy="682.0" r="8" fill="#7a7a7a" stroke="#ffffff" stroke-width="2.5"/>
+<rect x="1284.0" y="740.0" width="24.0" height="12.0" rx="2" fill="#d8b84a" stroke="#8a7430" stroke-width="1"/>
+<text x="1276.0" y="751.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="14" font-weight="800" fill="#7a7a7a" text-anchor="end">SCL</text>
+<text x="906.0" y="826.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="32" font-weight="800" fill="#111111" text-anchor="start">UKW-Modulator</text>
+<text x="906.0" y="858.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="22" font-weight="600" fill="#444444" text-anchor="start">QN8007 mit RDS</text>
+<rect x="60.0" y="990.0" width="940.0" height="40.0" rx="6" fill="#2d7be5"/>
+<text x="74.0" y="1017.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">Kabel</text>
+<text x="224.0" y="1017.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">Bus-Kontakt</text>
+<text x="374.0" y="1017.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">Tab5-GPIO</text>
+<text x="524.0" y="1017.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">Pico</text>
+<text x="634.0" y="1017.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">Signal</text>
+<text x="874.0" y="1017.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">Richtung</text>
+<rect x="60.0" y="1030.0" width="940.0" height="38.0" rx="0" fill="#f2f4f6"/>
+<line x1="74" y1="1049" x2="114" y2="1049" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/>
+<text x="126.0" y="1056.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Schwarz</text>
+<text x="224.0" y="1056.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">1</text>
+<text x="374.0" y="1056.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">GND</text>
+<text x="524.0" y="1056.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">GND</text>
+<text x="634.0" y="1056.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Masse</text>
+<text x="874.0" y="1056.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">-</text>
+<rect x="60.0" y="1068.0" width="940.0" height="38.0" rx="0" fill="#ffffff"/>
+<line x1="74" y1="1087" x2="114" y2="1087" stroke="#ff8a00" stroke-width="8" stroke-linecap="round"/>
+<text x="126.0" y="1094.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Orange</text>
+<text x="224.0" y="1094.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">2</text>
+<text x="374.0" y="1094.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G16</text>
+<text x="524.0" y="1094.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G18</text>
+<text x="634.0" y="1094.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">I2S Bittakt (BCLK)</text>
+<text x="874.0" y="1094.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Tab5 -&gt; Pico</text>
+<rect x="60.0" y="1106.0" width="940.0" height="38.0" rx="0" fill="#f2f4f6"/>
+<line x1="74" y1="1125" x2="114" y2="1125" stroke="#f2c200" stroke-width="8" stroke-linecap="round"/>
+<text x="126.0" y="1132.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Gelb</text>
+<text x="224.0" y="1132.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">4</text>
+<text x="374.0" y="1132.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G17</text>
+<text x="524.0" y="1132.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G19</text>
+<text x="634.0" y="1132.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">I2S Wortauswahl (WS)</text>
+<text x="874.0" y="1132.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Tab5 -&gt; Pico</text>
+<rect x="60.0" y="1144.0" width="940.0" height="38.0" rx="0" fill="#ffffff"/>
+<line x1="74" y1="1163" x2="114" y2="1163" stroke="#2e9e3e" stroke-width="8" stroke-linecap="round"/>
+<text x="126.0" y="1170.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Grün</text>
+<text x="224.0" y="1170.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">7</text>
+<text x="374.0" y="1170.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G18</text>
+<text x="524.0" y="1170.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G21</text>
+<text x="634.0" y="1170.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">I2S Daten</text>
+<text x="874.0" y="1170.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Tab5 -&gt; Pico</text>
+<rect x="60.0" y="1182.0" width="940.0" height="38.0" rx="0" fill="#f2f4f6"/>
+<line x1="74" y1="1201" x2="114" y2="1201" stroke="#1e63d6" stroke-width="8" stroke-linecap="round"/>
+<text x="126.0" y="1208.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Blau</text>
+<text x="224.0" y="1208.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">15</text>
+<text x="374.0" y="1208.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G7 (PC_RX)</text>
+<text x="524.0" y="1208.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G22</text>
+<text x="634.0" y="1208.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">UART, Pico sendet</text>
+<text x="874.0" y="1208.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Pico -&gt; Tab5</text>
+<rect x="60.0" y="1220.0" width="940.0" height="38.0" rx="0" fill="#ffffff"/>
+<line x1="74" y1="1239" x2="114" y2="1239" stroke="#8e3ccb" stroke-width="8" stroke-linecap="round"/>
+<text x="126.0" y="1246.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Violett</text>
+<text x="224.0" y="1246.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">16</text>
+<text x="374.0" y="1246.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G6 (PC_TX)</text>
+<text x="524.0" y="1246.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G25</text>
+<text x="634.0" y="1246.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">UART, Pico empfängt</text>
+<text x="874.0" y="1246.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Tab5 -&gt; Pico</text>
+<rect x="60.0" y="1258.0" width="940.0" height="38.0" rx="0" fill="#f2f4f6"/>
+<line x1="74" y1="1277" x2="114" y2="1277" stroke="#d0021b" stroke-width="8" stroke-linecap="round"/>
+<text x="126.0" y="1284.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Rot</text>
+<text x="224.0" y="1284.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">28</text>
+<text x="374.0" y="1284.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">5V (EXT5V)</text>
+<text x="524.0" y="1284.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">5V</text>
+<text x="634.0" y="1284.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">5 V Versorgung (Phase C)</text>
+<text x="874.0" y="1284.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Tab5 -&gt; Pico</text>
+<rect x="1060.0" y="990.0" width="900.0" height="40.0" rx="6" fill="#2d7be5"/>
+<text x="1074.0" y="1017.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">Kabel</text>
+<text x="1304.0" y="1017.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">Pico</text>
+<text x="1489.0" y="1017.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">Ziel</text>
+<text x="1664.0" y="1017.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="start">Signal</text>
+<rect x="1060.0" y="1030.0" width="900.0" height="38.0" rx="0" fill="#f2f4f6"/>
+<line x1="1074.0" y1="1049" x2="1112.0" y2="1049" stroke="#e75480" stroke-width="8" stroke-linecap="round"/>
+<text x="1126.0" y="1056.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Rosa</text>
+<text x="1304.0" y="1056.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G26</text>
+<text x="1489.0" y="1056.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">TOSLINK Daten</text>
+<text x="1664.0" y="1056.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">S/PDIF, optischer Ausgang</text>
+<rect x="1060.0" y="1068.0" width="900.0" height="38.0" rx="0" fill="#ffffff"/>
+<line x1="1074.0" y1="1087" x2="1112.0" y2="1087" stroke="#d0021b" stroke-width="8" stroke-linecap="round"/>
+<text x="1126.0" y="1094.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Rot</text>
+<text x="1304.0" y="1094.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">3V3</text>
+<text x="1489.0" y="1094.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">TOSLINK VCC</text>
+<text x="1664.0" y="1094.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">3,3 V für den Sender</text>
+<rect x="1060.0" y="1106.0" width="900.0" height="38.0" rx="0" fill="#f2f4f6"/>
+<line x1="1074.0" y1="1125" x2="1112.0" y2="1125" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/>
+<text x="1126.0" y="1132.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Schwarz</text>
+<text x="1304.0" y="1132.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">GND (kurze Reihe)</text>
+<text x="1489.0" y="1132.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">TOSLINK GND</text>
+<text x="1664.0" y="1132.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Masse</text>
+<rect x="1060.0" y="1144.0" width="900.0" height="38.0" rx="0" fill="#ffffff"/>
+<line x1="1074.0" y1="1163" x2="1085.3" y2="1163" stroke="#ff8a00" stroke-width="8" stroke-linecap="round"/>
+<line x1="1087.3" y1="1163" x2="1098.7" y2="1163" stroke="#f2c200" stroke-width="8" stroke-linecap="round"/>
+<line x1="1100.7" y1="1163" x2="1112.0" y2="1163" stroke="#2e9e3e" stroke-width="8" stroke-linecap="round"/>
+<text x="1126.0" y="1170.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Orange/Gelb/Grün</text>
+<text x="1304.0" y="1170.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G18/G19/G21</text>
+<text x="1489.0" y="1170.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">J2 BCK/WCK/DAT</text>
+<text x="1664.0" y="1170.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">I2S vom Tab5, parallel</text>
+<rect x="1060.0" y="1182.0" width="900.0" height="38.0" rx="0" fill="#f2f4f6"/>
+<line x1="1074.0" y1="1201" x2="1112.0" y2="1201" stroke="#8b5a2b" stroke-width="8" stroke-linecap="round"/>
+<text x="1126.0" y="1208.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Braun</text>
+<text x="1304.0" y="1208.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G32 (Lötpunkt)</text>
+<text x="1489.0" y="1208.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">SDA</text>
+<text x="1664.0" y="1208.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">I2C Daten, 400 kHz</text>
+<rect x="1060.0" y="1220.0" width="900.0" height="38.0" rx="0" fill="#ffffff"/>
+<line x1="1074.0" y1="1239" x2="1112.0" y2="1239" stroke="#7a7a7a" stroke-width="8" stroke-linecap="round"/>
+<text x="1126.0" y="1246.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Grau</text>
+<text x="1304.0" y="1246.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">G33 (Lötpunkt)</text>
+<text x="1489.0" y="1246.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">SCL</text>
+<text x="1664.0" y="1246.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">I2C Takt</text>
+<rect x="1060.0" y="1258.0" width="900.0" height="38.0" rx="0" fill="#f2f4f6"/>
+<line x1="1074.0" y1="1277" x2="1112.0" y2="1277" stroke="#d0021b" stroke-width="8" stroke-linecap="round"/>
+<text x="1126.0" y="1284.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Rot</text>
+<text x="1304.0" y="1284.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">5V (Lötpunkt)</text>
+<text x="1489.0" y="1284.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">VCC</text>
+<text x="1664.0" y="1284.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">5 V vom Bus über den Regler</text>
+<rect x="1060.0" y="1296.0" width="900.0" height="38.0" rx="0" fill="#ffffff"/>
+<line x1="1074.0" y1="1315" x2="1112.0" y2="1315" stroke="#1a1a1a" stroke-width="8" stroke-linecap="round"/>
+<text x="1126.0" y="1322.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Schwarz</text>
+<text x="1304.0" y="1322.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">GND (Lötpunkt)</text>
+<text x="1489.0" y="1322.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">GND</text>
+<text x="1664.0" y="1322.0" font-family="Noto Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" fill="#2c3e50" text-anchor="start">Masse</text>
+</svg>

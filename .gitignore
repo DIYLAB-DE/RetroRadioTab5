@@ -1,0 +1,19 @@
+# Lokale Build- und Werkzeugausgaben
+.pio/
+.pio-core/
+build/
+managed_components/
+.vscode/
+.idea/
+sdkconfig
+sdkconfig.old
+__pycache__/
+*.pyc
+*.log
+
+# Zugangsdaten und lokale Einstellungen
+.env
+.env.*
+!.env.example
+!.env.sample
+platformio_lokal.ini
