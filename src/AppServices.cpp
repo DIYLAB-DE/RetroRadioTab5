@@ -438,10 +438,11 @@ void AppServices::execute()
         {
             m_result.error = Error::Invalid;
         }
-        // Log-Schalter und PIN-Sperre schreiben wie im Original nur ihren eigenen Eintrag, alle anderen Aufträge den ganzen Datensatz.
-        else if (m_result.changedFields == Settings::SerialLogs ? !Tab5Config::saveSerialLogs(candidate.serialLogs)
-                 : m_result.changedFields == Settings::PinLock  ? !Tab5Config::savePinLock(candidate.pinLock)
-                                                                : !Tab5Config::save(candidate, m_revision + 1, extras))
+        // Log-Schalter und PIN-Sperre schreiben wie im Original nur ihren eigenen Eintrag, der Sekundenzeiger ebenso. Alle anderen Aufträge schreiben den ganzen Datensatz.
+        else if (m_result.changedFields == Settings::SerialLogs   ? !Tab5Config::saveSerialLogs(candidate.serialLogs)
+                 : m_result.changedFields == Settings::PinLock    ? !Tab5Config::savePinLock(candidate.pinLock)
+                 : m_result.changedFields == Settings::SecondHand ? !Tab5Config::saveSecondHand(candidate.secondSweep)
+                                                                  : !Tab5Config::save(candidate, m_revision + 1, extras))
         {
             m_result.error = Error::Storage;
         }

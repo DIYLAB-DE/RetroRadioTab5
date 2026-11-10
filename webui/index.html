@@ -1124,9 +1124,17 @@ DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
       display: grid;
       grid-template-columns: inherit;
       column-gap: inherit;
+      row-gap: var(--settings-label-gap);
       align-items: center;
       padding-block: var(--settings-label-gap);
       border-block: 1px solid var(--border-color);
+    }
+
+    .pin-settings > div {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px 12px;
     }
 
     .pin-settings h4 {
@@ -1143,7 +1151,13 @@ DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
       min-width: 4em;
     }
 
-    #pinLockToggle[aria-checked="true"] {
+    /* So breit wie der längere der beiden Texte, damit die Zeile beim Umschalten nicht springt */
+    #secondHandToggle {
+      min-width: 7.5em;
+    }
+
+    #pinLockToggle[aria-checked="true"],
+    #secondHandToggle[aria-checked="true"] {
       background-color: var(--navbar-color);
     }
 
@@ -2003,16 +2017,6 @@ DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
 
       .settings-container {
         grid-template-columns: 100%;
-      }
-
-      .pin-settings {
-        display: flex;
-        flex-wrap: wrap;
-        row-gap: var(--settings-label-gap);
-      }
-
-      .pin-settings-actions {
-        margin-inline-start: auto;
       }
 
       .settings-item:nth-child(1) {
@@ -3697,16 +3701,24 @@ DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
         </div>
 
         <div class="settings-item pin-settings">
-          <h4 id="pinLockLabel" data-i18n="settings.pinLockToggle">PIN-Sperre für Radio und Web</h4>
-          <div class="pin-settings-actions">
-            <button type="button" id="pinLockToggle" class="btn btn-secondary" role="switch" aria-labelledby="pinLockLabel" aria-checked="true" disabled>...</button>
-            <button type="button" id="pinChangeBtn" class="btn btn-secondary" aria-haspopup="dialog">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true" focusable="false">
-                <circle cx="16" cy="8" r="5"/>
-                <path d="m12.5 11.5-9 9m3-3 2.5 2.5m.5-5.5 2.5 2.5"/>
-              </svg>
-              <span data-i18n="settings.pinChangeTitle">PIN ändern</span>
-            </button>
+          <div>
+            <h4 id="pinLockLabel" data-i18n="settings.pinLockToggle">PIN-Sperre</h4>
+            <div class="pin-settings-actions">
+              <button type="button" id="pinLockToggle" class="btn btn-secondary" role="switch" aria-labelledby="pinLockLabel" aria-checked="true" disabled>...</button>
+              <button type="button" id="pinChangeBtn" class="btn btn-secondary" aria-haspopup="dialog">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true" focusable="false">
+                  <circle cx="16" cy="8" r="5"/>
+                  <path d="m12.5 11.5-9 9m3-3 2.5 2.5m.5-5.5 2.5 2.5"/>
+                </svg>
+                <span data-i18n="settings.pinChangeTitle">PIN ändern</span>
+              </button>
+            </div>
+          </div>
+          <div>
+            <h4 id="secondHandLabel" data-i18n="settings.secondHandToggle">Sekundenzeiger</h4>
+            <div class="pin-settings-actions">
+              <button type="button" id="secondHandToggle" class="btn btn-secondary" role="switch" aria-labelledby="secondHandLabel" aria-checked="true" disabled>...</button>
+            </div>
           </div>
         </div>
 
@@ -4119,7 +4131,10 @@ DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
         'settings.hostnameHint': 'Buchstaben, Ziffern und Bindestrich, 1 bis 32 Zeichen.',
         'settings.manualTime': 'Zeit manuell setzen',
         'settings.browserTime': 'Browser-Zeit aktualisieren',
-        'settings.pinLockToggle': 'PIN-Sperre für Radio und Web',
+        'settings.pinLockToggle': 'PIN-Sperre',
+        'settings.secondHandToggle': 'Sekundenzeiger',
+        'settings.secondHandSweep': 'schleichend',
+        'settings.secondHandStep': 'Schritt',
         'settings.pinOn': 'Ein',
         'settings.pinOff': 'Aus',
         'settings.pinChangeTitle': 'PIN ändern',
@@ -4257,6 +4272,7 @@ DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
         'js.uploadFailed': 'Upload fehlgeschlagen',
         'js.currentCodeInvalid': 'Die aktuelle PIN ist falsch.',
         'js.savePinLockFailed': 'Die PIN-Sperre konnte nicht gespeichert werden.',
+        'js.saveSecondHandFailed': 'Der Sekundenzeiger konnte nicht gespeichert werden.',
         'js.savePinFailed': 'Die neue PIN konnte nicht gespeichert werden.',
         'js.saveRestartConfirm': 'Einstellungen speichern und RetroRadio neu starten?',
         'js.appearanceSaveConfirm': 'Thema und Farben speichern und RetroRadio neu starten?',
@@ -4433,7 +4449,10 @@ DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
         'settings.hostnameHint': 'Letters, digits and hyphen, 1 to 32 characters.',
         'settings.manualTime': 'Set time manually',
         'settings.browserTime': 'Refresh browser time',
-        'settings.pinLockToggle': 'PIN lock for radio and web',
+        'settings.pinLockToggle': 'PIN lock',
+        'settings.secondHandToggle': 'Second hand',
+        'settings.secondHandSweep': 'sweeping',
+        'settings.secondHandStep': 'ticking',
         'settings.pinOn': 'On',
         'settings.pinOff': 'Off',
         'settings.pinChangeTitle': 'Change PIN',
@@ -4571,6 +4590,7 @@ DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
         'js.uploadFailed': 'Upload failed',
         'js.currentCodeInvalid': 'The current PIN is incorrect.',
         'js.savePinLockFailed': 'Could not save the PIN lock setting.',
+        'js.saveSecondHandFailed': 'Could not save the second hand setting.',
         'js.savePinFailed': 'Could not save the new PIN.',
         'js.saveRestartConfirm': 'Save settings and restart RetroRadio?',
         'js.appearanceSaveConfirm': 'Save the theme and colors and restart RetroRadio?',
@@ -5555,6 +5575,7 @@ DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
       initTimezoneDropdown();
       initSyncIntervalDropdown();
       initManualTime();
+      document.getElementById('secondHandToggle').addEventListener('click', toggleSecondHand);
       loadCurrentSettings();
       setupSettingsButtons();
       loadAppearance();
@@ -5572,6 +5593,33 @@ DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
         localStorage.setItem('retroRadioLanguage', language);
         applyLanguage(language);
       });
+    }
+
+    // Schalter des Sekundenzeigers auf den gespeicherten Zustand stellen und freigeben
+    function applySecondHand(sweep) {
+      const toggle = document.getElementById('secondHandToggle');
+      toggle.setAttribute('aria-checked', String(sweep));
+      toggle.dataset.i18n = sweep ? 'settings.secondHandSweep' : 'settings.secondHandStep';
+      toggle.textContent = t(toggle.dataset.i18n);
+      toggle.disabled = false;
+    }
+
+    // Der Sekundenzeiger wirkt sofort, ohne „Speichern & neu starten“
+    async function toggleSecondHand() {
+      const toggle = document.getElementById('secondHandToggle');
+      const sweep = toggle.getAttribute('aria-checked') !== 'true';
+      toggle.disabled = true;
+      try {
+        const response = await fetch('/api/secondhand', {method: 'POST', body: new URLSearchParams({sweep: String(sweep)})});
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const data = await response.json();
+        // Die Antwort trägt die neue Revision, sonst gälte „Speichern & neu starten“ danach als veraltet.
+        if (Number.isInteger(data.revision)) settingsRevision = data.revision;
+        applySecondHand(data.sweep === true);
+      } catch (error) {
+        alert(t('js.saveSecondHandFailed'));
+        toggle.disabled = false;
+      }
     }
 
     // Manuelle Zeiteingabe initialisieren
@@ -5646,6 +5694,7 @@ DISCLAIMER THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
           const data = await response.json();
           settingsRevision = data.revision;
           LockUI.setInitialMode(data.pinLockEnabled);
+          applySecondHand(data.secondHandSweep !== false);
           if (data.hostname) document.getElementById('hostnameInput').value = data.hostname;
           if (data.ntpServer) document.getElementById('ntpServerInput').value = data.ntpServer;
           if (data.timezoneRegion) {

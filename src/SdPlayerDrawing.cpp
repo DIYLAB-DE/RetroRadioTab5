@@ -861,7 +861,8 @@ void SdPlayer::drawDigitalClock(UiCanvas *sprite, int &lastDrawnSecond, int32_t 
 
 void SdPlayer::drawClock()
 {
-    if (m_lastDrawnSecond < 0)
+    const bool fresh = m_lastDrawnSecond < 0;
+    if (fresh)
         m_digitalClock.clear(farbe(Rolle::GemGrund));
     int minutes = -1, seconds = 0;
     if (m_sleep.isTimerActive())
@@ -870,6 +871,22 @@ void SdPlayer::drawClock()
         drawAnalogClock(&m_analogClock, m_lastDrawnSecond, NL::Clock::ANALOG_X, NL::Clock::ANALOG_Y, minutes, seconds);
     else
         drawDigitalClock(&m_digitalClock, m_lastDrawnSecond, NL::Clock::DIGITAL_X, NL::Clock::DIGITAL_Y, minutes, seconds);
+    drawBattery(fresh);
+}
+
+void SdPlayer::drawBattery(bool fresh)
+{
+    const auto &battery = m_state.battery;
+    if (!fresh && battery == m_batteryDrawn)
+        return;
+    m_batteryDrawn = battery;
+    // Ohne Akku bleibt die Zeile unberührt. Kommt oder geht der Akku, baut update() die Fläche über den Weg des Moduswechsels neu auf.
+    if (!battery.present)
+        return;
+    const uint16_t ground = farbe(Rolle::GemGrund);
+    m_battery.clear(ground);
+    BatteryIcon::draw(m_battery, 0, 0, BatteryIcon::Upright, battery, farbe(Rolle::UhrDigitalZiffern), ground);
+    present(m_battery, SL::Battery::X, SL::Battery::Y);
 }
 
 void SdPlayer::drawMetaText(bool init, const char *first, const char *second, uint16_t firstColor, uint16_t secondColor, uint16_t separatorColor, const char *separator, int reservedPixels, uint16_t backgroundColor)
@@ -1208,7 +1225,7 @@ bool SdPlayer::prepareGraphics()
 {
     if (!m_scene.prepare(SL::WIDTH, SL::HEIGHT) || !m_cover.prepare(COVER_W, COVER_H) || !m_cassette.prepare(CASSETTE_W, CASSETTE_H) || !m_wrap.prepare(WRAP_SPR_SIZE, WRAP_SPR_SIZE) || !m_dorn.prepare(WRAP_SPR_SIZE, WRAP_SPR_SIZE) ||
         !m_knob.prepare(NL::Knob::SIZE, NL::Knob::SIZE) || !m_sliders.prepare(NL::Tracks::WIDTH, NL::Tracks::HEIGHT) || !m_playlist.prepare(PLAYLIST_W, SL::Playlist::H) || !m_meta.prepare(SL::WIDTH, SL::Footer::HEIGHT) ||
-        !m_details.prepare(COVER_W, SL::Cover::DETAILS_H) || !m_progress.prepare(SL::Progress::W, SL::Progress::H) || !m_digitalClock.prepare(NL::Clock::DIGITAL_W, NL::Clock::DIGITAL_H) || !m_analogClock.prepare(NL::Clock::ANALOG_SIZE, NL::Clock::ANALOG_SIZE))
+        !m_details.prepare(COVER_W, SL::Cover::DETAILS_H) || !m_progress.prepare(SL::Progress::W, SL::Progress::H) || !m_digitalClock.prepare(NL::Clock::DIGITAL_W, NL::Clock::DIGITAL_H) || !m_battery.prepare(NL::Battery::W, NL::Battery::H) || !m_analogClock.prepare(NL::Clock::ANALOG_SIZE, NL::Clock::ANALOG_SIZE))
         return false;
     // Ziffern der Analoguhr wie beim Radio: nächstgrößere unskalierte Originalschrift statt DejaVu9
     m_analogClock.setFont(&fonts::DejaVu12);
@@ -1296,11 +1313,15 @@ bool SdPlayer::prepareGraphics()
         return false;
     const Hit hits[] = {Hit::Previous, Hit::Play, Hit::Pause, Hit::Stop, Hit::Next, Hit::Browse, Hit::Clear, Hit::Reset, Hit::Power};
     // Die Symbole werden vektoriell in 48 Pixeln gezeichnet, das Original nutzt 32
-    // Stopp trägt die Farbe Gem.Warnung, das Haus Gem.HausSymbol, je als Hexzahl im Etikett. initButton kopiert die Etiketten.
-    char stop[24], home[24];
+    // Stopp trägt die Farbe Gem.Warnung, das Haus Gem.HausSymbol, Ordner, Papierkorb und Zurücksetzen Gem.Akzent, je als Hexzahl im Etikett. initButton kopiert die Etiketten.
+    // Die untere Reihe nutzt Gem.TextGedaempft als Textfarbe, ihr gedrückter Rahmen gleicht so dem des Radios.
+    char stop[24], browse[24], clear[24], reset[24], home[24];
     snprintf(stop, sizeof(stop), "^STOP:48:%04X^", farbe(Rolle::GemWarnung));
+    snprintf(browse, sizeof(browse), "^OPEN:48:%04X^", farbe(Rolle::GemAkzent));
+    snprintf(clear, sizeof(clear), "^TRASH:48:%04X^", farbe(Rolle::GemAkzent));
+    snprintf(reset, sizeof(reset), "^RESET:48:%04X^", farbe(Rolle::GemAkzent));
     snprintf(home, sizeof(home), "^HOME:48:%04X^", farbe(Rolle::GemHausSymbol));
-    const char *labels[] = {"^SKIPB:48^", "^PLAY:48^", "^PAUSE:48^", stop, "^SKIPF:48^", "durchs.", "leeren", "reset", home};
+    const char *labels[] = {"^SKIPB:48^", "^PLAY:48^", "^PAUSE:48^", stop, "^SKIPF:48^", browse, clear, reset, home};
     const uint16_t outline = farbe(Rolle::GemRahmen), fill = farbe(Rolle::GemTastenFlaeche), symbol = farbe(Rolle::GemAkzent), text = farbe(Rolle::GemTextGedaempft);
     for (int i = 0; i < 9; ++i)
     {

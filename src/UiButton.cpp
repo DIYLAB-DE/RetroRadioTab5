@@ -257,6 +257,12 @@ void UiButton::drawSymbolFromLabel(const char *label, int16_t x, int16_t y, uint
         drawDeleteSymbol(x, y, size, symbolColor);
     else if (strncmp(label, "^HOME", 5) == 0)
         drawHomeSymbol(x, y, size, symbolColor);
+    else if (strncmp(label, "^RESET", 6) == 0)
+        drawResetSymbol(x, y, size, symbolColor);
+    else if (strncmp(label, "^OPEN", 5) == 0)
+        drawOpenFolderSymbol(x, y, size, symbolColor);
+    else if (strncmp(label, "^TRASH", 6) == 0)
+        drawTrashSymbol(x, y, size, symbolColor);
     else if (strncmp(label, "^SET", 4) == 0)
         drawSettingsSymbol(x, y, size, symbolColor);
     else if (strncmp(label, "^BACK", 5) == 0)
@@ -472,6 +478,66 @@ void UiButton::drawHomeSymbol(int16_t x, int16_t y, int16_t size, uint16_t color
         target()->drawWideLine(lastX, lastY, nextX, nextY, STROKE_RADIUS * scale, color);
         lastX = nextX;
         lastY = nextY;
+    }
+}
+
+void UiButton::drawResetSymbol(int16_t x, int16_t y, int16_t size, uint16_t color)
+{
+    // Phosphor zeichnet einen Bogen mit Radius 88 um die Mitte von (67.59,192) gegen den Uhrzeigersinn bis (65.77,65.77) und von dort eine Gerade zur Pfeilecke (24,104).
+    static constexpr float HEAD[][2] = {{-13.0f, -9.0f}, {-13.0f, -3.0f}, {-7.0f, -3.0f}}; ///< Pfeilspitze als rechter Winkel, mittlerer Punkt ist die Ecke
+    constexpr float ARC_RADIUS = 11.0f;                                                   ///< Bogenradius im 32er-Raster
+    constexpr float ARC_START = 133.34f;                                                  ///< Bogenanfang links unten in Grad, im Uhrzeigersinn ab rechts wegen der y-Achse nach unten
+    constexpr float ARC_END = -135.0f;                                                    ///< Bogenende links oben in Grad
+    constexpr int ARC_SEGMENTS = 24;                                                      ///< Gerade Teilstücke des Bogens, rund 11 Grad je Stück
+    float path[ARC_SEGMENTS + 2][2];
+    for (int i = 0; i <= ARC_SEGMENTS; ++i)
+    {
+        const float angle = (ARC_START + (ARC_END - ARC_START) * i / ARC_SEGMENTS) * PI / 180.0f;
+        path[i][0] = ARC_RADIUS * cosf(angle);
+        path[i][1] = ARC_RADIUS * sinf(angle);
+    }
+    path[ARC_SEGMENTS + 1][0] = HEAD[1][0];
+    path[ARC_SEGMENTS + 1][1] = HEAD[1][1];
+    drawPhosphorPath(path, ARC_SEGMENTS + 2, false, x, y, size, color);
+    drawPhosphorPath(HEAD, 3, false, x, y, size, color);
+}
+
+void UiButton::drawOpenFolderSymbol(int16_t x, int16_t y, int16_t size, uint16_t color)
+{
+    // Die Phosphor-Ecken mit Radius 8 laufen wie beim Haus spitz aus, die Ecken liegen auf den verlängerten Kanten.
+    static constexpr float BACK[][2] = {{-12.0f, 10.0f}, {-12.0f, -9.0f}, {-4.0f, -9.0f}, {0.0f, -6.0f}, {10.0f, -6.0f}, {10.0f, -1.5f}}; ///< Rückwand mit Reiter
+    static constexpr float FRONT[][2] = {{-12.0f, 10.0f}, {-8.0f, -1.5f}, {14.41f, -1.5f}, {10.39f, 10.0f}};                              ///< Aufgeklappte Vorderseite
+    drawPhosphorPath(BACK, sizeof(BACK) / sizeof(BACK[0]), false, x, y, size, color);
+    drawPhosphorPath(FRONT, sizeof(FRONT) / sizeof(FRONT[0]), true, x, y, size, color);
+}
+
+void UiButton::drawTrashSymbol(int16_t x, int16_t y, int16_t size, uint16_t color)
+{
+    // Die Phosphor-Ecken mit Radius 8 und 16 laufen wie beim Haus spitz aus.
+    static constexpr float LID[][2] = {{11.0f, -8.5f}, {-11.0f, -8.5f}};                               ///< Deckelkante
+    static constexpr float BODY[][2] = {{9.0f, -8.5f}, {9.0f, 11.0f}, {-9.0f, 11.0f}, {-9.0f, -8.5f}};   ///< Eimer
+    static constexpr float HANDLE[][2] = {{5.0f, -8.5f}, {5.0f, -13.5f}, {-5.0f, -13.5f}, {-5.0f, -8.5f}}; ///< Griff
+    static constexpr float SLOTS[][2][2] = {{{-3.0f, -3.0f}, {-3.0f, 5.0f}}, {{3.0f, -3.0f}, {3.0f, 5.0f}}}; ///< Zwei senkrechte Rillen
+    drawPhosphorPath(LID, 2, false, x, y, size, color);
+    drawPhosphorPath(BODY, 4, false, x, y, size, color);
+    drawPhosphorPath(HANDLE, 4, false, x, y, size, color);
+    for (const auto &slot : SLOTS)
+        drawPhosphorPath(slot, 2, false, x, y, size, color);
+}
+
+void UiButton::drawPhosphorPath(const float (*points)[2], size_t count, bool closed, int16_t x, int16_t y, int16_t size, uint16_t color)
+{
+    constexpr float GRID_SIZE = 32.0f;     ///< Bezugsgröße der Kontur in Pixeln wie beim Haus
+    constexpr float STROKE_RADIUS = 1.5f; ///< Halbe Strichbreite im Bezugsraster, Phosphor Bold zeichnet 24 von 256
+    if (count < 2)
+        return;
+    const float scale = size / GRID_SIZE;
+    // Gleitkommapunkte statt gerundeter Pixel, damit der Bogen des Zurücksetzensymbols rund bleibt
+    for (size_t i = closed ? 0 : 1; i < count; ++i)
+    {
+        const auto &from = points[i == 0 ? count - 1 : i - 1];
+        const auto &to = points[i];
+        target()->drawWideLine(x + from[0] * scale, y + from[1] * scale, x + to[0] * scale, y + to[1] * scale, STROKE_RADIUS * scale, color);
     }
 }
 

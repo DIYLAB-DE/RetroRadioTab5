@@ -7,6 +7,7 @@
 #include "VisualizerView.h"
 #include "SdPlayerTab5Layout.h"
 #include "Thema.h"
+#include "BatteryIcon.h"
 
 class AudioManager;
 class VisualizerView;
@@ -122,6 +123,7 @@ struct SdPlaybackStatus
     uint8_t hour = 0, minute = 0, second = 0, volume = 10;         ///< Uhrzeit für die Uhr, Lautstärke 0..100
     int8_t balance = 0, tone[3]{};                                 ///< Balance -16..16. Tiefen, Mitten, Höhen in dB, -12..12
     char title[128]{}, artist[128]{}, album[128]{};                ///< Metadaten, UTF-8
+    BatteryIcon::State battery;                                    ///< Akkuanzeige, ohne erkannten Akku bleibt die Zeile der Buttons unverändert
 };
 
 /** @brief Fertiges Cover. RGB565-Wörter in Hostreihenfolge, 345x330, synchron kopiert. */
@@ -391,6 +393,9 @@ private:
     bool m_lastCassettePlaying = false, m_bulk = false, m_resetDialog = false; ///< Kassette lief beim letzten Bild. Sammelzeichnen läuft. Der Dialog gehört zum Zurücksetzen statt zum Leeren
     float m_lastCassetteProgress = -1;               ///< Zuletzt gezeichneter Bandanteil der ganzen Playlist, 0..1, -1 vor dem ersten Bild
     VisMode m_drawnMode = static_cast<VisMode>(VIS_MODE_COUNT); ///< Zuletzt gezeichneter Visualizermodus
+    UiCanvas m_battery;                 ///< Akkusymbol hochkant
+    BatteryIcon::State m_batteryDrawn;  ///< Zuletzt gezeichneter Akkustand
+    bool m_batteryPresent = false;      ///< Akku war beim letzten Aufbau der Zeile erkannt
     static constexpr float WRAP_DPS_AT_REF = 140.0f; ///< Drehgeschwindigkeit der Naben in Grad/s beim mittleren Wickelradius, kleinere Wickel drehen schneller
     /** @brief Dekodiert die neun Bildassets und reserviert Kassettenfenster und Dialogpuffer vor Wiedergabe. */
     bool prepareGraphics();
@@ -426,6 +431,8 @@ private:
     void calcMarkerPos(float angle, int center, int offset, int &x, int &y);
     /** @brief Zeichnet die Uhr mit zentraler Zeit. */
     void drawClock();
+    /** @brief Zeichnet das Akkusymbol links neben dem Ordner-Button. @param fresh Die Zeile wurde gerade geleert, das Symbol muss auch bei unverändertem Stand neu. */
+    void drawBattery(bool fresh);
     /** @brief Zeichnet die analoge Uhr für den Goniometermodus. */
     void drawAnalogClock(UiCanvas *sprite, int &last, int32_t x, int32_t y, int minutes, int seconds);
     /** @brief Zeichnet die Digitaluhr für die übrigen Visualizermodi. */

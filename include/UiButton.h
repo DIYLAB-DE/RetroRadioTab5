@@ -423,6 +423,19 @@ private:
     void drawDeleteSymbol(int16_t x, int16_t y, int16_t size, uint16_t color);
     /** @brief Zeichnet das Haussymbol als Kontur nach House Bold von Phosphor Icons (MIT, Lizenztext in IconShapeData.h) mit Mittelpunkt (x, y). size ist die Bezugsgröße in Pixeln (32er-Raster wie im Original). */
     void drawHomeSymbol(int16_t x, int16_t y, int16_t size, uint16_t color);
+    /** @brief Zeichnet das Zurücksetzensymbol als Kontur nach Arrow Counter Clockwise Bold von Phosphor Icons (MIT, Lizenztext in IconShapeData.h) mit Mittelpunkt (x, y). size ist die Bezugsgröße in Pixeln wie beim Haus. */
+    void drawResetSymbol(int16_t x, int16_t y, int16_t size, uint16_t color);
+    /** @brief Zeichnet den offenen Ordner als Kontur nach Folder Open Bold von Phosphor Icons (MIT, Lizenztext in IconShapeData.h) mit Mittelpunkt (x, y). size ist die Bezugsgröße in Pixeln wie beim Haus. */
+    void drawOpenFolderSymbol(int16_t x, int16_t y, int16_t size, uint16_t color);
+    /** @brief Zeichnet den Papierkorb als Kontur nach Trash Bold von Phosphor Icons (MIT, Lizenztext in IconShapeData.h) mit Mittelpunkt (x, y). size ist die Bezugsgröße in Pixeln wie beim Haus. */
+    void drawTrashSymbol(int16_t x, int16_t y, int16_t size, uint16_t color);
+    /**
+     * @brief Zeichnet einen Linienzug einer Phosphor-Bold-Kontur mit runden Enden und der Strichbreite des Hauses
+     * @param points Punkte im 32er-Raster relativ zur Mitte, also Phosphor-Koordinaten minus 128 durch 8
+     * @param count Anzahl der Punkte, ab zwei wird gezeichnet
+     * @param closed Verbindet zusätzlich den letzten mit dem ersten Punkt
+     */
+    void drawPhosphorPath(const float (*points)[2], size_t count, bool closed, int16_t x, int16_t y, int16_t size, uint16_t color);
     /** @brief Zeichnet das Zahnradsymbol mit Mittelpunkt (x, y). size ist die Höhe in Pixeln. */
     void drawSettingsSymbol(int16_t x, int16_t y, int16_t size, uint16_t color);
     /** @brief Zeichnet das Pfeil nach links mit Mittelpunkt (x, y). size ist die Höhe in Pixeln. */

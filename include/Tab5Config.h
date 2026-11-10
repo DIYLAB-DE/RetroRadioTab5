@@ -26,7 +26,7 @@ namespace Tab5Config
     void defaults(Settings::Configuration &config, Extras &extras);
     /** @brief Prüft vollständig terminierte Felder und Wertebereiche vor der Serialisierung. */
     bool valid(const Settings::Configuration &config);
-    /** @brief Lädt den eigenen Datensatz oder reine RAM-Defaults, ohne NVS zu ändern. Die Freigabe der seriellen Logs aus logs_v1 hat Vorrang vor Byte 602 von config_v2. Die PIN-Sperre steht nur in pinLockOn und ist ohne diesen Eintrag ein. @param report false unterdrückt die Logzeile zum Ergebnis. */
+    /** @brief Lädt den eigenen Datensatz oder reine RAM-Defaults, ohne NVS zu ändern. Die Freigabe der seriellen Logs aus logs_v1 hat Vorrang vor Byte 602 von config_v2. Die PIN-Sperre steht nur in pinLockOn und ist ohne diesen Eintrag ein. Der Sekundenzeiger steht nur in secHand_v1 und schleicht ohne diesen Eintrag. @param report false unterdrückt die Logzeile zum Ergebnis. */
     void load(Settings::Configuration &config, uint64_t &revision, Extras *extras = nullptr, bool report = true);
     /** @brief Liest nur den gespeicherten Themenindex, ohne Logzeile. Ohne gültigen Datensatz 0 (Retro). Für den Start vor dem ersten begin() der Ansichten. */
     uint8_t loadTheme();
@@ -36,7 +36,9 @@ namespace Tab5Config
     bool saveSerialLogs(bool enabled);
     /** @brief Schreibt nur die PIN-Sperre nach rr_tab5/pinLockOn, einen einzelnen NVS-Eintrag wie im Original. config_v2 und die PIN bleiben unberührt. @return false bei NVS-Fehler. */
     bool savePinLock(bool enabled);
-    /** @brief Schreibt Konfiguration, PIN und Klang atomar nach rr_tab5/config_v2, die Logfreigabe zusätzlich nach logs_v1 und die PIN-Sperre nach pinLockOn. config_v1 bleibt erhalten. */
+    /** @brief Schreibt nur die Gangart des Sekundenzeigers nach rr_tab5/secHand_v1, einen einzelnen NVS-Eintrag. config_v2 bleibt unberührt. @param sweep true schleichend, false Sekundenschritte. @return false bei NVS-Fehler. */
+    bool saveSecondHand(bool sweep);
+    /** @brief Schreibt Konfiguration, PIN und Klang atomar nach rr_tab5/config_v2, die Logfreigabe zusätzlich nach logs_v1, die PIN-Sperre nach pinLockOn und den Sekundenzeiger nach secHand_v1. config_v1 bleibt erhalten. */
     bool save(const Settings::Configuration &config, uint64_t revision, const Extras &extras);
 
     /** @brief Lädt die Grundfarben von Modern aus rr_tab5/modern_v1. Fehlt der Eintrag oder ist er ungültig, gelten die Vorgaben. Gelöscht wird nichts. @param farben Ziel. Grund und Fläche tragen immer ihre Vorgabe. @param report false unterdrückt die Warnung bei einem ungültigen Eintrag. @return true, wenn ein gültiger Eintrag geladen wurde. */

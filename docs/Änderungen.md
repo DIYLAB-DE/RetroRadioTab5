@@ -4,6 +4,27 @@
 
 Hier steht, was sich von Version zu Version ändert, die neueste Version steht oben. Jede Version erscheint als [Release auf GitHub](https://github.com/DIYLAB-DE/RetroRadioTab5/releases) mit eigener Nummer. Die Nummer zeigt das Tab5 unter Einstellungen -> Info & Neustart und die Weboberfläche im Abschnitt System. Sie ändert sich nur mit einem neuen Release, auch wenn Du die Firmware selbst baust.
 
+## v26.11.10 vom 10.11.2026
+
+Die zweite Vorabversion, [v26.11.10 auf GitHub](https://github.com/DIYLAB-DE/RetroRadioTab5/releases/tag/v26.11.10).
+
+### Neu
+
+- Neu: Mit angeschlossenem Akku zeigt das Tab5 in jeder Ansicht ein Akkusymbol mit fünf Segmenten (grün, bei zwei Segmenten gelb, bei einem rot). Im Hauptmenü und auf dem Sperrbildschirm steht die Prozentzahl daneben, in den Einstellungen darüber. Unter 10 % blinkt das rote Segment, ein Blitz zeigt Strom über USB. Die Prozentzahl ist aus der Akkuspannung geschätzt und zeigt beim Laden etwas zu viel. Ohne Akku erscheint kein Symbol und alle Ansichten bleiben wie bisher.
+- Neu: Der Sekundenzeiger der Uhr im Hauptmenü schleicht in einer gleichmäßigen Bewegung, statt jede Sekunde zu springen. Wer die Sekundenschritte lieber mag, schaltet um: am Gerät unter Einstellungen -> Zeit & Zeitserver in der neuen Zeile „Sekundenzeiger“, in der Weboberfläche unter Systemeinstellungen mit dem Button neben „Sekundenzeiger“. Die Wahl gilt sofort, ohne Neustart, und bleibt gespeichert. Nach dem Update schleicht der Zeiger.
+
+### Geändert
+
+- Geändert: Im Radio zeigt der Button zum Zurücksetzen einen Kreispfeil statt des Wortes „reset“. Im SD-Player zeigen die Buttons für Dateiauswahl, Liste leeren und Zurücksetzen einen offenen Ordner, einen Papierkorb und einen Kreispfeil statt „durchs.“, „leeren“ und „reset“. Alle Buttons der unteren Reihe sind gleich breit, die Hinweise der leeren Titelliste nennen das Ordnersymbol.
+- Geändert: Auf der Seite Zeit & Zeitserver stehen Datum und Uhrzeit links und „zeit setzen“ rechts daneben. In der Weboberfläche stehen „PIN-Sperre“ und „Sekundenzeiger“ mit ihren Buttons platzsparend in einer Zeile.
+- Geändert: Erstinstallation und Fehlerhilfe erklären den Abbruch mit `resultcallback`. Er entsteht, wenn das Terminal ein veraltetes PlatformIO 4.3.4 aus den Paketquellen von Linux Mint oder Ubuntu startet statt des PlatformIO aus VS Code. Abhilfe ist das Terminal über **PlatformIO: New Terminal** oder der volle Pfad `~/.platformio/penv/bin/pio`.
+
+### Behoben
+
+- Behoben: Zerhackte Wiedergabe bei Streams ohne Vorlauf ([Issue 1](https://github.com/DIYLAB-DE/RetroRadioTab5/issues/1)). Ein Encoder im eigenen Netz, der in Echtzeit sendet, ließ dem Tab5 nach jedem Verbindungsaufbau nur rund 46 Millisekunden Reserve, jede kleine Verzögerung im WLAN wurde ein hörbarer Aussetzer. Die 18.000 Byte, ab denen ein Stream startet, sind jetzt ein echter Vorrat, bei 128 kbit/s rund 0,6 bis 0,8 Sekunden. Der Senderstart dauert dadurch nicht länger. Internetsender, die beim Verbinden einen Vorlauf schicken, waren nicht betroffen.
+- Behoben: Jeder Start eines AAC-Senders ließ rund 7 KB Speicher belegt. Der AAC-Decoder gibt seine Tabellen beim Schließen jetzt frei.
+- Behoben: Die Adresse von Radio Paradiso Berlin (Platz PARADISO) gibt es nicht mehr, das Radio meldete dort „Stream unterbrochen“. Die Werksliste enthält die neue Adresse `https://streams.paradiso.de/Berlin/mp3-192/radiode/`. Eine schon gespeicherte Senderliste behält die alte Adresse. Trage die neue dann in der Weboberfläche über den Sendermarker und **Bearbeiten** ein. **Reset** bei der Senderliste stellt ebenfalls die Werkssender her, überschreibt aber die eigene Liste.
+
 ## v26.11.8 vom 08.11.2026
 
 Die erste öffentliche Version von RetroRadioTab5, [v26.11.8 auf GitHub](https://github.com/DIYLAB-DE/RetroRadioTab5/releases/tag/v26.11.8). Sie ist als Vorabversion gekennzeichnet, weil sie bisher nur an wenigen Geräten geprüft ist.

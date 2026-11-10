@@ -2303,6 +2303,14 @@ void NeaacDecoder::cffti(uint16_t mdct_len, uint16_t n) {
     return;
 }
 // ===================================================================
+void NeaacDecoder::cfftu(cfft_info* cfft) {
+#ifndef FIXED_POINT
+    if (cfft) faad_free(&cfft->tab);
+#else
+    (void)cfft;
+#endif
+}
+// ===================================================================
 drc_info* NeaacDecoder::drc_init(real_t cut, real_t boost) {
     drc_info* drc = (drc_info*)faad_malloc(sizeof(drc_info));
     memset(drc, 0, sizeof(drc_info));
@@ -3790,16 +3798,19 @@ void NeaacDecoder::faad_mdct_init(uint16_t mdct_len, uint16_t N) {
 void NeaacDecoder::faad_mdct_end(uint16_t mdct_len) {
     switch (mdct_len) {
         case 256:
+            cfftu(m_ccft256.get());
             m_work256.reset();
             m_ccft256.reset();
             m_mdct256.reset();
             break;
         case 1024:
+            cfftu(m_ccft1024.get());
             m_work1024.reset();
             m_ccft1024.reset();
             m_mdct1024.reset();
             break;
         case 2048:
+            cfftu(m_ccft2048.get());
             m_work2048.reset();
             m_ccft2048.reset();
             m_mdct2048.reset();

@@ -13,6 +13,7 @@ namespace
     constexpr size_t ExtendedSize = 608;          ///< Größe von config_v2: config_v1-Daten ab Byte 0, danach Kennung, Klang, PIN, Bildschirm, Thema, UKW, serielle Logs und CRC am Ende
     constexpr uint32_t ExtendedMagic = 0x32434652; ///< Kennung des Anhangs von config_v2 ab Byte 576
     constexpr char LogsKey[] = "logs_v1";          ///< Eigener Eintrag der seriellen Logs (1 aus, 2 an). Ein Umschalten schreibt so einen NVS-Eintrag statt der 608 Byte von config_v2, der NVS-Bereich muss seltener Flashsektoren löschen
+    constexpr char SecondHandKey[] = "secHand_v1"; ///< Eigener Eintrag des Sekundenzeigers im MainScreen (1 Sekundenschritte, 2 schleichend). Fehlt er oder trägt er einen anderen Wert, schleicht der Zeiger
     constexpr char PinLockKey[] = "pinLockOn";     ///< Eigener Eintrag der PIN-Sperre mit dem Namen aus dem Original (0 aus, 1 an). Fehlt er oder trägt er einen anderen Wert, gilt die Sperre
 
     /** @brief CRC über den eigenen, explizit kodierten Datensatz. */
@@ -266,6 +267,9 @@ void Tab5Config::load(Settings::Configuration &config, uint64_t &revision, Extra
     uint8_t pinLock = 1;
     if (nvs_get_u8(nvs, PinLockKey, &pinLock) == ESP_OK && pinLock == 0)
         config.pinLock = false;
+    uint8_t secondHand = 2;
+    if (nvs_get_u8(nvs, SecondHandKey, &secondHand) == ESP_OK && secondHand == 1)
+        config.secondSweep = false;
     nvs_close(nvs);
     mbedtls_platform_zeroize(blob, sizeof(blob));
     mbedtls_platform_zeroize(&candidate, sizeof(candidate));
@@ -320,6 +324,20 @@ bool Tab5Config::savePinLock(bool enabled)
     return result == ESP_OK;
 }
 
+bool Tab5Config::saveSecondHand(bool sweep)
+{
+    nvs_handle_t nvs;
+    esp_err_t result = nvs_open("rr_tab5", NVS_READWRITE, &nvs);
+    if (result == ESP_OK)
+    {
+        result = nvs_set_u8(nvs, SecondHandKey, sweep ? 2 : 1);
+        if (result == ESP_OK)
+            result = nvs_commit(nvs);
+        nvs_close(nvs);
+    }
+    return result == ESP_OK;
+}
+
 bool Tab5Config::save(const Settings::Configuration &config, uint64_t revision, const Extras &extras)
 {
     if (!valid(config) || !valid(extras) || !revision || revision == UINT64_MAX)
@@ -359,6 +377,8 @@ bool Tab5Config::save(const Settings::Configuration &config, uint64_t revision, 
             result = nvs_set_u8(nvs, LogsKey, config.serialLogs ? 2 : 1);
         if (result == ESP_OK)
             result = nvs_set_u8(nvs, PinLockKey, config.pinLock ? 1 : 0);
+        if (result == ESP_OK)
+            result = nvs_set_u8(nvs, SecondHandKey, config.secondSweep ? 2 : 1);
         if (result == ESP_OK)
             result = nvs_commit(nvs);
         nvs_close(nvs);

@@ -142,17 +142,16 @@ namespace RadioTab5Layout
     {
         constexpr int Y = 653;                 ///< Original 435
         constexpr int H = HEIGHT - Y;          ///< 67, Original 45
-        constexpr int W = 68;                  ///< Original 45
-        constexpr int RESET_W = 101;           ///< Original 67
+        constexpr int W = 68;                  ///< Original 45, gilt auch für Reset (Original 67 mit Text)
         constexpr int GAP = 15;                ///< Original 10
         constexpr int RADIUS = 6;              ///< Eckenradius, Original 4
         constexpr int BORDER = 2;              ///< Rahmen, Original 1
         constexpr int BORDER_PRESSED = 3;      ///< Rahmen gedrückt, Original 2
-        constexpr int X4 = WIDTH - W;          ///< Haus (Hauptmenü und Sleep-Timer)
-        constexpr int X3 = X4 - GAP - RESET_W; ///< Reset
-        constexpr int X2 = X3 - GAP - W;       ///< Weiter
-        constexpr int X1 = X2 - GAP - W;       ///< Zurück
-        constexpr int X0 = X1 - GAP - W;       ///< Favoriten
+        constexpr int X4 = WIDTH - W;          ///< 1212, Haus (Hauptmenü und Sleep-Timer)
+        constexpr int X3 = X4 - GAP - W;       ///< 1129, Reset
+        constexpr int X2 = X3 - GAP - W;       ///< 1046, Weiter
+        constexpr int X1 = X2 - GAP - W;       ///< 963, Zurück
+        constexpr int X0 = X1 - GAP - W;       ///< 880, Favoriten
     }
 
     /** @brief Uhren im unteren Bereich, Lage über die Originalkanten auf die Visualizerfläche abgebildet. */
@@ -165,6 +164,19 @@ namespace RadioTab5Layout
         constexpr int ANALOG_X = Visual::X + 570;  ///< Original 721, im Goniometermodus
         constexpr int ANALOG_Y = Visual::Y;        ///< Original 354
         constexpr int ANALOG_SIZE = 105;           ///< Original 70
+    }
+
+    /** @brief Akkusymbol hochkant in der Zeile der Buttons, nur mit erkanntem Akku. Ohne Vorbild im Original. */
+    namespace Battery
+    {
+        constexpr int W = 27;                                   ///< Breite des Symbols (BatteryIcon::Upright)
+        constexpr int H = Buttons::H;                           ///< 67, so hoch wie ein Button
+        constexpr int X = Buttons::X0 - Buttons::GAP - W;       ///< 838, links neben dem Favoriten-Button im Abstand der Buttons untereinander
+        constexpr int Y = Buttons::Y;                           ///< 653
+        constexpr int CLOCK_INSET = Clock::DIGITAL_X + Clock::DIGITAL_W + 10 - X; ///< 9, mit Akku rücken Ring und Restzeit des Sleep-Timers im Uhrsprite so weit nach links, dass bis zum Symbol 10 frei bleiben wie ohne Akku bis zum ersten Button
+        constexpr int GONIO_LEFT = Visual::X + 246;             ///< 837, rechte Kante der Pegelsäulen des Goniometers (Original 505)
+        constexpr int GONIO_X = (GONIO_LEFT + Buttons::X0 - W) / 2; ///< 845, im Goniometermodus mittig zwischen Pegelsäulen und erstem Button des Radios, je 8 Abstand
+        static_assert(Clock::DIGITAL_X + Clock::DIGITAL_W <= X && GONIO_X + W < Buttons::X0, "Akkusymbol muss zwischen Digitaluhr und erstem Button liegen");
     }
 
     /** @brief Dialoge 1,5-fach, mittig auf dem Display wie im Original. Die Innenmaße stehen nativ in den Dialogklassen. */

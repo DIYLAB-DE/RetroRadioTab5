@@ -54,6 +54,8 @@ constexpr size_t FRAME_SIZE_AAC = 18000;         ///< mehr als ein icy-metaint
 constexpr size_t FRAME_SIZE_FLAC = UINT16_MAX;   ///< größte OGG-Seite
 constexpr size_t FRAME_SIZE_OPUS = UINT16_MAX;   ///< größte OGG-Seite
 constexpr size_t FRAME_SIZE_VORBIS = UINT16_MAX; ///< OGG-Seiten sind meist 4080 Bytes, im Metadaten-Block bis 64 KB
+constexpr size_t STREAM_DECODE_MIN = 4096;       ///< Füllstand, ab dem ein laufender MP3- oder AAC-Web-Stream den nächsten Rahmen dekodiert: mehr als der größte MP3-Rahmen (2880 Byte) samt Kopf des folgenden und als jeder ADTS-Rahmen mit bis zu zwei Kanälen (1543 Byte). Die Spanne bis zur Rahmengröße oben ist der Vorrat für Laufzeitschwankungen des Netzes
+constexpr size_t ADTS_HEADER_SIZE = 7;           ///< Länge des ADTS-Kopfs ohne Prüfsumme
 constexpr size_t OUT_BUFF_SIZE = 4608 * 2;
 constexpr size_t RESAMPLES_BUFF_SIZE = OUT_BUFF_SIZE * 8; ///< kleinste Abtastrate 6 kHz auf größte 48 kHz
 
@@ -246,6 +248,7 @@ void Audio::setDefaults() {
     m_fAcceptRanges = false;
     m_fConnectionClose = false;
     m_fAllDataReceived = false;
+    m_fRebuffering = false;
 
     m_codec = CODEC_NONE;
     m_dataMode = AUDIO_NONE;
@@ -4891,8 +4894,17 @@ void Audio::playAudioData() {
                 m_pad.bytesDecoded = sendBytes(m_inBuff.getReadPtr(), m_pad.bytesToDecode);
             } else {
                 m_pad.bytesToDecode = m_inBuff.readSpace();
-                if (m_pad.bytesToDecode >= m_inBuff.getMaxBlockSize()) {
-                    m_pad.bytesDecoded = sendBytes(m_inBuff.getReadPtr(), m_pad.bytesToDecode);
+                // Ist der Vorrat aufgebraucht, wartet die Wiedergabe, bis der Puffer wieder den Startfüllstand erreicht hat. Sonst liefe sie ohne Vorrat weiter, und jede Verzögerung im Netz wäre als Aussetzer zu hören.
+                if (m_fRebuffering && m_inBuff.bufferFilled() >= m_inBuff.getMaxBlockSize())
+                    m_fRebuffering = false;
+                if (!m_fRebuffering) {
+                    const size_t threshold = streamDecodeThreshold();
+                    if (m_pad.bytesToDecode >= threshold) {
+                        if (threshold == m_inBuff.getMaxBlockSize() || adtsFrameComplete(m_inBuff.getReadPtr(), m_pad.bytesToDecode))
+                            m_pad.bytesDecoded = sendBytes(m_inBuff.getReadPtr(), m_pad.bytesToDecode);
+                    } else if (threshold < m_inBuff.getMaxBlockSize() && m_inBuff.bufferFilled() < threshold) {
+                        m_fRebuffering = true;
+                    }
                 }
             }
         }
@@ -8136,11 +8148,35 @@ int32_t Audio::newInBuffStart(int32_t resumeFilePos) {
 }
 
 /**
+ * @brief Füllstand des Eingangspuffers, den die Dekodierung des nächsten Rahmens braucht
+ *
+ * Ein laufender MP3- oder AAC-Web-Stream braucht nur einen vollständigen Rahmen. Der Start, die Suche nach dem Synchronwort nach einem Decoderfehler und alle anderen Quellen brauchen die volle Rahmengröße des Codecs.
+ */
+size_t Audio::streamDecodeThreshold() {
+    if (m_fPlaying && m_streamType == ST_WEBSTREAM && m_playlistFormat != FORMAT_M3U8 && (m_codec == CODEC_MP3 || m_codec == CODEC_AAC))
+        return STREAM_DECODE_MIN;
+    return m_inBuff.getMaxBlockSize();
+}
+
+/**
+ * @brief Prüft, ob der ADTS-Rahmen am Lesezeiger vollständig im Puffer liegt
+ *
+ * Mehrkanal-AAC kann Rahmen bis 8191 Byte tragen, mehr als STREAM_DECODE_MIN. Ein unvollständiger Rahmen wäre für den Decoder ein Fehler. Alles ohne ADTS-Kopf am Lesezeiger, also auch MP3, gilt als vollständig.
+ */
+bool Audio::adtsFrameComplete(const uint8_t* data, size_t len) {
+    if (m_codec != CODEC_AAC || len < ADTS_HEADER_SIZE || data[0] != 0xFF || (data[1] & 0xF6) != 0xF0)
+        return true;
+    const size_t frameLength = static_cast<size_t>(data[3] & 0x03) << 11 | static_cast<size_t>(data[4]) << 3 | data[5] >> 5;
+    return frameLength <= len;
+}
+
+/**
  * @brief Überwacht den Datenfluss und erkennt langsame oder abgerissene Streams
  */
 bool Audio::streamDetection(uint32_t bytesAvail) {
 
-    if (m_inBuff.bufferFilled() < m_inBuff.getMaxBlockSize()) {
+    // Langsam ist der Stream erst, wenn der Vorrat aufgebraucht ist. Bis dahin zehrt die Wiedergabe von ihm.
+    if (m_fRebuffering || m_inBuff.bufferFilled() < streamDecodeThreshold()) {
         if (m_sdet.cnt_slow == 0)
             m_sdet.tmr_slow = audio_millis();
         m_sdet.cnt_slow++;

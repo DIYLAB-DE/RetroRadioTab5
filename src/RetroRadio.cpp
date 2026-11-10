@@ -742,7 +742,8 @@ void RetroRadio::drawDigitalClock(UiCanvas *sprite, int &lastDrawnSecond, int32_
     const uint16_t COLOR_TRACK = farbe(Rolle::UhrDigitalSpur);
     const uint16_t COLOR_TEXT = farbe(Rolle::UhrDigitalZiffern);
 
-    const int SPRITE_WIDTH = sprite->width();
+    // Mit Akku steht dessen Symbol gleich rechts neben dem Sprite, Ring und Restzeit rücken deshalb im Sprite nach links.
+    const int SPRITE_WIDTH = sprite->width() - (m_state.battery.present ? NL::Battery::CLOCK_INSET : 0);
     const int SPRITE_HEIGHT = sprite->height();
     // 1,5-fach des Originals: Ring 26 vom rechten Rand, Radius cy-6, Stärke 4,5
     const float cx = SPRITE_WIDTH - 39;
@@ -845,7 +846,7 @@ bool RetroRadio::begin(lgfx::LGFX_Device &display, StationManager &stations, Vis
     m_visualizer = &visualizer;
     if (!visualizer.ready() || !m_scene.prepare(NL::WIDTH, NL::HEIGHT) || !m_scale.prepare(NL::WIDTH, NL::Scale::HEIGHT) || !m_strip.prepare(NL::Scale::NEEDLE_STAGING_W, NL::Scale::HEIGHT) || !m_div.prepare(NL::WIDTH, NL::Scale::DIVIDER_HEIGHT) ||
         !m_footer.prepare(NL::WIDTH, NL::Footer::HEIGHT) || !m_stereo.prepare(NL::Footer::STEREO_W, NL::Footer::STEREO_H) || !m_codec.prepare(NL::Footer::CODEC_W, NL::Footer::CODEC_H) || !m_knob.prepare(NL::Knob::SIZE, NL::Knob::SIZE) || !m_tracks.prepare(NL::Tracks::WIDTH, NL::Tracks::HEIGHT) ||
-        !m_eye.prepare(NL::MagicEye::SIZE, NL::MagicEye::SIZE) || !m_analogClock.prepare(NL::Clock::ANALOG_SIZE, NL::Clock::ANALOG_SIZE) || !m_digitalClock.prepare(NL::Clock::DIGITAL_W, NL::Clock::DIGITAL_H))
+        !m_eye.prepare(NL::MagicEye::SIZE, NL::MagicEye::SIZE) || !m_analogClock.prepare(NL::Clock::ANALOG_SIZE, NL::Clock::ANALOG_SIZE) || !m_digitalClock.prepare(NL::Clock::DIGITAL_W, NL::Clock::DIGITAL_H) || !m_battery.prepare(NL::Battery::W, NL::Battery::H))
         return false;
     // Ziffern der Analoguhr in DejaVu12, das Original nutzt DejaVu9
     m_analogClock.setFont(&fonts::DejaVu12);
@@ -871,17 +872,18 @@ bool RetroRadio::begin(lgfx::LGFX_Device &display, StationManager &stations, Vis
         LOG_ERROR("Panelkopie der Skala nicht verfügbar, die Nadel zeichnet über die Szene");
     const int positions[] = {NL::Buttons::X0, NL::Buttons::X1, NL::Buttons::X2, NL::Buttons::X3, NL::Buttons::X4};
     // Tastensymbole vektoriell in 48 Pixel (Original 32). Ihre Farben stehen als Hexzahl im Etikett, initButton kopiert die Etiketten
-    char star[24], back[24], forward[24], home[24];
+    char star[24], back[24], forward[24], reset[24], home[24];
     snprintf(star, sizeof(star), "^STAR:48:%04X^", farbe(Rolle::RadStern));
     snprintf(back, sizeof(back), "^BCKW:48:%04X^", farbe(Rolle::GemAkzent));
     snprintf(forward, sizeof(forward), "^FORW:48:%04X^", farbe(Rolle::GemAkzent));
+    snprintf(reset, sizeof(reset), "^RESET:48:%04X^", farbe(Rolle::GemAkzent));
     snprintf(home, sizeof(home), "^HOME:48:%04X^", farbe(Rolle::GemHausSymbol));
-    const char *labels[] = {star, back, forward, "reset", home};
+    const char *labels[] = {star, back, forward, reset, home};
+    // Bei Symboltasten färbt die Textfarbe nur den Rahmen der gedrückten Taste
     const uint16_t outline = farbe(Rolle::GemRahmen), fill = farbe(Rolle::GemTastenFlaeche), text = farbe(Rolle::GemTextGedaempft);
     for (int i = 0; i < 5; ++i)
     {
-        const int width = i == 3 ? NL::Buttons::RESET_W : NL::Buttons::W;
-        m_buttons[i].initButton(&m_scene, positions[i] + width / 2, NL::Buttons::Y + NL::Buttons::H / 2, width, NL::Buttons::H, NL::Buttons::RADIUS, outline, fill, text, labels[i], nullptr);
+        m_buttons[i].initButton(&m_scene, positions[i] + NL::Buttons::W / 2, NL::Buttons::Y + NL::Buttons::H / 2, NL::Buttons::W, NL::Buttons::H, NL::Buttons::RADIUS, outline, fill, text, labels[i], nullptr);
         m_buttons[i].setFont(LeagueGothicCond51);
         m_buttons[i].setBorderWidths(NL::Buttons::BORDER, NL::Buttons::BORDER_PRESSED);
     }
@@ -1183,7 +1185,8 @@ void RetroRadio::drawEye()
 
 void RetroRadio::drawClock()
 {
-    if (m_lastDrawnSecond < 0)
+    const bool fresh = m_lastDrawnSecond < 0;
+    if (fresh)
         m_digitalClock.clear(farbe(Rolle::GemGrund));
     int minutes = -1, seconds = 0;
     if (m_sleep.isTimerActive())
@@ -1192,6 +1195,22 @@ void RetroRadio::drawClock()
         drawAnalogClock(&m_analogClock, m_lastDrawnSecond, NL::Clock::ANALOG_X, NL::Clock::ANALOG_Y, minutes, seconds);
     else
         drawDigitalClock(&m_digitalClock, m_lastDrawnSecond, NL::Clock::DIGITAL_X, NL::Clock::DIGITAL_Y, minutes, seconds);
+    drawBattery(fresh);
+}
+
+void RetroRadio::drawBattery(bool fresh)
+{
+    const auto &battery = m_state.battery;
+    if (!fresh && battery == m_batteryDrawn)
+        return;
+    m_batteryDrawn = battery;
+    // Ohne Akku bleibt die Zeile unberührt. Kommt oder geht der Akku, baut update() die Fläche über den Weg des Moduswechsels neu auf.
+    if (!battery.present)
+        return;
+    const uint16_t ground = farbe(Rolle::GemGrund);
+    m_battery.clear(ground);
+    BatteryIcon::draw(m_battery, 0, 0, BatteryIcon::Upright, battery, farbe(Rolle::UhrDigitalZiffern), ground);
+    present(m_battery, m_visualizer->mode() == VisMode::VIS_GONIO ? NL::Battery::GONIO_X : NL::Battery::X, NL::Battery::Y);
 }
 
 RetroRadio::Input RetroRadio::command(Action action, int station)
@@ -1315,6 +1334,12 @@ void RetroRadio::update(uint32_t now, AudioManager &audio)
         m_retryAt = 0;
         LOG_INFO_F("RADIO Wiederanlauf Sender %d nach %lu ms", m_target, static_cast<unsigned long>(m_retryDelay));
         m_pending = selectStation(m_target, now);
+    }
+    // Kommt oder geht der Akku, wechseln Ring und Restzeit der Digitaluhr ihren Platz und das Symbol erscheint oder verschwindet. Der Weg des Moduswechsels räumt die Fläche und baut alles neu auf.
+    if (m_state.battery.present != m_batteryPresent)
+    {
+        m_batteryPresent = m_state.battery.present;
+        m_drawnMode = static_cast<VisMode>(VIS_MODE_COUNT);
     }
     if (m_dirty)
         drawScene();

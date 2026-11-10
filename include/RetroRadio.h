@@ -4,6 +4,7 @@
 #include "UiCanvas.h"
 #include "StationManager.h"
 #include "Thema.h"
+#include "BatteryIcon.h"
 #include "RadioTab5Layout.h"
 #include "RadioPresetDialog.h"
 #include "SleepTimerDialog.h"
@@ -69,6 +70,7 @@ public:
         uint32_t sampleRate = 0, bitRate = 0;                                ///< Abtastrate in Hz, Bitrate in bit/s
         AudioManager::Codec codec = AudioManager::Codec::None;              ///< Decoder des laufenden Streams
         char title[256]{}, stationName[STATION_NAME_SIZE]{};                 ///< Streamtitel und Sendername, UTF-8
+        BatteryIcon::State battery;                                          ///< Akkuanzeige, ohne erkannten Akku bleibt die Zeile der Buttons unverändert
     };
 
     /** @brief Legt Szene und Sprites an und lädt die Senderliste. @param display Display. @param stations Zentrale Senderverwaltung. @param visualizer Bereits initialisierte, gemeinsam genutzte Fassade. @return false bei bereits vorbereitetem Radio, nicht bereitem Visualizer oder fehlendem Speicher. */
@@ -184,6 +186,9 @@ private:
     uint32_t m_retryAt = 0, m_retryDelay = 0; ///< Nächster selbsttätiger Wiederanlauf nach Streamabbruch und dessen wachsender Abstand
     char m_truncatedTitle[256]{};             ///< Arbeitspuffer für den gekürzten Titel der Infozeile
     VisMode m_drawnMode = static_cast<VisMode>(VIS_MODE_COUNT); ///< Zuletzt gezeichneter Visualizermodus, ungültig bis zum ersten Zeichnen
+    UiCanvas m_battery;                 ///< Akkusymbol hochkant
+    BatteryIcon::State m_batteryDrawn;  ///< Zuletzt gezeichneter Akkustand
+    bool m_batteryPresent = false;      ///< Akku war beim letzten Aufbau der Zeile erkannt
     /** @brief Kopiert den zentralen Sendersnapshot in die Skalenreihenfolge. */
     void loadStations();
     /** @brief Überträgt einen vorbereiteten Sprite und aktualisiert den Dialoguntergrund. */
@@ -230,6 +235,8 @@ private:
     void drawButtons();
     /** @brief Zeichnet die vom Visualizermodus abhängige Uhr mit optionalem Timer. */
     void drawClock();
+    /** @brief Zeichnet das Akkusymbol links neben dem Favoriten-Button, im Goniometermodus mittig zwischen Pegelsäulen und Favoriten-Button. @param fresh Die Zeile wurde gerade geleert, das Symbol muss auch bei unverändertem Stand neu. */
+    void drawBattery(bool fresh);
     /** @brief Zeichnet eine analoge Uhr aus dem zentralen Zeitstatus. */
     void drawAnalogClock(UiCanvas *sprite, int &lastDrawnSecond, int32_t x, int32_t y, int remainingMinutes, int remainingSeconds);
     /** @brief Zeichnet eine digitale Uhr aus dem zentralen Zeitstatus. */

@@ -134,20 +134,23 @@ namespace SdPlayerTab5Layout
         constexpr int LINE = RL::Footer::LINE;     ///< Original 1
     }
 
-    /** @brief Tasten rechts unten. Haus und Reset wie beim Radio, durchsuchen und leeren an Stelle der ersten drei Radiotasten. */
+    /** @brief Vier Symboltasten rechts unten im Raster der Radiotasten X1 bis X4, alle so breit wie das Haus. */
     namespace Buttons
     {
-        constexpr int Y = RL::Buttons::Y;               ///< Original 435
-        constexpr int H = RL::Buttons::H;               ///< Original 45
-        constexpr int GAP = RL::Buttons::GAP;           ///< Original 10
-        constexpr int POWER_X = RL::Buttons::X4;        ///< Original 755
-        constexpr int POWER_W = RL::Buttons::W;         ///< Original 45
-        constexpr int RESET_X = RL::Buttons::X3;        ///< Original 678
-        constexpr int RESET_W = RL::Buttons::RESET_W;   ///< Original 67
-        constexpr int CLEAR_W = 105;                    ///< Original 70
-        constexpr int CLEAR_X = RESET_X - GAP - CLEAR_W; ///< 976, Original 598
-        constexpr int BROWSE_X = RL::Buttons::X0;       ///< 847. Original 513, linke Kante wie die Favoritentaste des Radios
-        constexpr int BROWSE_W = CLEAR_X - GAP - BROWSE_X; ///< 114. Original 75, einen Pixel über 112,5 für die bündige Reihe
+        constexpr int Y = RL::Buttons::Y;         ///< Original 435
+        constexpr int H = RL::Buttons::H;         ///< Original 45
+        constexpr int W = RL::Buttons::W;         ///< 68, Original 45 bis 75 je nach Text
+        constexpr int POWER_X = RL::Buttons::X4;  ///< 1212, Original 755
+        constexpr int RESET_X = RL::Buttons::X3;  ///< 1129, Original 678
+        constexpr int CLEAR_X = RL::Buttons::X2;  ///< 1046, Original 598
+        constexpr int BROWSE_X = RL::Buttons::X1; ///< 963, Original 513
+    }
+
+    /** @brief Akkusymbol hochkant links neben dem Ordner-Button im Abstand der Buttons untereinander, in jeder Anzeigeart an derselben Stelle. Nur mit erkanntem Akku, ohne Vorbild im Original. */
+    namespace Battery
+    {
+        constexpr int X = Buttons::BROWSE_X - RL::Buttons::GAP - RL::Battery::W; ///< 921
+        constexpr int Y = RL::Battery::Y;                                        ///< 653
     }
 
     /** @brief Dateidialog 1,5-fach mittig. Alle Innenmaße relativ zur linken oberen Ecke. */

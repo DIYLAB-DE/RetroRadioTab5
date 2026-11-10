@@ -24,7 +24,7 @@ Balance (-16 bis 16) sowie Tiefen, Mitten und Höhen (je -12 bis 12 dB) stellst 
 
 [![Lautstärke null im Radio](bilder/bedienung/radio-lautstaerke-null-klein.png)](bilder/bedienung/radio-lautstaerke-null.png)
 
-**reset** öffnet die Rückfrage **ZURÜCKSETZEN?**. Mit **weiter** gehen Lautstärke (auf 30), Balance, Klangregler und die Varianten der Visualisierungen auf ihre Grundeinstellung zurück, **abbruch** lässt alles, wie es ist. Die Taste nicht mit dem normalen Beenden verwechseln.
+Die Taste mit dem **Kreispfeil** öffnet die Rückfrage **ZURÜCKSETZEN?**. Mit **weiter** gehen Lautstärke (auf 30), Balance, Klangregler und die Varianten der Visualisierungen auf ihre Grundeinstellung zurück, **abbruch** lässt alles, wie es ist. Die Taste nicht mit dem normalen Beenden verwechseln.
 
 ### Favoriten und Sleep-Timer
 
@@ -90,7 +90,7 @@ Der SD-Player spielt Dateien mit den Endungen **MP3, AAC, M4A, FLAC und OGG**. D
 
 ### Musik auswählen
 
-**durchs.** öffnet die Dateiauswahl. Ein kurzer Tipp öffnet einen Ordner, **..** führt eine Ebene zurück. Dateien beziehungsweise ein ganzer Ordner lassen sich durch längeres Drücken auswählen, auch mehrere nacheinander. Die Auswahl wird unten zusammengefasst. **ok** übernimmt sie in die Titelliste, **abbruch** schließt den Dialog ohne Übernahme. Bereits enthaltene Dateien werden beim Hinzufügen übersprungen.
+Das **Ordnersymbol** öffnet die Dateiauswahl. Ein kurzer Tipp öffnet einen Ordner, **..** führt eine Ebene zurück. Dateien beziehungsweise ein ganzer Ordner lassen sich durch längeres Drücken auswählen, auch mehrere nacheinander. Die Auswahl wird unten zusammengefasst. **ok** übernimmt sie in die Titelliste, **abbruch** schließt den Dialog ohne Übernahme. Bereits enthaltene Dateien werden beim Hinzufügen übersprungen.
 
 | Dateiauswahl | Musikordner | Albumordner | Ordner ausgewählt |
 | --- | --- | --- | --- |
@@ -98,7 +98,7 @@ Der SD-Player spielt Dateien mit den Endungen **MP3, AAC, M4A, FLAC und OGG**. D
 
 Ein ausgewählter Ordner bringt seine Titel nach Namen sortiert mit, danach die seiner Unterordner. Die Titelliste fasst höchstens 300 Einträge, gesammelt wird bis 20 Ordnerebenen tief. Wird eine Grenze erreicht, meldet der Dialog **Auswahlgrenze erreicht**. Verwaltungsdateien von Windows und macOS, etwa `._Titel.mp3`, `.DS_Store` oder `System Volume Information`, blendet die Dateiauswahl aus.
 
-Die Titel werden über die Wiedergabetaste gestartet. **leeren** entfernt nach der Rückfrage **LISTE LEEREN?** die Titelliste, nicht die Musikdateien auf der SD-Karte. Das Haus unten rechts öffnet wie im Radio den Sleep-Timer. Lautstärke, Balance, Klang, **reset** und Visualisierungswechsel funktionieren wie im Radio.
+Die Titel werden über die Wiedergabetaste gestartet. Der **Papierkorb** entfernt nach der Rückfrage **LISTE LEEREN?** die Titelliste, nicht die Musikdateien auf der SD-Karte. Das Haus unten rechts öffnet wie im Radio den Sleep-Timer. Lautstärke, Balance, Klang, der **Kreispfeil** zum Zurücksetzen und Visualisierungswechsel funktionieren wie im Radio.
 
 Die Abbildungen zeigen vorhandene Musikdateien und ein Cover zur Demonstration. Titel, Künstlernamen und Coverabbildungen dienen als Beispiele, Musikdateien sind nicht Bestandteil des Repositorys.
 
@@ -114,7 +114,7 @@ Die Farbe der Play-Taste zeigt den gewählten Modus. Die Farben gelten für das 
 | Grün | Aktuellen Titel wiederholen | Während normaler laufender Wiedergabe kurz auf Play tippen. |
 | Rot | Gesamte Wiedergabeliste wiederholen | Play mindestens 0,8 Sekunden halten und loslassen. |
 
-Ein kurzer Druck auf Play während laufender Wiedergabe mit aktiver Wiederholung schaltet zurück auf normal, ohne dass der Titel neu beginnt. Pause, Titelsprünge und die Wahl eines Titels in der Liste behalten den Modus. Play setzt eine Pause mit dem gewählten Modus fort. **Stop**, **leeren** und das Verlassen des Players schalten die Wiederholung aus. Die Listenwiederholung umfasst auch eine Wiedergabeliste mit Titeln aus mehreren Ordnern. Die Wahl wird nicht gespeichert.
+Ein kurzer Druck auf Play während laufender Wiedergabe mit aktiver Wiederholung schaltet zurück auf normal, ohne dass der Titel neu beginnt. Pause, Titelsprünge und die Wahl eines Titels in der Liste behalten den Modus. Play setzt eine Pause mit dem gewählten Modus fort. **Stop**, der **Papierkorb** und das Verlassen des Players schalten die Wiederholung aus. Die Listenwiederholung umfasst auch eine Wiedergabeliste mit Titeln aus mehreren Ordnern. Die Wahl wird nicht gespeichert.
 
 ### Ordnercover und Bildgrenzen
 

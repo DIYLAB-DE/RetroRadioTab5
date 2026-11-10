@@ -2,6 +2,7 @@
 
 #include "Logger.h"      // für das Loggen
 #include "StringUtils.h" // für sichere String-Operationen
+#include <algorithm>
 
 namespace
 {
@@ -13,6 +14,8 @@ namespace
     // 16 KiB I2S-DMA statt 64 KiB: Der SDIO-WLAN-Treiber braucht denselben internen DMA-Speicher.
     constexpr uint16_t I2sDmaDescriptors = 8;
     constexpr uint16_t I2sDmaFrames = 256;
+    constexpr uint32_t PcmGapMarginMs = 10; ///< Zuschlag in ms, ab dem ein verspäteter PCM-Block als Lücke zählt
+    constexpr uint32_t PcmGapStartBlocks = 4; ///< So viele Blöcke nach einem Start bleiben bei der Lückenzählung außen vor
 
     // String-Validierung
     constexpr size_t MIN_STRING_LENGTH_SUSPICIOUS = 2;
@@ -535,8 +538,18 @@ void AudioManager::task_processAudioSamples32(int32_t *outBuff, int16_t validSam
     if (!outBuff || validSamples <= 0)
         return;
 
+    // Lücke: Der Abstand zum vorigen Block übersteigt dessen Dauer und den Inhalt der I2S-DMA-Puffer, der Ausgang lief also leer und sendete Nullen.
+    // Die ersten Blöcke nach einem Start zählen nicht, dort füllt audio-lite die noch leeren DMA-Puffer in Teilstücken.
+    const uint32_t now = millis(), last = m_lastPcm.load(), rate = m_audio ? m_audio->getSampleRate() : 0;
+    m_startBlocks = last ? std::min<uint32_t>(m_startBlocks + 1, PcmGapStartBlocks) : 0;
+    if (m_startBlocks >= PcmGapStartBlocks && rate && now - last > m_blockMs + I2sDmaDescriptors * I2sDmaFrames * 1000u / rate + PcmGapMarginMs)
+    {
+        m_pcmGaps.fetch_add(1);
+        m_pcmGapMs.fetch_add(now - last);
+    }
+    m_blockMs = rate ? static_cast<uint32_t>(validSamples) * 1000u / rate : 0;
     m_pcmFrames.fetch_add(static_cast<uint32_t>(validSamples));
-    m_lastPcm.store(millis());
+    m_lastPcm.store(now);
     for (int i = 0; i < validSamples * 2; ++i)
     {
         if (outBuff[i] != 0)
@@ -793,6 +806,9 @@ AudioManager::Status AudioManager::getStatus() const
                   m_rate.load(), m_bitRate.load(), m_nonzeroBlocks.load(), m_stationIndex.load(), m_appliedVolume.load(),
                   requestId, m_controlId.load(), m_position.load(), m_duration.load(),
                   m_file.load(), m_fileConfirmed.load(), m_commandFailed.load(), m_codec.load()};
+    status.pcmGaps = m_pcmGaps.load();
+    status.pcmGapMs = m_pcmGapMs.load();
+    status.inputBytes = m_inputBytes.load();
     if (generation != activeGeneration || generation != m_generation.load() || activeGeneration != m_activeGeneration.load() || state != m_state.load() || requestId != m_requestId.load())
         status.state = State::Starting;
     return status;
@@ -841,6 +857,7 @@ void AudioManager::radioTask(void *context)
             manager.m_nonzeroBlocks.store(0);
             manager.m_rate.store(0);
             manager.m_bitRate.store(0);
+            manager.m_inputBytes.store(0);
             manager.m_codec.store(Codec::None);
             manager.m_position.store(0);
             manager.m_duration.store(0);
@@ -967,6 +984,7 @@ void AudioManager::radioTask(void *context)
             }
             manager.m_rate.store(audio.getSampleRate());
             manager.m_bitRate.store(audio.getBitRate());
+            manager.m_inputBytes.store(audio.inBufferFilled());
             if (manager.m_file.load() && active)
             {
                 manager.m_position.store(audio.getAudioCurrentTime());

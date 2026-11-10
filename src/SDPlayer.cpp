@@ -473,13 +473,13 @@ SdPlayer::Rect SdPlayer::bounds(Hit hit) const
     case Hit::Next:
         return {SL::Transport::X0 + SL::Transport::STEP * (static_cast<int>(hit) - static_cast<int>(Hit::Previous)), SL::Transport::Y, SL::Transport::SIZE, SL::Transport::SIZE};
     case Hit::Browse:
-        return {SL::Buttons::BROWSE_X, SL::Buttons::Y, SL::Buttons::BROWSE_W, SL::Buttons::H};
+        return {SL::Buttons::BROWSE_X, SL::Buttons::Y, SL::Buttons::W, SL::Buttons::H};
     case Hit::Clear:
-        return {SL::Buttons::CLEAR_X, SL::Buttons::Y, SL::Buttons::CLEAR_W, SL::Buttons::H};
+        return {SL::Buttons::CLEAR_X, SL::Buttons::Y, SL::Buttons::W, SL::Buttons::H};
     case Hit::Reset:
-        return {SL::Buttons::RESET_X, SL::Buttons::Y, SL::Buttons::RESET_W, SL::Buttons::H};
+        return {SL::Buttons::RESET_X, SL::Buttons::Y, SL::Buttons::W, SL::Buttons::H};
     case Hit::Power:
-        return {SL::Buttons::POWER_X, SL::Buttons::Y, SL::Buttons::POWER_W, SL::Buttons::H};
+        return {SL::Buttons::POWER_X, SL::Buttons::Y, SL::Buttons::W, SL::Buttons::H};
     case Hit::Track:
         return {ListX, ListY, ListWidth, ListHeight};
     case Hit::Tape:
@@ -893,8 +893,6 @@ SdPlayerKey SdPlayer::stateText() const
 void SdPlayer::drawControls()
 {
     const Hit hits[] = {Hit::Previous, Hit::Play, Hit::Pause, Hit::Stop, Hit::Next, Hit::Browse, Hit::Clear, Hit::Reset, Hit::Power};
-    m_buttons[5].setLabelText(I18n::sdPlayer(SdPlayerKey::BrowseButton, m_language));
-    m_buttons[6].setLabelText(I18n::sdPlayer(SdPlayerKey::ClearButton, m_language));
     // Der Wiederholungsmodus bleibt auch während der Pause und zwischen zwei Titeln sichtbar, nach einem Lesefehler wie im Stopp nicht
     const auto state = m_playback.state;
     const bool active = state == SdPlaybackStatus::State::Starting || state == SdPlaybackStatus::State::Playing || state == SdPlaybackStatus::State::Paused || state == SdPlaybackStatus::State::Ended;
@@ -1254,6 +1252,12 @@ void SdPlayer::update(uint32_t now, AudioManager &audio)
             if (target != m_playback.positionSeconds)
                 request(SdPlayerAction::Type::Seek, target);
         }
+    }
+    // Kommt oder geht der Akku, erscheint oder verschwindet sein Symbol. Der Weg des Moduswechsels räumt die Fläche und baut Uhr, Symbol und Buttons neu auf.
+    if (m_state.battery.present != m_batteryPresent)
+    {
+        m_batteryPresent = m_state.battery.present;
+        m_drawnMode = static_cast<VisMode>(VIS_MODE_COUNT);
     }
     if (m_drawnMode != m_visualizer->mode())
     {

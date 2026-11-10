@@ -6,6 +6,7 @@
 | --- | --- |
 | Kein serieller Anschluss | Datenkabel statt Ladekabel verwenden und das Tab5 möglichst direkt am Rechner anschließen. Unter Linux die Geräteberechtigungen prüfen, siehe [Erstinstallation](RetroRadioTab5-Ersteinrichtung.md#11-hilfe-bei-problemen). |
 | Upload meldet **Gerätetabelle ist nicht das RetroRadioTab5-Layout** | Das Tab5 trägt noch die Werksfirmware. Den ersten Upload einmalig mit `TAB5_ERSTFLASH=1` ausführen, wie in der [Erstinstallation](RetroRadioTab5-Ersteinrichtung.md#7-retroradiotab5-erstmals-übertragen) beschrieben. |
+| Terminal meldet einen Python-Fehler mit **resultcallback** und `platformio==4.3.4` | Das Terminal startet ein veraltetes PlatformIO aus den Paketquellen der Linux-Distribution. Das Terminal über **PlatformIO: New Terminal** öffnen oder `~/.platformio/penv/bin/pio` mit vollem Pfad aufrufen, siehe [Erstinstallation](RetroRadioTab5-Ersteinrichtung.md#pio-bricht-mit-resultcallback-ab). |
 | Upload bricht wegen der Chiprevision ab | Das Tab5 hat einen ESP32-P4 ab Revision 3.0 und wird derzeit nicht unterstützt. Auf das Gerät wurde nichts geschrieben. |
 | Upload-Port belegt | Serielle Monitore und andere Programme schließen, die denselben Anschluss geöffnet haben. Hängen mehrere Tab5 am Rechner, den Anschluss ausdrücklich wählen. |
 | WLAN bleibt getrennt | 2,4-GHz-Netz, Passwort und aktiviertes Profil prüfen. **test** ausführen, speichern und den angebotenen Neustart durchführen. Nach einem Test mit falschem Passwort weisen manche Router das Gerät einige Minuten lang ab. |

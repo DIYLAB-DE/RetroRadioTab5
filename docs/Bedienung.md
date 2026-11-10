@@ -45,7 +45,7 @@ Unter **Netzwerkname** änderst Du den Namen, mit dem sich das Tab5 im Netzwerk 
 
 ### Zeit und Zeitfenster
 
-Auf der Seite **Zeit & Zeitserver** wählst Du Zeitzone, Zeitserver und das Sync-Intervall. Nach jeder neuen WLAN-Verbindung gleicht das Tab5 die Uhrzeit mit dem Zeitserver ab und schreibt sie in seine eingebaute Uhr. Ohne Netz läuft die Uhr dort weiter. **zeit setzen** stellt die Uhr von Hand, der nächste Abgleich mit dem Zeitserver kann sie wieder ändern.
+Auf der Seite **Zeit & Zeitserver** wählst Du Zeitzone, Zeitserver und das Sync-Intervall. Nach jeder neuen WLAN-Verbindung gleicht das Tab5 die Uhrzeit mit dem Zeitserver ab und schreibt sie in seine eingebaute Uhr. Ohne Netz läuft die Uhr dort weiter. **zeit setzen** stellt die Uhr von Hand, der nächste Abgleich mit dem Zeitserver kann sie wieder ändern. In der Zeile **Sekundenzeiger** wählst Du, wie der rote Zeiger der Uhr im Hauptmenü läuft: schleichend in einer gleichmäßigen Bewegung oder in Sekundenschritten. Ein Tipp auf die Zeile schaltet sofort um.
 
 Die Seite **Zeitfenster** zeigt eine Wochenübersicht mit einem Kästchen je Wochentag und voller Stunde. Angehakt bleibt das Gerät in dieser Stunde aktiv. In einer leeren Stunde stoppt die Wiedergabe, das Tab5 wechselt ins Hauptmenü, sperrt sich bei eingeschalteter PIN-Sperre und schaltet die Beleuchtung aus. Eine Berührung weckt es bis zur nächsten vollen Stunde. Die Zeitfenster wirken nur bei gültiger Uhrzeit.
 
@@ -84,6 +84,10 @@ Auf der Seite **Bildschirm** stellst Du das **Hintergrundlicht** in Zehnerschrit
 Die Seite **Info & Neustart** zeigt unter **Netzwerk** WLAN-Name, Netzwerkname, IP-Adresse, Gateway, Signal, MAC-Adresse, Kanal, Zeitserver, den letzten Abgleich und den Zustand von FTP. Unter **System** stehen Prozessor, Speicher, Firmwaregröße, freier Arbeitsspeicher, die angeschlossenen I2C-Geräte und die Chiptemperatur. Die **Version** ist die Nummer des installierten Release. Die Zeile **FTP** zeigt **aus** oder **an** samt Adresse, das Passwort steht nur in der Weboberfläche.
 
 **neustart** startet das Tab5 nach einer Rückfrage neu. **zurücksetzen** stellt nach einer Rückfrage die Werkseinstellungen her: Alle WLAN-Profile und Einstellungen gehen dabei verloren. Es ist kein normaler Schritt bei einem Firmware-Update.
+
+## Akkuanzeige
+
+Ist am Tab5 ein Akku angeschlossen, zeigt jede Ansicht ein Akkusymbol mit fünf Segmenten, jedes steht für rund 20 % Ladung. Ab drei Segmenten leuchten sie grün, bei zwei gelb, bei einem rot. Unter 10 % blinkt das rote Segment. Ein Blitz im Symbol bedeutet, dass das Tab5 Strom über USB bekommt. Im Hauptmenü und auf dem Sperrbildschirm steht neben dem Symbol die Prozentzahl, in den Einstellungen darüber. Die Zahl ist aus der Akkuspannung geschätzt und zeigt beim Laden etwas zu viel. Ohne Akku erscheint kein Symbol.
 
 ## Sperren und Entsperren
 

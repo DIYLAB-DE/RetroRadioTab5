@@ -53,6 +53,23 @@ namespace MainScreenTab5Layout
         constexpr float SECOND_TIP = 0.75f;                                            ///< Spitze des Sekundenzeigers, Original 0,5
     }
 
+    /** @brief Akkuanzeige in Höhe der Datumszeile: liegendes Symbol mit Prozentzahl in der Datumsschrift, nur mit erkanntem Akku. Auf dem MainScreen rechtsbündig mit den Symbolen, auf dem Sperrbildschirm mittig. Ohne Vorbild im Original. */
+    namespace Battery
+    {
+        constexpr int ICON_W = 82;                            ///< Breite des Symbols (BatteryIcon::Large)
+        constexpr int ICON_H = 42;                            ///< Höhe des Symbols
+        constexpr int GAP = 16;                               ///< Abstand Symbol -> Zahl
+        constexpr int TEXT_W = 122;                           ///< Breite von "100 %" in ComfortaaBold45
+        constexpr int W = ICON_W + GAP + TEXT_W;              ///< 220, Sprite für Symbol und Zahl
+        constexpr int H = Clock::DATE_H;                      ///< 54, die Zahl steht auf der Grundlinie des Datums
+        constexpr int X = WIDTH - Buttons::EDGE_MARGIN - W;   ///< 1027, rechte Kante 1247 wie die Symbole
+        constexpr int Y = Clock::SPRITE_Y + Clock::DATE_Y;    ///< 633, Oberkante der Datumszeile
+        constexpr int CAP_H = 35;                             ///< Höhe der Ziffern von ComfortaaBold45
+        constexpr int DESCENT = 11;                           ///< Unterlänge von ComfortaaBold45
+        constexpr int ICON_Y = H - DESCENT - CAP_H + (CAP_H - ICON_H) / 2; ///< 5, Symbol und Ziffern auf einer Mittellinie
+        constexpr int LOCK_X = (WIDTH - W) / 2;               ///< 530, Sperrbildschirm mittig
+    }
+
     /** @brief WLAN-Anzeige und gedrehte NTP/DST-Beschriftungen im Zifferblatt. */
     namespace Indicators
     {

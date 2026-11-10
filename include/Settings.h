@@ -10,6 +10,7 @@
 #include "DotMatrix.h"
 #include "SettingsTexts.h"
 #include "BtProtocol.h"
+#include "BatteryIcon.h"
 
 /** @brief Konfiguration nativ in 1280x720 (Geometrie in SettingsTab5Layout.h). Besitzt nur UI-Entwurf, niemals zentrale Dienste oder Persistenz. */
 class Settings
@@ -105,7 +106,8 @@ public:
         Theme = 2048u,      ///< Themenindex
         Ukw = 4096u,        ///< UKW-Sender: Schalter, Frequenz und Leistung
         SerialLogs = 8192u, ///< Serielle Logs über USB
-        PinLock = 16384u    ///< PIN-Sperre für Display und Webportal
+        PinLock = 16384u,   ///< PIN-Sperre für Display und Webportal
+        SecondHand = 32768u ///< Sekundenzeiger der Uhr im MainScreen: schleichend oder in Sekundenschritten
     };
 
     /** @brief WLAN-Zugangsdaten eines Profils. */
@@ -132,6 +134,7 @@ public:
         uint8_t ukwPower = 0;                                                                    ///< Seine Leistungsstufe 0..UkwMaxPower
         bool serialLogs = false;                                                                 ///< Serielle Logs über USB, ab Werk aus wie im Original. Antworten auf USB-Befehle kommen immer
         bool pinLock = true;                                                                     ///< Gemeinsame PIN-Sperre für Display und Webportal, ab Werk ein wie im Original. Ausschalten verlangt die aktuelle PIN
+        bool secondSweep = true;                                                                 ///< Sekundenzeiger im MainScreen schleichend, ab Werk ein. Aus: Sekundenschritte, wie sie das Original zeigt
     };
 
     /** @brief Klangwerte getrennt vom binären Konfigurationscontainer. */
@@ -187,6 +190,7 @@ public:
         bool chipTempValid = false;                                                                                              ///< Interner Temperatursensor des ESP32-P4 gelesen
         int16_t chipTempC10 = 0;                                                                                                 ///< Chiptemperatur in Zehntel Grad Celsius
         bool ftpEnabled = false;                                                                                                 ///< FTP-Dienst eingeschaltet, der Schalter gilt nur im RAM
+        BatteryIcon::State battery;                                                                                              ///< Akkuanzeige in der Fußzeile, ohne erkannten Akku bleibt die Fußzeile wie im Original
     };
 
     /** @brief Kopierbarer zentraler Auftrag, nur typzugehörige Felder verwenden und Geheimnisse danach löschen. */
@@ -605,8 +609,10 @@ private:
     void drawPanelSecurity(UiCanvas *spr);
     /** @brief Lage des Schalters der PIN-Sperre, rechtsbündig oben auf der Sicherheitsseite. */
     Rect pinLockToggleRect() const;
-    /** @brief Zeichnet die Zeitseite mit Auswahlzeilen und Schrittgebern. */
+    /** @brief Zeichnet die Zeitseite: Auswahlzeilen, Schrittgeber links, „zeit setzen“ rechts daneben, darunter die Zeile des Sekundenzeigers mit Schalter. */
     void drawPanelTime(UiCanvas *spr);
+    /** @brief Lage der Zeile „Sekundenzeiger“ unten auf der Zeitseite, die ganze Zeile schaltet. */
+    Rect secondHandRowRect() const;
     /** @brief Zeichnet die Matrix der Zeitfenster. */
     void drawPanelTimeWindow(UiCanvas *spr);
     /** @brief Zeichnet die Klangseite. */

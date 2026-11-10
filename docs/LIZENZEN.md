@@ -52,7 +52,7 @@ Die separat beigelegten ursprünglichen Helix-Hinweise stammen aus der erhaltene
 
 Die Webschrift der Weboberfläche ist lokal im HTML eingebettet, dort ist ihr Lizenztext beigefügt. Die Lizenztexte nennen die Urheber der Schriften.
 
-Die Symbole für Radio und Einstellungen im Hauptmenü stammen von **Phosphor Icons**, Copyright 2023, unter MIT. Die Haus-Taste für das Hauptmenü verwendet eine für das Display angepasste Kontur von [House Bold](https://github.com/phosphor-icons/core/blob/main/assets/bold/house-bold.svg). Der vollständige Text liegt als [Phosphor-Lizenz](lizenzen/Phosphor-Lizenz.txt) bei und steht außerdem in `include/IconShapeData.h`. Das Symbol des SD-Players ist eigenes Material des Projekts.
+Die Symbole für Radio und Einstellungen im Hauptmenü stammen von **Phosphor Icons**, Copyright 2023, unter MIT. Die Haus-Taste für das Hauptmenü verwendet eine für das Display angepasste Kontur von [House Bold](https://github.com/phosphor-icons/core/blob/main/assets/bold/house-bold.svg). Ebenso angepasst sind die Tasten Zurücksetzen in Radio und SD-Player sowie Dateiauswahl und Liste leeren im SD-Player nach [Arrow Counter Clockwise Bold](https://github.com/phosphor-icons/core/blob/main/assets/bold/arrow-counter-clockwise-bold.svg), [Folder Open Bold](https://github.com/phosphor-icons/core/blob/main/assets/bold/folder-open-bold.svg) und [Trash Bold](https://github.com/phosphor-icons/core/blob/main/assets/bold/trash-bold.svg). Der vollständige Text liegt als [Phosphor-Lizenz](lizenzen/Phosphor-Lizenz.txt) bei und steht außerdem in `include/IconShapeData.h`. Das Symbol des SD-Players ist eigenes Material des Projekts.
 
 ## Darstellungen und Bilder
 

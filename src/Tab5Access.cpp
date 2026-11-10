@@ -6,11 +6,14 @@
 #include "fonts/ComfortaaBold45.h"
 #include "images/logo_450.h"
 #include "images/made_in_germany.h"
+#include <algorithm>
+#include <cstdio>
 
 // Selektiv aus DIYLAB-DE/RetroRadio, ea4229a34fb39faaff23619092cf09cafb8c51cf, LockScreen.h/.cpp und MainScreen.cpp. GPL-3.0, siehe referenz/RetroRadio-LICENSE. Gerätezugriff, AppState und zentrale PIN-Prüfung sind durch die unten dokumentierten Schnittstellen ersetzt. Die nativen Maße stehen mit Originalwert in MainScreenTab5Layout.h.
 namespace
 {
     using namespace MainScreenTab5Layout::Lock;
+    namespace Battery = MainScreenTab5Layout::Battery;
     namespace Corner = MainScreenTab5Layout::Corner;
     constexpr int DISPLAY_W = MainScreenTab5Layout::WIDTH, DISPLAY_H = MainScreenTab5Layout::HEIGHT;
     constexpr int KEY_COUNT = KEY_COLS * KEY_ROWS;
@@ -85,6 +88,9 @@ void Tab5Access::release()
         m_display->waitDMA();
     m_keypad.setFont(nullptr);
     m_keypad.deleteSprite();
+    m_battery.setFont(nullptr);
+    m_battery.deleteSprite();
+    m_batteryShown = m_batteryFailed = false;
     m_font.unloadFont();
     free(m_logoGrau);
     free(m_madeInGrau);
@@ -148,8 +154,58 @@ void Tab5Access::drawScreen()
     m_display->pushImage(MADEIN_X, MADEIN_Y, MADEIN_W, MADEIN_H, m_madeInGrau ? m_madeInGrau : made_in_germany);
     m_display->waitDMA();
     m_display->setSwapBytes(swap);
+    // Die Fläche ist gerade geleert, ein erkannter Akku wird neu gezeichnet.
+    m_batteryShown = false;
+    drawBattery();
     if (m_keypadVisible)
         renderKeypad();
+}
+
+void Tab5Access::setBattery(const BatteryIcon::State &state)
+{
+    if (state == m_batteryState)
+        return;
+    m_batteryState = state;
+    if (m_ready && m_active)
+        drawBattery();
+}
+
+void Tab5Access::drawBattery()
+{
+    const auto &battery = m_batteryState;
+    if ((!battery.present && !m_batteryShown) || m_batteryFailed)
+        return;
+    if (!m_battery.width())
+    {
+        m_battery.setPsram(true);
+        m_battery.setColorDepth(16);
+        m_battery.setSwapBytes(true);
+        m_battery.setTextSize(1);
+        m_battery.setTextWrap(false);
+        if (!m_battery.createSprite(Battery::W, Battery::H))
+        {
+            m_batteryFailed = true;
+            return;
+        }
+    }
+    const uint16_t ground = farbe(Rolle::GemGrund), tint = farbe(Rolle::MainDatum);
+    m_battery.fillSprite(ground);
+    if (battery.present)
+    {
+        char value[8];
+        snprintf(value, sizeof(value), "%u %%", static_cast<unsigned>(battery.percent));
+        m_battery.setFont(&m_font);
+        m_battery.setTextDatum(BC_DATUM);
+        m_battery.setTextColor(tint, ground);
+        // Symbol und Zahl stehen zusammen mittig.
+        const int width = m_battery.textWidth(value), left = std::max(0, (Battery::W - Battery::ICON_W - Battery::GAP - width) / 2);
+        m_battery.drawString(value, left + Battery::ICON_W + Battery::GAP + width / 2, Battery::H);
+        m_battery.setFont(nullptr);
+        BatteryIcon::draw(m_battery, left, Battery::ICON_Y, BatteryIcon::Large, battery, tint, ground);
+    }
+    m_batteryShown = battery.present;
+    Tab5Render::pushSprite(m_display, m_battery, Battery::LOCK_X, Battery::Y);
+    m_display->waitDMA();
 }
 
 void Tab5Access::renderKeypad(int8_t pressedKey, bool pulseFrames, uint16_t pulseColor)

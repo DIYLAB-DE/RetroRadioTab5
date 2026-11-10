@@ -118,10 +118,12 @@ private:
     bool trusted(httpd_req_t *request, bool post);
     /** @brief Übergibt einen Auftrag an den UI-Koordinator und wartet bis zu 16 s auf die Antwort. @param command Auftrag. id, expires und generation werden gesetzt. @return HTTP-Statuscode, 503 bei voller Warteschlange, 504 ohne Antwort. */
     int execute(Command &command);
-    /** @brief Bearbeitet /api/settings, /api/settime und /factoryreset: prüft das JSON und gibt die Änderung an den Dienst. GET /api/settings liefert auch pinLockEnabled. Ein POST nur mit lockPinCurrent und lockPinNew ändert allein die PIN, ohne Revision und Neustart, die falsche aktuelle PIN ergibt 403. */
+    /** @brief Bearbeitet /api/settings, /api/settime und /factoryreset: prüft das JSON und gibt die Änderung an den Dienst. GET /api/settings liefert auch pinLockEnabled und secondHandSweep. Ein POST nur mit lockPinCurrent und lockPinNew ändert allein die PIN, ohne Revision und Neustart, die falsche aktuelle PIN ergibt 403. */
     esp_err_t settings(httpd_req_t *request, const char *body);
     /** @brief Bearbeitet POST /api/lock/mode (Formular enabled=true|false, zum Ausschalten zusätzlich pin). Der schon geltende Zustand ist ohne Auftrag erfolgreich. Ausschalten ohne die aktuelle PIN ergibt 403, sonst speichert der Dienst den Schalter. Antwort wie das lock-Ereignis {"enabled":...,"locked":...}. */
     esp_err_t lockMode(httpd_req_t *request, const char *body);
+    /** @brief Bearbeitet POST /api/secondhand (Formular sweep=true|false): speichert die Gangart des Sekundenzeigers im MainScreen ohne Neustart und ohne die Sitzungen abzumelden. Der schon geltende Zustand ist ohne Auftrag erfolgreich. Antwort {"sweep":...,"revision":...} mit der neuen Revision der Einstellungen. */
+    esp_err_t secondHand(httpd_req_t *request, const char *body);
     /** @brief Bearbeitet /api/theme (GET liefert Thema und Grundfarben von Modern, POST speichert Thema und/oder geänderte Grundfarben mit höchstens einem Neustart) und /api/theme/modern/reset (POST stellt die Vorgaben der Grundfarben wieder her). Den Neustart verlangt wie bei den Einstellungen das Feld restart. */
     esp_err_t theme(httpd_req_t *request, const char *body);
     /** @brief Bearbeitet /api/stations, /api/radio/presets und /api/radio/reset-stations (Senderliste speichern, Favoriten, Zurücksetzen). Ein POST auf /api/stations mit order (70 bisherige Plätze, order[neu] = alt) sortiert nur um: Jeder Eintrag muss dem bisherigen Sender auf order[i] gleichen, sonst 409. Die Antwort trägt dann zusätzlich stationId. */

@@ -16,6 +16,7 @@
 #include "MainScreen.h"
 #include "Settings.h"
 #include "Tab5Access.h"
+#include "Tab5Battery.h"
 #include "Tab5Orientation.h"
 #include "SDPlayer.h"
 #include "AppServices.h"
@@ -98,6 +99,9 @@ namespace
     Settings::Configuration s_config;
     MainScreen::Status s_homeStatus;
     Settings::Status s_settingsStatus;
+    Tab5Battery::Monitor s_battery;   ///< Auswertung der Akkumessung, einmal je Sekunde gefüttert
+    BatteryIcon::State s_batteryState; ///< Anzeigezustand für alle Ansichten
+    uint32_t s_batteryReadUs = 0;     ///< Dauer der letzten Akkumessung über I2C in Mikrosekunden
     Screen s_screen = Screen::Home;
     Source s_source = Source::None;
     bool s_ready = false, s_servicesReady = false, s_codecReady = false, s_listening = false, s_userMuted = false; ///< Start abgeschlossen, Dienste laufen, Codec vorbereitet, Ausgang freigegeben, vom Benutzer stumm
@@ -876,6 +880,13 @@ namespace
                     }
                     LOG_INFO_F("PINSPERRE Schalter=%u", s_config.pinLock);
                 }
+                // Der Sekundenzeiger wirkt sofort und ohne Neustart, alle anderen Werte und die Websitzungen bleiben unverändert.
+                else if (result.outcome == Settings::Outcome::Success && result.changedFields == Settings::SecondHand)
+                {
+                    s_config = result.config;
+                    s_home.setSecondSweep(s_config.secondSweep);
+                    LOG_INFO_F("SEKUNDENZEIGER Schleichend=%u", s_config.secondSweep);
+                }
                 else if (result.outcome == Settings::Outcome::Success)
                 {
                     s_config = result.config;
@@ -888,6 +899,7 @@ namespace
                     applySound(s_services.sound());
                     applyScreen(s_config.brightness, s_config.rotation, s_config.autoRotate);
                     applyUkw(s_config);
+                    s_home.setSecondSweep(s_config.secondSweep);
                     Logger::getInstance().setEnabled(s_config.serialLogs);
                     if (s_screen == Screen::Settings)
                         s_settings.show(s_config.language);
@@ -918,7 +930,9 @@ namespace
                 if (success)
                 {
                     s_settings.setConfiguration(s_config, result.revision);
-                    s_web.invalidateSessions();
+                    // Das Umschalten des Sekundenzeigers im Webportal meldet den Browser nicht ab.
+                    if (result.changedFields != Settings::SecondHand)
+                        s_web.invalidateSessions();
                     if (s_webRestart)
                     {
                         stopAudio();
@@ -1300,8 +1314,26 @@ namespace
         tm local{};
         localtime_r(&current, &local);
         const bool valid = local.tm_year >= 100 && local.tm_year < 200;
+        {
+            // Spannung und Strom der Akkuleitung aus dem INA226, Ladestatus aus E2: drei kurze I2C-Zugriffe je Sekunde im UI-Task.
+            const uint32_t before = micros();
+            Tab5Battery::Sample sample;
+            sample.millivolts = static_cast<uint16_t>(std::max<int32_t>(0, M5.Power.getBatteryVoltage()));
+            sample.milliamps = static_cast<int16_t>(std::max<int32_t>(INT16_MIN, std::min<int32_t>(INT16_MAX, M5.Power.getBatteryCurrent())));
+            sample.charging = M5.Power.isCharging() == m5::Power_Class::is_charging;
+            s_batteryReadUs = micros() - before;
+            s_battery.feed(sample);
+            const auto &battery = s_battery.status();
+            s_batteryState.present = battery.present;
+            s_batteryState.external = battery.external;
+            s_batteryState.percent = battery.percent;
+            // Fast leer und ohne Strom von außen blinkt das Symbol im Takt des Doppelpunkts der Digitaluhren.
+            s_batteryState.blinkOff = battery.present && !battery.external && battery.percent < BatteryIcon::BlinkBelow && (local.tm_sec & 1);
+            s_access.setBattery(s_batteryState);
+        }
         auto &home = s_homeStatus;
         ++home.revision;
+        home.battery = s_batteryState;
         home.language = s_config.language;
         home.timeZoneRevision = s_services.timeRevision();
         home.timeValid = valid && local.tm_year >= 124;
@@ -1326,6 +1358,7 @@ namespace
         s_home.setStatus(home);
         auto &status = s_settingsStatus;
         ++status.revision;
+        status.battery = s_batteryState;
         status.timeValid = valid;
         status.ntpConfirmed = home.ntpSynced;
         status.localTime = {home.year, home.month, home.day, home.hour, home.minute};
@@ -1408,6 +1441,7 @@ namespace
         radio.hour = s_homeStatus.hour;
         radio.minute = s_homeStatus.minute;
         radio.second = s_homeStatus.second;
+        radio.battery = s_batteryState;
         radio.volume = s_shownVolume;
         radio.balance = s_balance;
         memcpy(radio.tone, s_tone, sizeof(s_tone));
@@ -1490,6 +1524,7 @@ namespace
         sd.hour = s_homeStatus.hour;
         sd.minute = s_homeStatus.minute;
         sd.second = s_homeStatus.second;
+        sd.battery = s_batteryState;
         sd.volume = s_shownVolume;
         sd.balance = s_balance;
         memcpy(sd.tone, s_tone, 3);
@@ -1798,6 +1833,27 @@ namespace
             LOG_PLAIN_F("E1 nicht lesbar");
     }
 
+    /** @brief Verarbeitet \@akku:<0..100> (Akkubetrieb), \@akku:<0..100>:netz (Strom von außen), \@akku:demo (Vorführung aller Zustände) und \@akku:echt (zurück zur Messung). Die Simulation ersetzt nur die Anzeige, gilt bis zum Neustart und lässt die Messung weiterlaufen. @param argument Text hinter \@akku:. */
+    void receiveBattery(const char *argument)
+    {
+        int percent = -1, end = 0;
+        if (strcmp(argument, "demo") == 0)
+            s_battery.demo();
+        else if (strcmp(argument, "echt") == 0)
+            s_battery.simulate(-1, false);
+        else if (sscanf(argument, "%d%n", &percent, &end) == 1 && percent >= 0 && percent <= 100 && (!argument[end] || strcmp(argument + end, ":netz") == 0))
+            s_battery.simulate(percent, argument[end] != 0);
+        else
+        {
+            LOG_PLAIN_F("AKKU_USB INVALID");
+            return;
+        }
+        // Die Ansichten übernehmen den neuen Stand mit dem nächsten Durchlauf statt erst zur vollen Sekunde.
+        s_lastStatus = 0;
+        const auto &battery = s_battery.status();
+        LOG_PLAIN_F("AKKU_USB Simulation=%u Erkannt=%u Prozent=%u Netz=%u", battery.simulated, battery.present, battery.percent, battery.external);
+    }
+
     /** @brief Verarbeitet eine USB-Zeile: \@touch:<p|m|r>:<x>:<y> speist einen Kontakt über denselben zentralen Eingabeweg wie den GT911 ein, \@thema:<N> speichert das Thema und startet neu, \@modernfarbe:... speichert Grundfarben von Modern und startet neu, \@ftp:... steuert den FTP-Dienst, \@bt:... steuert den Bluetooth-Sender, \@codec protokolliert die ES8388- und E1-Register, \@codec:<reg>:<wert> (hex) schreibt zur Diagnose ein ES8388-Register, jede andere Zeile gilt als WLAN-Profil. */
     void receiveDiagnosticLine(char *line)
     {
@@ -1819,6 +1875,11 @@ namespace
         if (strncmp(line, "@ftp:", 5) == 0)
         {
             receiveFtp(line);
+            return;
+        }
+        if (strncmp(line, "@akku:", 6) == 0)
+        {
+            receiveBattery(line + 6);
             return;
         }
         if (strncmp(line, "@bt:", 4) == 0)
@@ -1945,6 +2006,11 @@ namespace
                 LOG_PLAIN_F("RTC Verfuegbar=%u Gueltig=%u Boot=%u Flags=0x%02x RAM-Schreiben=%lu Zeit-Schreiben=%lu Radio-NVS=%lu UTC=%lld System=%lld NTP=%u Wunschpegel=%u Stumm=%u Rueckkehr=%u", rtc.available, rtc.timeValid, rtc.restored, rtc.flags, static_cast<unsigned long>(rtc.ramWrites), static_cast<unsigned long>(rtc.timeWrites), static_cast<unsigned long>(s_services.radioFlashWrites()), static_cast<long long>(rtc.utc), static_cast<long long>(time(nullptr)), s_services.ntpSynced(), s_volume, s_userMuted, s_beforeMute);
                 LOG_PLAIN_F("STATUS Radio=%u Sender=%d Auswahl=%d Ausgabe=%u Pegel=%u PCM=%lu PCMAlter=%lu ms Heap=%u PSRAMfrei=%u", static_cast<unsigned>(status.state), status.stationIndex, s_selectedStation, s_listening, status.volume, static_cast<unsigned long>(status.pcmFrames), static_cast<unsigned long>(status.pcmAgeMs), ESP.getFreeHeap(), ESP.getFreePsram());
                 {
+                    const auto &battery = s_battery.status();
+                    LOG_PLAIN_F("AKKU Erkannt=%u Prozent=%u Netz=%u Simulation=%u Messung=%u mV=%u Glatt=%u mA=%d Laden=%u Wechsel=%u Schwankung=%u LesenUs=%lu", battery.present, battery.percent, battery.external, battery.simulated, battery.measured, battery.millivolts, battery.smoothed, battery.milliamps, battery.charging, battery.toggles, battery.spread, static_cast<unsigned long>(s_batteryReadUs));
+                }
+                LOG_PLAIN_F("AUDIO Rate=%lu Bitrate=%lu Codec=%u Puffer=%lu Luecken=%lu LueckenMs=%lu", static_cast<unsigned long>(status.sampleRate), static_cast<unsigned long>(status.bitRate), static_cast<unsigned>(status.codec), static_cast<unsigned long>(status.inputBytes), static_cast<unsigned long>(status.pcmGaps), static_cast<unsigned long>(status.pcmGapMs));
+                {
                     bool inserted = false, speaker = false;
                     const bool insertedRead = Tab5Board::readHeadphone(inserted), speakerRead = Tab5Board::readSpeaker(speaker);
                     LOG_PLAIN_F("KOPFHOERER Stecker=%u Gelesen=%d Verstaerker=%d", s_headphone.inserted(), insertedRead ? inserted : -1, speakerRead ? speaker : -1);
@@ -1952,7 +2018,7 @@ namespace
                 {
                     Settings::Configuration config;
                     const uint64_t revision = s_services.configuration(config);
-                    LOG_PLAIN_F("KONFIG Revision=%llu Thema=%u Logs=%u", static_cast<unsigned long long>(revision), config.theme, config.serialLogs);
+                    LOG_PLAIN_F("KONFIG Revision=%llu Thema=%u Logs=%u Schleichend=%u", static_cast<unsigned long long>(revision), config.theme, config.serialLogs, config.secondSweep);
                     // Die Kopie enthält auch die WLAN-Passwörter.
                     mbedtls_platform_zeroize(&config, sizeof(config));
                     ModernFarben colors;
@@ -2098,6 +2164,7 @@ void setup()
     s_servicesReady = s_services.begin(s_selectedStation);
     const uint64_t revision = s_services.configuration(s_config);
     s_settings.setConfiguration(s_config, revision);
+    s_home.setSecondSweep(s_config.secondSweep);
     applyScreen(s_config.brightness, s_config.rotation, s_config.autoRotate);
     applyUkw(s_config);
     s_audioSettings = s_services.sound();

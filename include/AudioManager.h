@@ -134,6 +134,7 @@ public:
         uint32_t requestId = 0, controlRequestId = 0, positionSeconds = 0, durationSeconds = 0; ///< Kennung der Wiedergabe, des letzten Pause-/Suchbefehls, Position und Dauer der Datei in Sekunden
         bool file = false, fileConfirmed = false, commandFailed = false; ///< Quelle ist eine Datei, PCM der Datei wurde gesehen, letzter Pause-/Suchbefehl abgelehnt
         Codec codec = Codec::None;                                      ///< Aktiver Decoder
+        uint32_t pcmGaps = 0, pcmGapMs = 0, inputBytes = 0;             ///< Lücken zwischen PCM-Blöcken seit dem Start des Geräts, deren Summe in ms und der Füllstand des Eingangspuffers in Byte
     };
 
     /** @brief Prüft frisches PCM der aktuellen Quelle vor dem Freigeben des Codecs. @param status Konsistentes Audioabbild. @param requestId Aktuell gewünschte Wiedergabe. @return Signal ist bereit. */
@@ -393,6 +394,8 @@ private:
     std::atomic<State> m_state{State::Unavailable};
     std::atomic<uint32_t> m_generation{0}, m_activeGeneration{0};
     std::atomic<uint32_t> m_pcmFrames{0}, m_lastPcm{0}, m_nonzeroBlocks{0};
+    std::atomic<uint32_t> m_pcmGaps{0}, m_pcmGapMs{0}, m_inputBytes{0}; ///< Zahl und Summe der PCM-Lücken, Füllstand des Eingangspuffers. Nur Diagnose
+    uint32_t m_blockMs = 0, m_startBlocks = 0;                         ///< Dauer des zuletzt gelieferten PCM-Blocks in ms und Zahl der Blöcke seit dem Start, nur der audio-lite-Task greift zu
     std::atomic<uint32_t> m_rate{0}, m_bitRate{0};
     std::atomic<int> m_stationIndex{-1};
     std::atomic<uint8_t> m_volume{DefaultVolume}, m_appliedVolume{0};

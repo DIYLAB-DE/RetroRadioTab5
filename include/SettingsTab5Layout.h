@@ -148,7 +148,7 @@ namespace SettingsTab5Layout
         constexpr int PAD_TEXT_OY = 3; ///< Original 2
     }
 
-    /** @brief Zeit: drei Auswahlzeilen, fünf Schrittgeber und der Knopf zum Setzen. */
+    /** @brief Zeit: drei Auswahlzeilen, fünf Schrittgeber links, der Knopf zum Setzen rechts daneben, unten die Zeile des Sekundenzeigers. */
     namespace Time
     {
         constexpr int FIELD_H = 75;        ///< Original 50
@@ -157,7 +157,6 @@ namespace SettingsTab5Layout
         constexpr int LABEL_Y = 9;         ///< Original 6
         constexpr int VALUE_Y = 39;        ///< Original 26
         constexpr int FIELD_COUNT = 3;     ///< Zeitzone, NTP-Server, Intervall
-        constexpr int STEPPER_Y = FIELD_COUNT * (FIELD_H + FIELD_GAP) + 9; ///< 261, Original 174
         constexpr int COL_W = 105;         ///< Original 70
         constexpr int COL_GAP = 9;         ///< Original 6
         constexpr int STEP_H = 39;         ///< Plus und Minus, Original 26
@@ -165,7 +164,8 @@ namespace SettingsTab5Layout
         constexpr int VALUE_GAP = 3;       ///< Zwischen Knopf und Wert, Original 2
         constexpr int TOTAL_H = 2 * STEP_H + VALUE_H + 2 * VALUE_GAP; ///< 132, Original 88
         constexpr int VALUE_OFFSET_Y = 5;  ///< Ziffern optisch mittig, Original 3
-        constexpr int SET_GAP_Y = 17;      ///< Original 11
+        constexpr int SECOND_Y = Content::H - FIELD_H; ///< 401, Zeile „Sekundenzeiger“ am unteren Rand des Inhalts, ohne Vorbild im Original
+        constexpr int STEPPER_Y = (FIELD_COUNT * (FIELD_H + FIELD_GAP) - FIELD_GAP + SECOND_Y - TOTAL_H) / 2; ///< 256, mittig zwischen Auswahlzeilen und Sekundenzeile. Original 174 unter den Auswahlzeilen, die Schrittgeber dort mittig mit „zeit setzen“ darunter, hier linksbündig mit „zeit setzen“ rechts daneben
         constexpr int SET_W = 240;         ///< Original 160
         constexpr int SET_H = 68;          ///< Original 45
     }
@@ -292,6 +292,16 @@ namespace SettingsTab5Layout
         constexpr int CLOCK_X = EXIT_CX - EXIT / 2 - 21 - CLOCK_W; ///< 1038, Original 650 (14 vor der Haus-Taste)
         constexpr int CLOCK_Y = Frame::FOOTER_Y + (Frame::FOOTER_H - CLOCK_H) / 2 + 2; ///< 646, Original 430
         constexpr int CLOCK_GAP = 24;                  ///< Mindestabstand von Textknöpfen und Klangfeld zur Uhr, Original 16
+        constexpr int CLOCK_DIGIT_H = 46;              ///< Höhe der Ziffern von Font7
+        constexpr int BATTERY_SYMBOL_W = 50;             ///< Akkusymbol liegend (BatteryIcon::Small), nur mit erkanntem Akku, ohne Vorbild im Original
+        constexpr int BATTERY_SYMBOL_H = 24;             ///< Höhe des Symbols
+        constexpr int BATTERY_W = 56;                  ///< Breite von "100 %" in ComfortaaBold21, das Symbol steht mittig darunter
+        constexpr int BATTERY_GAP = 21;                ///< Abstand zur Uhr wie zwischen Uhr und Haus-Button
+        constexpr int BATTERY_X = CLOCK_X - BATTERY_GAP - BATTERY_W; ///< 961
+        constexpr int BATTERY_CAP_H = 17;              ///< Höhe der Ziffern von ComfortaaBold21
+        constexpr int BATTERY_TEXT_Y = CLOCK_Y + (CLOCK_H - CLOCK_DIGIT_H) / 2; ///< 657, Oberkante der Zahl auf der Oberkante der Uhrziffern
+        constexpr int BATTERY_SYMBOL_Y = BATTERY_TEXT_Y + CLOCK_DIGIT_H - BATTERY_SYMBOL_H; ///< 679, Unterkante des Symbols auf der Unterkante der Uhrziffern
+        constexpr int BATTERY_SHIFT = BATTERY_W + BATTERY_GAP; ///< 77, um so viel rücken Textknöpfe und Klangfeld mit Akku nach links
     }
 
     /** @brief Klangfeld in der Fußzeile: Hörprobe, leiser, Lautstärke, lauter. */

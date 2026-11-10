@@ -376,6 +376,14 @@ public:
     uint32_t getBitRate();
 
     /**
+     * @brief Füllstand des Eingangspuffers
+     * @return Anzahl der noch nicht dekodierten Bytes der laufenden Quelle
+     *
+     * @note Aufrufkontext: Task des Hosts.
+     */
+    uint32_t inBufferFilled();
+
+    /**
      * @brief Spult in der laufenden Datei um die angegebenen Sekunden vor oder zurück
      * @param sec Sprungweite in Sekunden, negativ spult zurück
      * @return true, wenn der Sprung angenommen wurde
@@ -410,7 +418,6 @@ public:
     int32_t          getI2sPort();
     uint16_t         getVUlevel();
     uint32_t         getInBufferSize();
-    uint32_t         inBufferFilled();
     uint32_t         inBufferFree();
     uint8_t          getBitsPerSample();
     uint8_t          getChannels();
@@ -516,6 +523,8 @@ public:
     bool readID3V1Tag();
     int32_t newInBuffStart(int32_t resumeFilePos);
     bool streamDetection(uint32_t bytesAvail);
+    size_t streamDecodeThreshold();
+    bool adtsFrameComplete(const uint8_t* data, size_t len);
     uint32_t m4aCorrectResumeFilePos();
     int32_t oggCorrectResumeFilePos();
     int32_t flacCorrectResumeFilePos();
@@ -778,6 +787,7 @@ public:
     bool m_fAudioTaskIsRunning = false;    ///< Audio-Task läuft
     bool m_fAllDataReceived = false;       ///< Quelle vollständig gelesen
     bool m_fStream = false;                ///< Stream ist bereit für die Ausgabe
+    bool m_fRebuffering = false;           ///< Vorrat eines Web-Streams ist aufgebraucht, die Dekodierung wartet auf den Startfüllstand
     bool m_fDecodeReady = false;          ///< Daten für den Decoder liegen bereit
     bool m_fEof = false;                   ///< Ende der Datei oder des Streams
     bool m_fLockInBuffer = false;          ///< sperrt den Eingangspuffer während einer Umbaumaßnahme

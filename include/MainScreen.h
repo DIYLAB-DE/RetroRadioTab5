@@ -3,6 +3,7 @@
 
 #include <M5GFX.h>
 #include "Strings_mainscreen.h"
+#include "BatteryIcon.h"
 
 /** @brief Startseite nativ in 1280x720 (Maße in MainScreenTab5Layout.h) als reiner Verbraucher zentraler Zeit-, WLAN- und Spracheingaben. Alle Aufrufe erfolgen serialisiert aus dem UI-Task. */
 class MainScreen
@@ -51,6 +52,7 @@ public:
         bool ipv4Valid = false; ///< IPv4-Adresse ist gültig
         uint8_t ipv4[4]{};      ///< Eigene IPv4-Adresse
         char ssid[33]{}; ///< Höchstens 32 SSID-Bytes, ungültiges UTF-8 wird für die Anzeige ersetzt.
+        BatteryIcon::State battery; ///< Akkuanzeige rechts auf der Datumszeile, ohne erkannten Akku bleibt die Fläche leer.
     };
 
     /** @brief Erstellt die noch inaktive Ansicht ohne Hardware-/Dienstzugriff. */
@@ -70,7 +72,9 @@ public:
     void invalidate();
     /** @brief Kopiert ein neues Statusabbild und markiert betroffene Bereiche. @param status Zentraler Snapshot. Keine Zeiger bleiben erhalten. @return true bei Übernahme, false bei gleicher/älterer Revision. Unplausible Zeitdaten werden sichtbar ungültig. */
     bool setStatus(const Status &status);
-    /** @brief Zeichnet nur aktive, geänderte Bereiche mit vorbereiteten Puffern. Keine Uhr-/Netz-/Dateiabfragen. @return true bei einer Bildaktualisierung für die zentrale Zeitmessung. */
+    /** @brief Wählt die Gangart des Sekundenzeigers und zeichnet die Uhr beim nächsten update neu. @param sweep true schleichend im Takt des Displays, false in Sekundenschritten. Ohne Bildsignal des Displays oder ohne Ausschnittpuffer bleibt es bei Sekundenschritten. */
+    void setSecondSweep(bool sweep);
+    /** @brief Zeichnet nur aktive, geänderte Bereiche mit vorbereiteten Puffern. Keine Netz- oder Dateiabfragen. Schleicht der Sekundenzeiger, liest es je Displaybild die Systemzeit. @return true bei einer Bildaktualisierung für die zentrale Zeitmessung. */
     bool update();
     /** @brief Verarbeitet genau einen zentral zugeordneten Kontakt. @param phase Press/Move/Release/Cancel. @param x Physische X-Koordinate. @param y Physische Y-Koordinate. @return Navigation beim ersten Press im aktivierten Symbol, bis Release keine weitere Aktion. Außerhalb der Symbole keine Navigation, das Radio-Symbol reagiert nur bei bestehender WLAN-Verbindung. */
     Action touch(TouchPhase phase, int32_t x, int32_t y);
@@ -91,7 +95,10 @@ private:
     Status m_status{};
     bool m_hasStatus = false, m_ready = false, m_visible = false;
     bool m_fullDirty = true, m_clockDirty = true, m_dateDirty = true;
+    bool m_sweep = true; ///< Sekundenzeiger schleicht, sonst Sekundenschritte
     uint8_t m_buttonDirty = 7; ///< Bitmaske der neu zu zeichnenden Symbole, Bit 0 = Radio
+    lgfx::LGFX_Sprite m_battery; ///< Akkusymbol mit Prozentzahl, erst mit dem ersten erkannten Akku angelegt
+    bool m_batteryDirty = true, m_batteryShown = false, m_batteryFailed = false; ///< Akkuanzeige neu zeichnen, Display zeigt ein Symbol, Sprite ließ sich nicht anlegen
     bool m_contact = false, m_touchProcessed = false;
     int8_t m_pressed = -1; ///< Index des gedrückten Symbols, sonst -1
 
@@ -113,10 +120,64 @@ private:
     void cancelTouch();
     /** @brief Zeichnet Zifferblatt, Zeiger und Status mit zentralem Zeit-/WLAN-Snapshot oberhalb der Datumszeile. */
     void drawAnalogClock(lgfx::LGFX_Sprite *buffer, int centerX, int centerY, float radius);
+    /** @brief Zeichnet das Zifferblatt ohne Zeiger: Markierungen, NTP/DST, WLAN-Balken, SSID und IP. */
+    void drawDial(lgfx::LGFX_Sprite *buffer, int centerX, int centerY, float radius);
+    /** @brief Zeichnet die WLAN-Balken. @return Unterkante der Balken als Bezug für SSID und IP. */
+    int drawSignalBars(lgfx::LGFX_Sprite *buffer, int centerX, int centerY, float radius);
+    /** @brief Liefert die Zahl der leuchtenden WLAN-Balken. */
+    static int signalBars(const Status &status);
+#if defined(ARDUINO_ARCH_ESP32)
+    /** @brief Zeigerstellung in Grad im Uhrzeigersinn ab 12 Uhr. */
+    struct Hands
+    {
+        float hour = 0, minute = 0, second = 0;
+    };
+
+    /** @brief Rechteck im Uhrsprite in Pixeln. */
+    struct Box
+    {
+        int x = 0, y = 0, w = 0, h = 0;
+    };
+
+    /** @brief Sprite mit Zugang zur geglätteten Keillinie von M5GFX in Kommakoordinaten. Die öffentlichen Zeichenfunktionen nehmen ganze Pixel, ein schleichender Zeiger braucht Teilpixel. */
+    class FineSprite : public lgfx::LGFX_Sprite
+    {
+    public:
+        /** @brief Zeichnet eine geglättete Keillinie von (ax, ay) mit Halbbreite ar nach (bx, by) mit Halbbreite br in RGB565-Farbe color. */
+        void wedge(float ax, float ay, float bx, float by, float ar, float br, uint16_t color)
+        {
+            draw_wedgeline(ax, ay, bx, by, ar, br, lgfx::convert_to_rgb888(color));
+        }
+    };
+
+    lgfx::LGFX_Sprite m_dial;         ///< Zifferblatt ohne Zeiger als Hintergrund der Zeiger, SPRITE_W x DATE_Y
+    FineSprite m_view;                ///< Zeichenfläche der Zeiger auf fremdem Speicher (m_viewPixels oder m_clock), Größe je Aufruf über setBuffer
+    uint16_t *m_viewPixels = nullptr; ///< Ausschnittpuffer der Zeiger im PSRAM für höchstens ViewPixels Pixel
+    Hands m_drawn{};                  ///< Zuletzt übertragene Zeigerstellung
+    uint32_t m_lastFrame = 0;         ///< Bildzähler des Displays beim letzten Zeigerschritt
+    bool m_composed = false;          ///< Display zeigt das aktuelle Zifferblatt mit Zeigern, danach genügen Ausschnitte
+    bool m_dialDirty = true;          ///< Zifferblatt ohne Zeiger muss neu gezeichnet werden
+    bool m_barsDirty = false;         ///< Nur die Zahl der WLAN-Balken hat sich geändert
+
+    /** @brief Zeichnet die Uhr im Takt des Displays: Zifferblatt und Datum nur bei Änderung, die Zeiger je Displaybild nur im Rechteck um alte und neue Stellung. Dazu die Symbole. @return true, wenn etwas übertragen wurde. */
+    bool updateSweep();
+    /** @brief Liest die Systemzeit und liefert die Zeigerstellung mit schleichendem Sekundenzeiger. Minuten- und Stundenzeiger rücken wie im Original je Sekunde bzw. Minute. */
+    static Hands currentHands();
+    /** @brief Setzt Zifferblatt, Zeiger und bei Bedarf das Datum im ganzen Uhrsprite zusammen und überträgt es. */
+    void composeClock(const Hands &hands);
+    /** @brief Setzt ein Rechteck aus Zifferblatt und Zeigern zusammen und überträgt nur dieses. @return false, wenn es nicht in den Ausschnittpuffer passt. */
+    bool pushBox(const Box &box, const Hands &hands);
+    /** @brief Zeichnet die drei Zeiger samt Achse in m_view, dessen Ursprung im Uhrsprite bei (originX, originY) liegt. */
+    void drawHands(int originX, int originY, const Hands &hands);
+    /** @brief Liefert das Rechteck im Zifferblatt, das ein Zeiger bei angle mit Rückstück back, Länge length und Halbbreite width samt Glättungssaum belegt. */
+    static Box handBox(float angle, float back, float length, float width);
+#endif
     /** @brief Zeichnet die gedrehten Statusbeschriftungen einmalig vor. */
     void renderLabelCaches();
     /** @brief Zeichnet die Datumszeile des Uhrsprites bei Tages-, Sprach- oder Zeitgültigkeitswechsel neu. */
     void renderDate();
+    /** @brief Zeichnet Akkusymbol und Prozentzahl rechts auf die Höhe der Datumszeile. Ohne Akku nur, um ein zuvor gezeigtes Symbol zu entfernen. @return true, wenn etwas übertragen wurde. */
+    bool drawBattery();
     /** @brief Füllt beim Neuaufbau nur die Flächen außerhalb von Uhrsprite und Symbolen mit Gem.Grund, damit kein Zwischenbild entsteht. */
     void clearBackground();
     /** @brief Zeichnet ein Symbol mit Rahmen. Gedrückt mit invertiertem Rahmen, das Radio-Symbol ohne WLAN-Verbindung grau. */

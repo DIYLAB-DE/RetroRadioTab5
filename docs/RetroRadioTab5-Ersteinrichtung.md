@@ -4,7 +4,7 @@
 
 Diese Anleitung führt Dich vom fabrikneuen M5Stack Tab5 zum gestarteten RetroRadioTab5. Du bereitest das Projekt unter Windows, Linux oder macOS in Visual Studio Code mit PlatformIO vor und überträgst die Firmware über ein einziges USB-C-Kabel. Beim ersten Mal sichert der Upload zuerst die Werksfirmware des Tab5 auf Deinem Rechner. Danach kannst Du denselben Projektordner zum Lesen und Bearbeiten des Quellcodes und für spätere Aktualisierungen verwenden.
 
-**Stand: 08.11.2026.** Der Ablauf wurde unter Linux praktisch bestätigt: Am 22.10.2026 wurden zwei Tab5 mit Werksfirmware, eines mit ST7123- und eines mit ST7121-Display, erstmals eingerichtet und danach mehrfach aktualisiert. Die Schritte für Windows und macOS stützen sich auf die offiziellen Software- und Treiberunterlagen, eigene Durchläufe auf diesen Systemen stehen noch aus. Der optionale Bluetooth-Sender wurde ebenfalls nur unter Linux geflasht.
+**Stand: 10.11.2026.** Der Ablauf wurde unter Linux praktisch bestätigt: Am 22.10.2026 wurden zwei Tab5 mit Werksfirmware, eines mit ST7123- und eines mit ST7121-Display, erstmals eingerichtet und danach mehrfach aktualisiert. Die Schritte für Windows und macOS stützen sich auf die offiziellen Software- und Treiberunterlagen, eigene Durchläufe auf diesen Systemen stehen noch aus. Der optionale Bluetooth-Sender wurde ebenfalls nur unter Linux geflasht.
 
 > Beginne mit dem Tab5 allein, ohne Bluetooth-Sender am M5-Bus. Die ab Werk installierte Demo wird durch RetroRadioTab5 ersetzt, eine Zwischen-Firmware ist nicht erforderlich. Die Sicherung der Werksfirmware entsteht dabei automatisch.
 
@@ -112,7 +112,7 @@ Die Firmware des WLAN-Chips ESP32-C6 im Tab5 wird in keinem Fall verändert.
 
 ## 7. RetroRadioTab5 erstmals übertragen
 
-Die Erstinstallation auf einem Tab5 mit Werksfirmware gibst Du einmalig mit der Umgebungsvariablen `TAB5_ERSTFLASH=1` frei. Das geht im Terminal. Öffne im Projekt über die Befehlspalette **PlatformIO: New Terminal**. Dieses Terminal verwendet die mit PlatformIO eingerichteten Werkzeuge. Schließe vorher offene serielle Monitore, damit sie den Anschluss nicht belegen.
+Die Erstinstallation auf einem Tab5 mit Werksfirmware gibst Du einmalig mit der Umgebungsvariablen `TAB5_ERSTFLASH=1` frei. Das geht im Terminal. Öffne im Projekt über die Befehlspalette **PlatformIO: New Terminal**. Dieses Terminal verwendet die mit PlatformIO eingerichteten Werkzeuge. Zur Kontrolle meldet `pio --version` dort PlatformIO Core 6.1 oder neuer. Schließe vorher offene serielle Monitore, damit sie den Anschluss nicht belegen.
 
 **Linux und macOS:**
 
@@ -184,7 +184,7 @@ Die WLAN-Zugangsdaten werden am Gerät eingerichtet. Für die Installation brauc
 
 ### SD-Karte und Weboberfläche
 
-Kopiere Deine Musik am Rechner auf eine microSD-Karte mit FAT32, am besten in einen Ordner je Album. Schalte das Tab5 aus, stecke die Karte ein und schalte es wieder ein. Im SD-Player öffnet **durchs.** die Dateiauswahl, wie im Abschnitt [SD-Player](Radio-und-Musik.md#sd-player) beschrieben.
+Kopiere Deine Musik am Rechner auf eine microSD-Karte mit FAT32, am besten in einen Ordner je Album. Schalte das Tab5 aus, stecke die Karte ein und schalte es wieder ein. Im SD-Player öffnet das **Ordnersymbol** die Dateiauswahl, wie im Abschnitt [SD-Player](Radio-und-Musik.md#sd-player) beschrieben.
 
 Die IP-Adresse des Tab5 steht im Zifferblatt des Hauptmenüs. Öffne sie im Browser mit `http://` davor, dort pflegst Du Sender und Dateien, siehe [Weboberfläche](Weboberfläche.md).
 
@@ -230,6 +230,16 @@ Schließe serielle Monitore und andere Programme, die auf denselben Port zugreif
 ### `pio` wird nicht gefunden
 
 Verwende das in Abschnitt 7 beschriebene PlatformIO-Terminal in VS Code und warte, bis die Erweiterung fertig eingerichtet ist. Ein gewöhnliches Systemterminal kennt den Installationspfad möglicherweise noch nicht. Dafür ist keine zweite PlatformIO-Installation erforderlich. Für die Nutzung außerhalb von VS Code beschreibt PlatformIO die [Einrichtung der Shell-Befehle](https://docs.platformio.org/en/latest/core/installation/shell-commands.html).
+
+### `pio` bricht mit `resultcallback` ab
+
+Erscheint nach dem Befehl ein langer Python-Fehler mit `platformio==4.3.4`, `/usr/bin/pio` und `resultcallback`, startet das Terminal ein veraltetes PlatformIO aus den Paketquellen der Linux-Distribution, etwa bei Linux Mint oder Ubuntu. Es passt nicht zu aktuellen Python-Bibliotheken und bricht schon beim Start ab, bevor es das Tab5 anspricht. Der Build über VS Code gelingt trotzdem, weil die Erweiterung ihr eigenes PlatformIO verwendet. Öffne das Terminal über **PlatformIO: New Terminal** und prüfe mit `pio --version`, dass dort 6.1 oder neuer erscheint. Alternativ rufst Du das PlatformIO der Erweiterung mit vollem Pfad auf:
+
+```text
+TAB5_ERSTFLASH=1 ~/.platformio/penv/bin/pio run -e tab5_basis -t upload
+```
+
+Das veraltete Paket entfernst Du mit `sudo apt remove platformio`. Die PlatformIO-Erweiterung in VS Code bleibt davon unberührt.
 
 ### Der Build schlägt beim Download von Paketen fehl
 

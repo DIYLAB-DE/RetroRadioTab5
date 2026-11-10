@@ -3,6 +3,7 @@
 
 #include <M5GFX.h>
 #include <time.h>
+#include "BatteryIcon.h"
 
 /** @brief PIN-Sperrbildschirm nativ in 1280x720 (Maße in MainScreenTab5Layout.h). Hardware, gespeicherte PIN und Navigationszustand gehören dem zentralen Aufrufer. */
 class Tab5Access
@@ -49,6 +50,9 @@ public:
     /** @brief Verarbeitet einen vom zentralen Besitzer gelieferten Kontakt. @param phase Kontaktphase. @param x Physische X-Koordinate. @param y Physische Y-Koordinate. @param now Monotoner Millisekundenwert. @return true ausschließlich beim erfolgreichen OK-Loslassen, der Aufrufer zeichnet danach den MainScreen. */
     bool touch(TouchPhase phase, int32_t x, int32_t y, uint32_t now);
 
+    /** @brief Übernimmt den Akkustand und zeichnet die Anzeige unten mittig neu, solange die Sperre aktiv ist. Ohne erkannten Akku bleibt die Fläche leer. @param state Wird kopiert. */
+    void setBattery(const BatteryIcon::State &state);
+
     /** @brief Ändert den Inaktivitätszeitraum. @param timeoutMs Millisekunden, 0 deaktiviert das Ausblenden. */
     void setIdleTimeoutMs(uint32_t timeoutMs)
     {
@@ -71,6 +75,9 @@ private:
     uint16_t m_buttonPulseColor = 0;
     uint32_t m_buttonPulsePhaseStart = 0, m_lastActivityMs = 0, m_idleTimeoutMs = 30000;
     uint16_t *m_logoGrau = nullptr, *m_madeInGrau = nullptr; ///< Logo und Schriftzug als graue Kopie im PSRAM bei MerkmalGraustufen, sonst nullptr
+    lgfx::LGFX_Sprite m_battery;      ///< Akkusymbol mit Prozentzahl, erst mit dem ersten erkannten Akku angelegt
+    BatteryIcon::State m_batteryState; ///< Zuletzt übernommener Akkustand
+    bool m_batteryShown = false, m_batteryFailed = false; ///< Display zeigt ein Symbol, Sprite ließ sich nicht anlegen
 
     /** @brief Gibt nur eigene Ressourcen frei. */
     void release();
@@ -78,6 +85,8 @@ private:
     void clearInput();
     /** @brief Zeichnet die Logos und optional das Keypad. */
     void drawScreen();
+    /** @brief Zeichnet Akkusymbol und Prozentzahl unten mittig, in Größe und Höhe wie auf dem MainScreen. Ohne Akku nur, um ein zuvor gezeigtes Symbol zu entfernen. */
+    void drawBattery();
     /** @brief Zeichnet Ziffernfeld, Druckfüllung und Pulsrahmen. */
     void renderKeypad(int8_t pressedKey = -1, bool pulseFrames = false, uint16_t pulseColor = 0);
     /** @brief Prüft die inklusiven Tastengrenzen und liefert den Tastenindex, sonst -1. */

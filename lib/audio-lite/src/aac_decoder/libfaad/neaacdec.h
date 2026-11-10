@@ -190,6 +190,8 @@ class NeaacDecoder {
     void      cfftf(uint16_t mdct_len, complex_t* c);
     void      cfftb(uint16_t mdct_len, complex_t* c);
     void      cffti(uint16_t mdct_len, uint16_t n);
+    /** @brief Gibt die FFT-Tabelle frei, die cffti() in der Gleitkommavariante mit faad_malloc() anlegt. Der cfft_info-Block selbst bleibt bestehen, in der Festkommavariante zeigt tab auf konstante Tabellen und es geschieht nichts. */
+    void      cfftu(cfft_info* cfft);
     void*     aac_frame_decode(NeAACDecStruct* hDecoder, NeAACDecFrameInfo* hInfo, uint8_t* buffer, uint32_t buffer_size, void** sample_buffer2, uint32_t sample_buffer_size);
     void      create_channel_config(NeAACDecStruct* hDecoder, NeAACDecFrameInfo* hInfo);
     void      passf2pos(const uint16_t ido, const uint16_t l1, const complex_t* cc, complex_t* ch, const complex_t* wa);

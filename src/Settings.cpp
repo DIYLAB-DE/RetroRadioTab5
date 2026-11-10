@@ -148,6 +148,8 @@ namespace
     constexpr int TIME_STEPPER_TOTAL_H = L::Time::TOTAL_H;    ///< Höhe einer Stepper-Spalte
     constexpr int TIME_SET_BTN_H = L::Time::SET_H;            ///< Höhe des Zeit-setzen-Knopfes
     constexpr int TIME_SET_BTN_W = L::Time::SET_W;            ///< Breite des Zeit-setzen-Knopfes
+    static_assert(TIME_STEPPER_TOTAL_W + TIME_STEPPER_COL_GAP <= CONTENT_W - TIME_SET_BTN_W, "Der Knopf zum Setzen der Zeit steht rechts neben den Schrittgebern");
+    static_assert(L::Time::STEPPER_Y >= TIME_FIELD_COUNT * (TIME_FIELD_H + TIME_FIELD_GAP) && L::Time::STEPPER_Y + TIME_STEPPER_TOTAL_H + TIME_FIELD_GAP <= L::Time::SECOND_Y, "Die Schrittgeber liegen zwischen Auswahlzeilen und Sekundenzeile");
 
     // Zeitfenster-Panel: 7 Wochentage x 24 volle Stunden
     constexpr int TIME_WINDOW_DAYS = 7;   ///< Anzahl Wochentage
@@ -278,6 +280,7 @@ namespace
         Ntp,
         Interval,
         Manual,
+        SecondHandToggle,
         AllActive = 110,
         LanguageDe = 120,
         LanguageEn,
@@ -592,6 +595,8 @@ uint32_t Settings::changedFields() const
         fields |= SerialLogs;
     if (m_baseline.pinLock != m_draft.pinLock)
         fields |= PinLock;
+    if (m_baseline.secondSweep != m_draft.secondSweep)
+        fields |= SecondHand;
     if (pinPending())
         fields |= Pin;
     if (m_soundLoaded && !sameSound(m_soundDraft, m_soundBaseline))
@@ -773,6 +778,8 @@ bool Settings::completeSave(uint32_t id, bool success, const Configuration &stor
         // Der Log-Schalter zeigt wie im Original weiter den gespeicherten Zustand, der Logger wurde nicht umgeschaltet.
         if (m_savedFields == SerialLogs)
             m_draft.serialLogs = m_baseline.serialLogs;
+        if (m_savedFields == SecondHand)
+            m_draft.secondSweep = m_baseline.secondSweep;
         if (m_savedFields == PinLock)
         {
             m_draft.pinLock = m_baseline.pinLock;
@@ -810,7 +817,7 @@ bool Settings::completeSave(uint32_t id, bool success, const Configuration &stor
     {
         if (m_savedFields & 15)
             ask(Purpose::SavedWifi, SettingsKey::Saved, ot(OKey::SAVED_MSG));
-        else if (m_savedFields != SerialLogs && m_savedFields != PinLock) // Log-Schalter und PIN-Sperre wirken still wie im Original, ihre Stellung zeigt das Ergebnis
+        else if (m_savedFields != SerialLogs && m_savedFields != PinLock && m_savedFields != SecondHand) // Log-Schalter und PIN-Sperre wirken still wie im Original, der Sekundenzeiger ebenso. Ihre Stellung zeigt das Ergebnis
             notice(SettingsKey::Saved);
     }
     return true;
@@ -1070,6 +1077,8 @@ void Settings::save(AfterSave after, uint32_t only)
     }
     if (fields & SerialLogs)
         request.configuration.serialLogs = m_draft.serialLogs;
+    if (fields & SecondHand)
+        request.configuration.secondSweep = m_draft.secondSweep;
     if (fields & PinLock)
     {
         request.configuration.pinLock = m_draft.pinLock;
@@ -2149,9 +2158,7 @@ Settings::Rect Settings::timeFieldRect(int idx) const
 
 Settings::Rect Settings::timeStepperColumnRect(int col) const
 {
-    const int totalW = TIME_STEPPER_TOTAL_W;
-    const int startX = CONTENT_X + (CONTENT_W - totalW) / 2;
-    const int x = startX + col * (TIME_STEPPER_COL_W + TIME_STEPPER_COL_GAP);
+    const int x = CONTENT_X + col * (TIME_STEPPER_COL_W + TIME_STEPPER_COL_GAP);
     const int y = CONTENT_Y + TIME_STEPPER_BLOCK_Y;
     return Rect{x, y, TIME_STEPPER_COL_W, TIME_STEPPER_TOTAL_H};
 }
@@ -2176,9 +2183,15 @@ Settings::Rect Settings::timeStepperValueRect(int col) const
 
 Settings::Rect Settings::timeSetButtonRect() const
 {
-    const int x = CONTENT_X + (CONTENT_W - TIME_SET_BTN_W) / 2;
-    const int y = CONTENT_Y + TIME_STEPPER_BLOCK_Y + TIME_STEPPER_TOTAL_H + L::Time::SET_GAP_Y;
+    // Rechtsbündig mit den Auswahlzeilen, auf halber Höhe der Schrittgeber.
+    const int x = CONTENT_X + CONTENT_W - TIME_SET_BTN_W;
+    const int y = CONTENT_Y + TIME_STEPPER_BLOCK_Y + (TIME_STEPPER_TOTAL_H - TIME_SET_BTN_H) / 2;
     return Rect{x, y, TIME_SET_BTN_W, TIME_SET_BTN_H};
+}
+
+Settings::Rect Settings::secondHandRowRect() const
+{
+    return Rect{CONTENT_X, CONTENT_Y + L::Time::SECOND_Y, CONTENT_W, TIME_FIELD_H};
 }
 
 void Settings::clampManualDay()
@@ -2640,6 +2653,21 @@ void Settings::drawPanelTime(UiCanvas *spr)
                                     : reinterpret_cast<const char *>(ot(notSetKeys[i]));
         spr->drawString(valueText, r.x + TIME_FIELD_PAD_X, r.y + TIME_FIELD_VALUE_Y);
         spr->unloadFont();
+    }
+
+    // Zeile des Sekundenzeigers im Aufbau der Auswahlzeilen, rechts der Schalter. Sie sichert sich selbst und zeigt darum keinen Entwurfsstreifen.
+    {
+        const Rect r = secondHandRowRect();
+        spr->fillSmoothRoundRect(r.x, r.y, r.w, r.h, FIELD_R, rahmen);
+        spr->fillSmoothRoundRect(r.x + BORDER, r.y + BORDER, r.w - 2 * BORDER, r.h - 2 * BORDER, FIELD_INNER_R, zeile);
+        spr->loadFont(ComfortaaBold24);
+        spr->setTextDatum(TL_DATUM);
+        spr->setTextColor(textNeben);
+        spr->drawString(ot(OKey::TIME_SECOND_LABEL), r.x + TIME_FIELD_PAD_X, r.y + TIME_FIELD_LABEL_Y);
+        spr->setTextColor(text);
+        spr->drawString(ot(m_draft.secondSweep ? OKey::TIME_SECOND_SWEEP : OKey::TIME_SECOND_STEP), r.x + TIME_FIELD_PAD_X, r.y + TIME_FIELD_VALUE_Y);
+        spr->unloadFont();
+        drawToggle(spr, {r.x + r.w - TOGGLE_W - TOGGLE_MARGIN, r.y + (r.h - TOGGLE_H) / 2, TOGGLE_W, TOGGLE_H}, m_draft.secondSweep, zeile);
     }
 
     // Schrittgeberblock mit fünf Spalten in sprachabhängiger Datums- und Zeitreihenfolge
@@ -3218,7 +3246,7 @@ void Settings::update(uint32_t now)
 
 uint32_t Settings::panelFields() const
 {
-    static constexpr uint32_t fields[] = {15, 0, Ukw, Time, Windows, Language | SerialLogs, Pin | PinLock, SoundField, Appearance, Theme, Screen, 0};
+    static constexpr uint32_t fields[] = {15, 0, Ukw, Time | SecondHand, Windows, Language | SerialLogs, Pin | PinLock, SoundField, Appearance, Theme, Screen, 0};
     static_assert(sizeof(fields) / sizeof(fields[0]) == PanelCount, "Eine Feldmaske je Seite in der Reihenfolge von Panel");
     return fields[static_cast<unsigned>(m_panel)];
 }
@@ -3449,6 +3477,7 @@ void Settings::drawPanel()
             target(timeStepperDownRect(i), TimeMinus + i, m_capabilities.manualTime);
         }
         target(timeSetButtonRect(), DateAccept, m_capabilities.manualTime);
+        target(secondHandRowRect(), SecondHandToggle, true);
         break;
     case Panel::Window:
         drawPanelTimeWindow(&m_work);
@@ -3565,8 +3594,10 @@ void Settings::drawFooter()
     snprintf(symbol, sizeof(symbol), "^HOME:48:%04X^", farbe(Rolle::GemHausSymbol));
     drawButton(m_painter, exit, symbol, true, m_contact.pressed() == HomeAction);
     target(exit, HomeAction, true, false);
-    // Log-Schalter und PIN-Sperre speichern sich selbst, ihr laufender Auftrag zeigt keine Speichern-Taste.
-    const bool pending = (changedFields() & panelFields() & ~(SerialLogs | PinLock)) != 0;
+    // Mit Akku steht dessen Anzeige links neben der Uhr, Textknöpfe und Klangfeld rücken um ihre Breite nach links.
+    const int batteryShift = m_status.battery.present ? L::Footer::BATTERY_SHIFT : 0;
+    // Log-Schalter, PIN-Sperre und Sekundenzeiger speichern sich selbst, ihr laufender Auftrag zeigt keine Speichern-Taste.
+    const bool pending = (changedFields() & panelFields() & ~(SerialLogs | PinLock | SecondHand)) != 0;
     if (pending || m_panel == Panel::Window)
     {
         const Rect r{WORK_X, L::Footer::BUTTON_Y, SAVE_BTN_W, BTN_H};
@@ -3579,7 +3610,7 @@ void Settings::drawFooter()
         int width = std::max(FOOTER_ACTION_BTN_MIN_W, static_cast<int>(m_painter.textWidth(ot(OKey::INFO_RESET_BTN))) + L::Footer::ACTION_PAD);
         if (m_panel == Panel::Info)
             width = std::max(width, static_cast<int>(m_painter.textWidth(ot(OKey::INFO_RESTART_BTN))) + L::Footer::ACTION_PAD);
-        width = std::min(width, (CLOCK_PUSH_X - L::Footer::CLOCK_GAP - WORK_X - FOOTER_ACTION_BTN_GAP) / 2);
+        width = std::min(width, (CLOCK_PUSH_X - batteryShift - L::Footer::CLOCK_GAP - WORK_X - FOOTER_ACTION_BTN_GAP) / 2);
         m_painter.unloadFont();
         if (m_panel == Panel::Info)
         {
@@ -3600,7 +3631,7 @@ void Settings::drawFooter()
     if (m_panel == Panel::Sound)
     {
         constexpr int half = AUDIO_FT_BTN_SIZE / 2, top = FOOTER_CY - half;
-        const Rect play{AUDIO_FT_PLAY_CX - half, top, AUDIO_FT_BTN_SIZE, AUDIO_FT_BTN_SIZE}, down{AUDIO_FT_VDOWN_CX - half, top, AUDIO_FT_BTN_SIZE, AUDIO_FT_BTN_SIZE}, up{AUDIO_FT_VUP_CX - half, top, AUDIO_FT_BTN_SIZE, AUDIO_FT_BTN_SIZE};
+        const Rect play{AUDIO_FT_PLAY_CX - batteryShift - half, top, AUDIO_FT_BTN_SIZE, AUDIO_FT_BTN_SIZE}, down{AUDIO_FT_VDOWN_CX - batteryShift - half, top, AUDIO_FT_BTN_SIZE, AUDIO_FT_BTN_SIZE}, up{AUDIO_FT_VUP_CX - batteryShift - half, top, AUDIO_FT_BTN_SIZE, AUDIO_FT_BTN_SIZE};
         if (m_soundDraft.playing)
             snprintf(symbol, sizeof(symbol), "^STOP:48:%04X^", farbe(Rolle::EinStopSymbol));
         else
@@ -3612,8 +3643,8 @@ void Settings::drawFooter()
         target(down, VolumeDown, m_capabilities.sound, false);
         target(up, VolumeUp, m_capabilities.sound, false);
         const uint16_t feld = farbe(Rolle::GemTastenFlaeche);
-        m_painter.fillSmoothRoundRect(AUDIO_FT_FRAME_X, top, AUDIO_FT_FRAME_W, AUDIO_FT_BTN_SIZE, AUDIO_FT_BTN_R, farbe(Rolle::GemRahmen));
-        m_painter.fillSmoothRoundRect(AUDIO_FT_FRAME_X + BORDER, top + BORDER, AUDIO_FT_FRAME_W - 2 * BORDER, AUDIO_FT_BTN_SIZE - 2 * BORDER, AUDIO_FT_BTN_R, feld);
+        m_painter.fillSmoothRoundRect(AUDIO_FT_FRAME_X - batteryShift, top, AUDIO_FT_FRAME_W, AUDIO_FT_BTN_SIZE, AUDIO_FT_BTN_R, farbe(Rolle::GemRahmen));
+        m_painter.fillSmoothRoundRect(AUDIO_FT_FRAME_X - batteryShift + BORDER, top + BORDER, AUDIO_FT_FRAME_W - 2 * BORDER, AUDIO_FT_BTN_SIZE - 2 * BORDER, AUDIO_FT_BTN_R, feld);
         // Nur 100 benötigt drei schmalere Ziffern im festen Lautstärkefeld, zwei Ziffern stehen mittig darin.
         const bool full = m_soundDraft.volume == 100;
         m_audioVolDots.init(full ? L::SoundFooter::DOT_100 : L::SoundFooter::DOT, L::SoundFooter::DOT, L::SoundFooter::DOT_SPACE, full ? 0 : L::SoundFooter::CHAR_SPACE);
@@ -3622,7 +3653,21 @@ void Settings::drawFooter()
         m_audioVolDots.setText(volume);
         m_audioVolume.fillSprite(feld);
         m_audioVolDots.draw(&m_audioVolume, full ? 0 : (AUDIO_FT_DISP_W - L::SoundFooter::DIGITS_W) / 2, 0);
-        blit(m_painter, m_audioVolume, AUDIO_FT_DISP_X, FOOTER_CY - AUDIO_FT_DISP_H / 2, m_clip);
+        blit(m_painter, m_audioVolume, AUDIO_FT_DISP_X - batteryShift, FOOTER_CY - AUDIO_FT_DISP_H / 2, m_clip);
+    }
+    if (m_status.battery.present)
+    {
+        // Zahl über dem liegenden Symbol, zusammen so hoch wie die Ziffern der Uhr daneben.
+        const uint16_t ground = farbe(Rolle::GemGrund), tint = farbe(Rolle::UhrDigitalZiffern);
+        char value[8];
+        snprintf(value, sizeof(value), "%u %%", static_cast<unsigned>(m_status.battery.percent));
+        m_painter.loadFont(ComfortaaBold21);
+        // Über die Grundlinie ausgerichtet: Die Schrift enthält höhere Zeichen als die Ziffern, ihre Oberkante läge sonst tiefer.
+        m_painter.setTextDatum(C_BASELINE);
+        m_painter.setTextColor(tint);
+        m_painter.drawString(value, L::Footer::BATTERY_X + L::Footer::BATTERY_W / 2, L::Footer::BATTERY_TEXT_Y + L::Footer::BATTERY_CAP_H);
+        m_painter.unloadFont();
+        BatteryIcon::draw(m_painter, L::Footer::BATTERY_X + (L::Footer::BATTERY_W - L::Footer::BATTERY_SYMBOL_W) / 2, L::Footer::BATTERY_SYMBOL_Y, BatteryIcon::Small, m_status.battery, tint, ground);
     }
     drawClock();
     markDirty(area);
@@ -4212,6 +4257,16 @@ void Settings::activate(int id)
         save(AfterSave::None, SerialLogs);
         if (!m_pendingId)
             m_draft.serialLogs = m_baseline.serialLogs;
+        redraw();
+        break;
+    case SecondHandToggle:
+        // Wirkt sofort und wird ohne „speichern“ gesichert. Offene Änderungen an Zeitzone, Zeitserver und Intervall bleiben Entwurf. Kommt kein Speicherauftrag zustande, bleibt der gespeicherte Zustand stehen.
+        if (m_pendingId)
+            break;
+        m_draft.secondSweep = !m_draft.secondSweep;
+        save(AfterSave::None, SecondHand);
+        if (!m_pendingId)
+            m_draft.secondSweep = m_baseline.secondSweep;
         redraw();
         break;
     case PinLockToggle:

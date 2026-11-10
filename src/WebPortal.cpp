@@ -693,6 +693,8 @@ esp_err_t WebPortal::route(httpd_req_t *r)
         return result(r, r->content_len > WebValidation::MaxBody ? 413 : 400);
     if (post && !strcmp(route, "/api/lock/mode"))
         return lockMode(r, input.get());
+    if (post && !strcmp(route, "/api/secondhand"))
+        return secondHand(r, input.get());
     if (!strcmp(route, "/api/settings") || !strcmp(route, "/api/settime") || !strcmp(route, "/factoryreset"))
         return settings(r, input.get());
     if (!strcmp(route, "/api/theme") || !strcmp(route, "/api/theme/modern/reset"))
@@ -766,6 +768,7 @@ esp_err_t WebPortal::settings(httpd_req_t *r, const char *input)
         }
         auto *o = cJSON_CreateObject();
         cJSON_AddBoolToObject(o, "pinLockEnabled", config.pinLock);
+        cJSON_AddBoolToObject(o, "secondHandSweep", config.secondSweep);
         cJSON_AddStringToObject(o, "hostname", config.hostname);
         cJSON_AddStringToObject(o, "ntpServer", config.ntpServer);
         cJSON_AddStringToObject(o, "timezoneRegion", config.timezone);
@@ -902,6 +905,38 @@ esp_err_t WebPortal::lockMode(httpd_req_t *r, const char *input)
     httpd_resp_set_type(r, "application/json");
     httpd_resp_set_hdr(r, "Cache-Control", "no-store");
     return httpd_resp_send(r, status, HTTPD_RESP_USE_STRLEN);
+}
+
+esp_err_t WebPortal::secondHand(httpd_req_t *r, const char *input)
+{
+    char value[8]{};
+    if (!WebValidation::form(input, "sweep", value, sizeof(value)) || (strcmp(value, "true") && strcmp(value, "false")))
+        return result(r, 400);
+    const bool sweep = !strcmp(value, "true");
+    Command cmd;
+    cmd.action = Action::Settings;
+    auto &job = cmd.settings;
+    job.type = Settings::RequestType::Save;
+    job.changedFields = Settings::SecondHand;
+    job.baselineRevision = m_services->configuration(job.configuration);
+    int code = 200;
+    // Der schon geltende Zustand ist ohne Speichern erfolgreich.
+    if (job.configuration.secondSweep != sweep)
+    {
+        job.configuration.secondSweep = sweep;
+        code = execute(cmd);
+    }
+    // Die Kopie der Konfiguration enthält auch die WLAN-Passwörter.
+    mbedtls_platform_zeroize(&cmd, sizeof(cmd));
+    if (code != 200)
+        return result(r, code);
+    Settings::Configuration config;
+    const auto revision = m_services->configuration(config);
+    auto *o = cJSON_CreateObject();
+    cJSON_AddBoolToObject(o, "sweep", config.secondSweep);
+    cJSON_AddNumberToObject(o, "revision", revision);
+    mbedtls_platform_zeroize(&config, sizeof(config));
+    return sendJson(r, o);
 }
 
 esp_err_t WebPortal::theme(httpd_req_t *r, const char *input)

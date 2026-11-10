@@ -53,7 +53,7 @@ static const StationDefault DEFAULT_STATIONS[] = {
     // Überregional / International
     {"DEFJAY", "DEFJAY", "http://icepool.silvacast.com/DEFJAY.mp3", false},
     {"RADIO PALOMA", "Radio Paloma", "http://www3.radiopaloma.de/RP-Hauptkanal.pls", false},
-    {"PARADISO", "Radio Paradiso Berlin", "http://paradisode.streamabc.net/para-paradisoberlin-mp3-128-5481878", false},
+    {"PARADISO", "Radio Paradiso Berlin", "https://streams.paradiso.de/Berlin/mp3-192/radiode/", false},
     {"JAM FM", "JAM FM Berlin", "http://stream.jam.fm/jamfm-nmr/mp3-128", false},
     {"COSMO", "Cosmo", "http://dispatcher.rndfnk.com/wdr/cosmo/live/mp3/128/stream.mp3", false},
     {"DLF", "Deutschlandfunk", "http://st01.sslstream.dlf.de/dlf/01/high/aac/stream.aac?aggregator=web", false},

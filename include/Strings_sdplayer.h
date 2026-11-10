@@ -29,8 +29,6 @@ enum class SdPlayerKey : uint8_t
     Added,
     Duplicate,
     Skipped,  ///< printf-Format: Zahl der übersprungenen Einträge (%u)
-    BrowseButton,  ///< Beschriftung des Knopfs für den Dateidialog
-    ClearButton,  ///< Beschriftung des Knopfs zum Leeren der Titelliste
     PlaylistHint1,  ///< erste Zeile des Hinweises bei leerer Titelliste
     PlaylistHint2,  ///< zweite Zeile des Hinweises bei leerer Titelliste
     NoPlayback,
