@@ -87,7 +87,19 @@ Die Seite **Info & Neustart** zeigt unter **Netzwerk** WLAN-Name, Netzwerkname, 
 
 ## Akkuanzeige
 
-Ist am Tab5 ein Akku angeschlossen, zeigt jede Ansicht ein Akkusymbol mit fünf Segmenten, jedes steht für rund 20 % Ladung. Ab drei Segmenten leuchten sie grün, bei zwei gelb, bei einem rot. Unter 10 % blinkt das rote Segment. Ein Blitz im Symbol bedeutet, dass das Tab5 Strom über USB bekommt. Im Hauptmenü und auf dem Sperrbildschirm steht neben dem Symbol die Prozentzahl, in den Einstellungen darüber. Die Zahl ist aus der Akkuspannung geschätzt und zeigt beim Laden etwas zu viel. Ohne Akku erscheint kein Symbol.
+Ist am Tab5 ein Akku angeschlossen, zeigt jede Ansicht ein Akkusymbol mit fünf Segmenten, jedes steht für rund 20 % Ladung. Ab drei Segmenten leuchten sie grün, bei zwei gelb, bei einem rot. Unter 10 % blinkt das rote Segment. Ein Blitz im Symbol bedeutet, dass das Tab5 Strom über USB bekommt. Im Hauptmenü und auf dem Sperrbildschirm steht neben dem Symbol die Prozentzahl, in den Einstellungen darüber. Ohne Akku erscheint kein Symbol.
+
+Das Tab5 hat keinen Baustein, der den Füllstand des Akkus misst. Es kennt nur Spannung und Strom. Im Akkubetrieb schätzt es den Füllstand aus der Spannung. Beim Laden zählt es mit, wie viel Strom in den Akku fließt. Die Zahl steigt dabei nur so schnell, wie der Akku wirklich lädt, und zeigt höchstens 95 %. Die 100 % erscheinen erst, wenn der Akku voll ist.
+
+Damit diese Rechnung stimmt, muss das Tab5 wissen, wie groß Dein Akku ist. Ab Werk rechnet es mit 2000 mAh. Die wirkliche Größe lernt es von selbst bei einer vollen Ladung. Bis dahin kann die Zahl am Ende der Ladung noch einen Sprung auf 100 % machen oder länger bei 95 % stehen.
+
+**Anzeige genau machen (einmalig, etwa drei Stunden)**
+
+1. Lass das Tab5 im Akkubetrieb laufen, bis das rote Segment blinkt.
+2. Stecke das USB-Netzteil an und lass das Tab5 eingeschaltet. Ausgeschaltet kann es nicht mitzählen.
+3. Lade in einem Zug, bis die Anzeige 100 % zeigt.
+
+Danach steht unter Einstellungen -> **Info & Neustart** in der Zeile **Akku** die gemessene Größe mit dem Zusatz **gelernt** statt **Vorgabe**. Ab jetzt darfst Du laden, wann und wie lange Du willst. Wiederholen musst Du die drei Schritte nur mit einem anderen Akku oder wenn die Zahl nach langer Zeit nicht mehr passt.
 
 ## Sperren und Entsperren
 

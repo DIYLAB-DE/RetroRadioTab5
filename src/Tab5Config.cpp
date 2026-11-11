@@ -459,6 +459,48 @@ bool Tab5Config::saveRadio(const RadioPreferences &value)
 
 namespace
 {
+    constexpr uint32_t BatteryMagic = 0x31415252; ///< Kennung von akku_v1, als Bytes „RRA1“
+}
+
+bool Tab5Config::loadBattery(Tab5Battery::Calibration &value)
+{
+    nvs_handle_t handle;
+    if (nvs_open("rr_tab5", NVS_READONLY, &handle) != ESP_OK)
+        return false;
+    uint8_t blob[12]{};
+    size_t size = sizeof(blob);
+    const bool found = nvs_get_blob(handle, "akku_v1", blob, &size) == ESP_OK;
+    nvs_close(handle);
+    size_t at = 8;
+    if (!found || size != sizeof(blob) || number(blob, at, 4) != crc(blob, 8))
+        return false;
+    at = 0;
+    if (number(blob, at, 4) != BatteryMagic)
+        return false;
+    value.capacityMah = static_cast<uint16_t>(number(blob, at, 2));
+    value.resistanceMohm = static_cast<uint16_t>(number(blob, at, 2));
+    value.learned = true;
+    return true;
+}
+
+bool Tab5Config::saveBattery(const Tab5Battery::Calibration &value)
+{
+    uint8_t blob[12]{};
+    size_t at = 0;
+    number(blob, at, BatteryMagic, 4);
+    number(blob, at, value.capacityMah, 2);
+    number(blob, at, value.resistanceMohm, 2);
+    number(blob, at, crc(blob, 8), 4);
+    nvs_handle_t handle;
+    if (nvs_open("rr_tab5", NVS_READWRITE, &handle) != ESP_OK)
+        return false;
+    const bool ok = nvs_set_blob(handle, "akku_v1", blob, sizeof(blob)) == ESP_OK && nvs_commit(handle) == ESP_OK;
+    nvs_close(handle);
+    return ok;
+}
+
+namespace
+{
     constexpr uint32_t ModernMagic = 0x314D5252;                               ///< Kennung von modern_v1, als Bytes „RRM1“
     constexpr uint16_t ModernVersion = 1;                                      ///< Version von modern_v1
     constexpr size_t ModernSize = 4 + 2 + 1 + 3 * ModernBearbeitbarAnzahl + 4; ///< Größe von modern_v1: Kennung, Version, Anzahl, je bearbeitbare Grundfarbe R, G, B und CRC am Ende

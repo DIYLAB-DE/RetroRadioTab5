@@ -166,7 +166,7 @@ namespace
     constexpr int TIME_WINDOW_INNER_R = L::Window::INNER_R;         ///< Eckradius der Innenfläche
     constexpr int TIME_WINDOW_FRAME_INSET = L::Window::FRAME_INSET; ///< Innenversatz der Matrix-Füllung
     constexpr int TIME_WINDOW_FRAME_PAD_Y = L::Window::FRAME_PAD_Y; ///< Vertikaler Außenabstand des Matrix-Rahmens
-    constexpr int TIME_WINDOW_CHECK_LINE_W = L::Window::TICK_W;     ///< Strichbreite des Hakens
+    constexpr float TIME_WINDOW_TICK_R = L::Window::TICK_R;         ///< Radius des Hakenstrichs
     constexpr int TIME_WINDOW_HINT_GAP_Y = L::Window::HINT_GAP_Y;   ///< Abstand der Erklärung unter der Matrix
     constexpr int TIME_WINDOW_HINT_LINE_H = L::Window::HINT_LINE_H; ///< Zeilenhöhe der Erklärung
     constexpr int TIME_WINDOW_HINT_X = CONTENT_X + L::Window::HINT_X; ///< Linke Textkante der Erklärung
@@ -539,7 +539,7 @@ bool Settings::setStatus(const Status &status)
         return false;
     const bool changed = !m_haveStatus ||
                          // Laufzeit (minutengenau angezeigt) und Signalstärke stehen nur auf der Info-Seite, nativ kostet jedes Neuzeichnen der Seite spürbar Zeit.
-                         (m_panel == Panel::Info && (status.uptimeSeconds / 60 != m_status.uptimeSeconds / 60 || status.rssi != m_status.rssi || status.ftpEnabled != m_status.ftpEnabled)) ||
+                         (m_panel == Panel::Info && (status.uptimeSeconds / 60 != m_status.uptimeSeconds / 60 || status.rssi != m_status.rssi || status.ftpEnabled != m_status.ftpEnabled || status.battery.present != m_status.battery.present || status.batteryCapacityMah != m_status.batteryCapacityMah || status.batteryLearned != m_status.batteryLearned)) ||
                          status.timeValid != m_status.timeValid || status.ntpConfirmed != m_status.ntpConfirmed ||
                          status.localTime.year != m_status.localTime.year || status.localTime.month != m_status.localTime.month || status.localTime.day != m_status.localTime.day || status.localTime.hour != m_status.localTime.hour || status.localTime.minute != m_status.localTime.minute ||
                          status.wifiConnected != m_status.wifiConnected || status.signalValid != m_status.signalValid ||
@@ -2274,8 +2274,8 @@ void Settings::drawPanelTimeWindow(UiCanvas *spr)
                 // Haken des Originals: (-3,-1) (-1,2) (4,-4)
                 const int cx = boxX + TIME_WINDOW_CHECK_SIZE / 2;
                 const int cy = boxY + TIME_WINDOW_CHECK_SIZE / 2;
-                spr->drawWideLine(cx - 5, cy - 2, cx - 2, cy + 3, TIME_WINDOW_CHECK_LINE_W, color);
-                spr->drawWideLine(cx - 2, cy + 3, cx + 6, cy - 6, TIME_WINDOW_CHECK_LINE_W, color);
+                spr->drawWideLine(cx - 5, cy - 2, cx - 2, cy + 3, TIME_WINDOW_TICK_R, color);
+                spr->drawWideLine(cx - 2, cy + 3, cx + 6, cy - 6, TIME_WINDOW_TICK_R, color);
             }
         }
 
@@ -2286,7 +2286,8 @@ void Settings::drawPanelTimeWindow(UiCanvas *spr)
                           trenner);
     }
 
-    for (int hour = 0; hour <= TIME_WINDOW_HOURS; ++hour)
+    // Hinter der letzten Stunde schließt der Rahmen das Raster. Eine Linie dort läge außerhalb des Rahmens
+    for (int hour = 0; hour < TIME_WINDOW_HOURS; ++hour)
     {
         const int x = gridX + (hour * TIME_WINDOW_GRID_W) / TIME_WINDOW_HOURS;
         spr->fillRect(x, rowsY, LINE, rowsH, trenner);
@@ -2760,6 +2761,7 @@ void Settings::drawPanelInfo(UiCanvas *spr)
     char uptimeBuf[32] = {0};
     char uartBuf[24] = {0};
     char chipTempBuf[32] = {0};
+    char batteryBuf[32] = {0};
     char ftpBuf[48] = {0};
     char i2cBuf[128] = {0};
 
@@ -2852,7 +2854,11 @@ void Settings::drawPanelInfo(UiCanvas *spr)
         {OKey::INFO_HEAP_FREE, heapBuf},
         {OKey::INFO_PSRAM_FREE, psramFreeBuf},
         {OKey::INFO_UPTIME, uptimeBuf},
+        {OKey::INFO_BATTERY, batteryBuf},
     };
+    // Die Akkuzeile steht als letzte und entfällt ohne erkannten Akku.
+    STRF(batteryBuf, m_status.batteryLearned ? OKey::INFO_BATTERY_LEARNED_FMT : OKey::INFO_BATTERY_DEFAULT_FMT, static_cast<unsigned>(m_status.batteryCapacityMah));
+    const size_t rightCount = sizeof(rightRows) / sizeof(rightRows[0]) - (m_status.battery.present ? 0 : 1);
 
     const uint16_t textNeben = farbe(Rolle::EinTextNeben), textHell = farbe(Rolle::GemTextHell), trenner = farbe(Rolle::EinTrenner);
     auto drawInfoRow = [&](int colX, int colW, int yTop, const InfoRow &row)
@@ -2954,9 +2960,9 @@ void Settings::drawPanelInfo(UiCanvas *spr)
 
     // Rechte Spalte: System-Werte untereinander
     int rightY = CONTENT_Y + HDR_H + L::Info::ROWS_GAP;
-    for (const InfoRow &row : rightRows)
+    for (size_t i = 0; i < rightCount; ++i)
     {
-        drawInfoRow(RIGHT_X, COL_W, rightY, row);
+        drawInfoRow(RIGHT_X, COL_W, rightY, rightRows[i]);
         rightY += ROW_H;
     }
 

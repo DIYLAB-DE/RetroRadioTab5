@@ -4,8 +4,8 @@
 # FW_DATE:    <TT>.<MM>.<JJJJ>
 
 Import("env")
-fw_version = "v26.11.10"
-fw_date = "10.11.2026"
+fw_version = "v26.11.11"
+fw_date = "11.11.2026"
 
 env.Append(CPPDEFINES=[
     ("FW_VERSION", env.StringifyMacro(fw_version)),

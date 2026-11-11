@@ -65,6 +65,8 @@ public:
     RadioPreferences radioPreferences();
     /** @brief Merkt Regler-/Stiländerungen zum zusammengefassten Speichern im Worker. */
     void saveRadioPreferences(const RadioPreferences &value);
+    /** @brief Merkt neu gemessene Kennwerte des Akkus vor, der Dienst-Task schreibt sie nach rr_tab5/akku_v1. Aufruf aus dem UI-Task, ohne Flash-Zugriff. */
+    void saveBattery(const Tab5Battery::Calibration &value);
     /** @brief Kopiert bestätigte RTC-Befunde und Schreibzähler ohne Hardwarezugriff. */
     Tab5Rtc::Status rtcStatus();
 
@@ -352,6 +354,8 @@ private:
     bool m_rtcRadioFailed = false;
     std::atomic<uint32_t> m_radioFlashWrites{0};
     uint32_t m_radioChanged = 0, m_radioGeneration = 0, m_radioSaved = 0;
+    Tab5Battery::Calibration m_battery; ///< Zum Speichern vorgemerkte Kennwerte des Akkus, geschützt durch m_configLock
+    bool m_batteryPending = false;      ///< m_battery wartet auf den Dienst-Task
     uint64_t m_revision = 1;
     Settings::Request m_work;
     Result m_result;

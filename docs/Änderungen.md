@@ -4,6 +4,25 @@
 
 Hier steht, was sich von Version zu Version ändert, die neueste Version steht oben. Jede Version erscheint als [Release auf GitHub](https://github.com/DIYLAB-DE/RetroRadioTab5/releases) mit eigener Nummer. Die Nummer zeigt das Tab5 unter Einstellungen -> Info & Neustart und die Weboberfläche im Abschnitt System. Sie ändert sich nur mit einem neuen Release, auch wenn Du die Firmware selbst baust.
 
+## v26.11.11 vom 11.11.2026
+
+Die dritte Vorabversion, [v26.11.11 auf GitHub](https://github.com/DIYLAB-DE/RetroRadioTab5/releases/tag/v26.11.11).
+
+### Neu
+
+- Neu: Das Tab5 lernt die Größe Deines Akkus selbst. Ab Werk rechnet es mit 2000 mAh. Lädst Du einmal in einem Zug von fast leer (rotes Segment blinkt) bis voll und lässt das Tab5 dabei eingeschaltet, misst es die wirkliche Größe und merkt sie sich. Unter Einstellungen -> Info & Neustart steht sie in der neuen Zeile „Akku“ mit dem Zusatz „gelernt“ statt „Vorgabe“. Die [Bedienung](Bedienung.md#akkuanzeige) beschreibt die drei Schritte im Abschnitt Akkuanzeige.
+
+### Geändert
+
+- Geändert: Das magische Auge EM34 ist um 45 Grad gegen den Uhrzeigersinn gedreht. Der breite Schatten liegt oben, der schmale unten. So war die Röhre in Radios meist eingebaut. Das gilt im Radio, in der Vorschau unter Einstellungen -> Anzeige und in der Weboberfläche.
+- Geändert: Meldungen in der Statuszeile des SD-Players wie „keine Wiedergabe“ oder „Playlist beendet“ stehen jetzt mittig zwischen zwei Strichen, also „- keine Wiedergabe -“. Bisher fehlte der hintere Strich.
+
+### Behoben
+
+- Behoben: Beim Laden sprang die Prozentzahl der Akkuanzeige binnen Minuten viel zu hoch, ein leerer Akku zeigte nach kurzer Zeit am Netz 80 %. Das Tab5 zählt jetzt mit, wie viel Strom in den Akku fließt. Die Zahl steigt nur so schnell, wie der Akku wirklich lädt, zeigt beim Laden höchstens 95 % und springt erst auf 100 %, wenn der Akku voll ist.
+- Behoben: Das Tab5 bringt seine Bilder mit dem Grafikbeschleuniger PPA auf das Display, der dabei auch ins Querformat dreht. Eine zu strenge Prüfung beim Start konnte ihn je nach Speicherbelegung ohne Meldung abschalten. Dann rechnete der Prozessor alles selbst, und ein volles Bild brauchte deutlich länger. Die Prüfung verlangt jetzt nur noch, was der Beschleuniger wirklich braucht.
+- Behoben: Unter Einstellungen -> Zeitfenster füllten die Haken ihre Kästchen fast ganz aus. Sie sind jetzt deutlich dünner und berühren den Rahmen nicht mehr. Außerdem stand rechts neben dem Raster eine überzählige Linie außerhalb des Rahmens, sie ist weg.
+
 ## v26.11.10 vom 10.11.2026
 
 Die zweite Vorabversion, [v26.11.10 auf GitHub](https://github.com/DIYLAB-DE/RetroRadioTab5/releases/tag/v26.11.10).

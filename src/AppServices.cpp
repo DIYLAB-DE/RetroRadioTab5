@@ -807,7 +807,17 @@ void AppServices::worker(void *context)
         }
         portENTER_CRITICAL(&s.m_configLock);
         s.m_rtcStatus = s.m_rtc.status();
+        const Tab5Battery::Calibration battery = s.m_battery;
+        const bool batteryPending = s.m_batteryPending;
+        s.m_batteryPending = false;
         portEXIT_CRITICAL(&s.m_configLock);
+        if (batteryPending)
+        {
+            if (Tab5Config::saveBattery(battery))
+                LOG_INFO_F("AKKU Kennwerte gespeichert: %u mAh, %u mOhm", battery.capacityMah, battery.resistanceMohm);
+            else
+                LOG_ERROR("AKKU Kennwerte nicht gespeichert.");
+        }
         s.watchCard();
         if (!s.m_coverReady.load(std::memory_order_acquire) && xQueueReceive(s.m_coverRequests, &s.m_coverWork, 0) == pdPASS)
             s.decodeCover();
@@ -822,6 +832,14 @@ RadioPreferences AppServices::radioPreferences()
     const auto value = m_radio;
     portEXIT_CRITICAL(&m_configLock);
     return value;
+}
+
+void AppServices::saveBattery(const Tab5Battery::Calibration &value)
+{
+    portENTER_CRITICAL(&m_configLock);
+    m_battery = value;
+    m_batteryPending = true;
+    portEXIT_CRITICAL(&m_configLock);
 }
 
 void AppServices::saveRadioPreferences(const RadioPreferences &value)

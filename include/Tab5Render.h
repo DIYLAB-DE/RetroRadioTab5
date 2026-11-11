@@ -8,11 +8,13 @@ namespace Tab5Render
     constexpr int PanelHeight = 1280; ///< Zeilen des DSI-Framebuffers
 #if defined(ARDUINO_ARCH_ESP32)
 
-    /** @brief Zähler der PPA-Zeitgrenze seit dem Start. */
+    /** @brief Bereitschaft und Zähler der PPA seit dem Start. */
     struct PpaCounters
     {
         uint32_t timeouts; ///< Übertragungen, deren PPA-Fertigmeldung nicht innerhalb der Zeitgrenze kam
         uint32_t late;     ///< Fertigmeldungen, die nach der Zeitgrenze noch kamen
+        bool ready;        ///< Die PPA überträgt. false ohne PPA-Client oder nach einem Fehler der PPA, dann bleibt der gekachelte CPU-Weg
+        uint32_t jobs;     ///< An die PPA übergebene Aufträge
     };
 
     /** @brief Bindet ausschließlich den bestätigten 720x1280-DSI-Framebuffer im Querformat an (Rotation 3, um 180 Grad gedreht Rotation 1) und richtet die PPA samt Fertigmeldung ein. Ohne PPA bleibt der gekachelte CPU-Weg. @param display Initialisiertes Display. @return false bei anderem Panel, anderer Größe oder anderer Rotation. */
@@ -21,7 +23,7 @@ namespace Tab5Render
     void pushSprite(lgfx::LGFX_Device *display, lgfx::LGFX_Sprite &sprite, int x, int y);
     /** @brief Überträgt einen RGB565-Ausschnitt (M5GFX-Byteordnung) an die Position x/y und schreibt ihn für DSI zurück. Nur aus dem UI-Task aufrufen. Wartet höchstens 500 ms auf die Fertigmeldung der PPA. Bleibt sie aus, überträgt die CPU diese Fläche und alle weiteren, bis die verspätete Meldung kommt. @param stride Zeilenbreite der Quelle in Pixeln. */
     void pushRegion(lgfx::LGFX_Device &display, const uint16_t *source, int stride, int x, int y, int width, int height);
-    /** @brief Liefert die Zähler der PPA-Zeitgrenze und nimmt dabei eine inzwischen eingetroffene verspätete Meldung an. Nur aus dem UI-Task aufrufen. */
+    /** @brief Liefert Bereitschaft und Zähler der PPA und nimmt dabei eine inzwischen eingetroffene verspätete Meldung an. Nur aus dem UI-Task aufrufen. */
     PpaCounters ppaCounters();
     /** @brief Wartet auf die Fertigmeldung des nächsten Displaybildes (on_refresh_done des DPI-Treibers). Eine schon vorliegende Meldung zählt nicht, damit der Aufrufer am Takt des Panels hängt. Nur aus dem UI-Task aufrufen. @param timeoutMs Höchstwartezeit in ms. @return false ohne Bildsignal oder nach der Zeitgrenze. Der Aufrufer zeichnet dann frei laufend weiter. */
     bool waitFrame(uint32_t timeoutMs);

@@ -4,6 +4,7 @@
 #include "RadioPreferences.h"
 #include "Thema.h"
 #include "FtpProtocol.h"
+#include "Tab5Battery.h"
 
 /** @brief Versionierter Tab5-Konfigurationsspeicher, Altprofile bleiben unangetastet. */
 namespace Tab5Config
@@ -12,6 +13,10 @@ namespace Tab5Config
     RadioPreferences loadRadio();
     /** @brief Speichert geprüfte Radiowerte atomar in einem eigenen NVS-Schlüssel. */
     bool saveRadio(const RadioPreferences &value);
+    /** @brief Liest die an einer Ladung gemessenen Kennwerte des Akkus aus rr_tab5/akku_v1. @param value Erhält Akkugröße und Innenwiderstand, bleibt ohne gültigen Eintrag unverändert. @return true bei einem CRC-geprüften Eintrag. */
+    bool loadBattery(Tab5Battery::Calibration &value);
+    /** @brief Schreibt die gemessenen Kennwerte des Akkus nach rr_tab5/akku_v1, einen einzelnen NVS-Eintrag. Blockiert für den Flash-Zugriff, darum nur aus dem Dienst-Task. @return true nach bestätigtem Schreiben. */
+    bool saveBattery(const Tab5Battery::Calibration &value);
 
     /** @brief Zusätzliche eigene Einstellungen, die bestehende WLAN-Struktur bleibt unverändert. */
     struct Extras

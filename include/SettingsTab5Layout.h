@@ -184,7 +184,7 @@ namespace SettingsTab5Layout
         constexpr int INNER_R = 8;       ///< Original 5
         constexpr int FRAME_INSET = 2;   ///< Original 1
         constexpr int FRAME_PAD_Y = 4;   ///< Original 2, 4 statt 3, damit der Rahmen oben und unten wie seitlich 2 px stark bleibt
-        constexpr int TICK_W = 3;        ///< Strich des Hakens, Original 2
+        constexpr float TICK_R = 1.25f;  ///< Radius des Hakenstrichs für drawWideLine, der Strich wird rund doppelt so breit. Original 2 (Strich rund 4 Pixel), dünner, weil der Haken das Kästchen sonst fast füllte
         constexpr int HINT_GAP_Y = 24;   ///< Original 16
         constexpr int HINT_LINE_H = 29;  ///< Original 19
         constexpr int HINT_X = 6;        ///< Original 4

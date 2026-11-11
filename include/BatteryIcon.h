@@ -29,7 +29,6 @@ namespace BatteryIcon
     };
 
     constexpr int SegmentCount = 5;     ///< Jedes Segment steht für 20 %
-    constexpr uint8_t BlinkBelow = 10;  ///< Unter diesem Ladestand blinkt das rote Segment ohne Strom von außen
 
     /** @brief Liefert die Zahl der leuchtenden Segmente 1..5. Das letzte Segment bleibt bis 0 % an, damit ein erkannter Akku nie wie ein leerer Rahmen aussieht. */
     constexpr int segments(uint8_t percent)

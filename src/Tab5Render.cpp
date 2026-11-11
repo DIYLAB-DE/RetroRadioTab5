@@ -12,10 +12,12 @@
 #include <esp_timer.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/semphr.h>
+#include <sdkconfig.h>
 
 namespace
 {
     constexpr uint32_t PpaTimeoutUs = 500000; ///< Zeitgrenze für die Fertigmeldung einer PPA-Übertragung, ein Vollbild mit Drehung braucht rund 45 ms
+    constexpr uintptr_t CacheLine = CONFIG_CACHE_L2_CACHE_LINE_SIZE; ///< Cachezeile des PSRAM in Byte (64 in den Kernbibliotheken). Die PPA verlangt den Bildspeicher auf dieser Grenze, esp_lcd legt ihn so an
 
     lgfx::LGFX_Device *s_display = nullptr; ///< Das in begin() gebundene Display
     uint16_t *s_framebuffer = nullptr;      ///< DSI-Framebuffer in Panelausrichtung (720x1280)
@@ -78,11 +80,11 @@ namespace
         return woken == pdTRUE;
     }
 
-    /** @brief Cacheabgleich eines Bereichs, auf ganze Cachezeilen von 128 Byte ausgeweitet. @param direction ESP_CACHE_MSYNC_FLAG_DIR_C2M (CPU-Änderungen in den Speicher schreiben) oder ESP_CACHE_MSYNC_FLAG_DIR_M2C (CPU-Kopie verwerfen). */
+    /** @brief Cacheabgleich eines Bereichs, auf ganze Cachezeilen (CacheLine) ausgeweitet. @param direction ESP_CACHE_MSYNC_FLAG_DIR_C2M (CPU-Änderungen in den Speicher schreiben) oder ESP_CACHE_MSYNC_FLAG_DIR_M2C (CPU-Kopie verwerfen). */
     void syncCache(const void *address, size_t bytes, int direction)
     {
-        const uintptr_t begin = reinterpret_cast<uintptr_t>(address) & ~uintptr_t(127);
-        const uintptr_t end = (reinterpret_cast<uintptr_t>(address) + bytes + 127) & ~uintptr_t(127);
+        const uintptr_t begin = reinterpret_cast<uintptr_t>(address) & ~(CacheLine - 1);
+        const uintptr_t end = (reinterpret_cast<uintptr_t>(address) + bytes + CacheLine - 1) & ~(CacheLine - 1);
         esp_cache_msync(reinterpret_cast<void *>(begin), end - begin, direction | ESP_CACHE_MSYNC_FLAG_TYPE_DATA);
     }
 
@@ -131,10 +133,13 @@ bool Tab5Render::begin(lgfx::LGFX_Device &display)
     client.max_pending_trans_num = 1;
     ppa_event_callbacks_t callbacks{};
     callbacks.on_trans_done = onDone;
-    if ((reinterpret_cast<uintptr_t>(s_framebuffer) & 127) || ppa_register_client(&client, &s_ppa) != ESP_OK)
+    const uintptr_t address = reinterpret_cast<uintptr_t>(s_framebuffer);
+    const esp_err_t registered = address & (CacheLine - 1) ? ESP_ERR_INVALID_ARG : ppa_register_client(&client, &s_ppa);
+    if (registered != ESP_OK)
     {
         s_ppa = nullptr;
         s_mode = 1;
+        LOG_ERROR_F("PPA nicht verfügbar, CPU-Weg: Bildspeicher=0x%08lx Fehler=%d", static_cast<unsigned long>(address), registered);
     }
     else if (ppa_client_register_event_callbacks(s_ppa, &callbacks) != ESP_OK)
     {
@@ -142,6 +147,7 @@ bool Tab5Render::begin(lgfx::LGFX_Device &display)
         ppa_unregister_client(s_ppa);
         s_ppa = nullptr;
         s_mode = 1;
+        LOG_ERROR("PPA ohne Fertigmeldung, CPU-Weg");
     }
     if (!s_frame)
         s_frame = xSemaphoreCreateBinaryStatic(&s_frameStorage);
@@ -316,7 +322,7 @@ void Tab5Render::pushSprite(lgfx::LGFX_Device *display, lgfx::LGFX_Sprite &sprit
 Tab5Render::PpaCounters Tab5Render::ppaCounters()
 {
     checkPending();
-    return {s_timeouts, s_late};
+    return {s_timeouts, s_late, s_mode == 2 && s_ppa, s_jobs};
 }
 
 const char *Tab5Render::panelName(lgfx::LGFX_Device &display)

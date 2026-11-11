@@ -1091,10 +1091,17 @@ void SdPlayer::draw()
             drawMetaText(true);
         const bool failure = stateText() != SdPlayerKey::Ready;
         const uint16_t text = farbe(Rolle::GemText);
+        // Meldungen stehen zwischen zwei Strichen wie das Datum im Originalradio: Der Trenner nach dem Leerzeichen bringt den vorderen, der angehängte Text den hinteren. Der Anhang spiegelt Leerzeichen und Trenner, damit die Meldung mittig steht.
+        auto drawNotice = [&](SdPlayerKey key)
+        {
+            char notice[96];
+            snprintf(notice, sizeof(notice), "%s -  ", I18n::sdPlayer(key, m_language));
+            drawMetaText(false, " ", notice, text, text, text, " - ");
+        };
         if (failure)
-            drawMetaText(false, " ", I18n::sdPlayer(stateText(), m_language), text, text, text, " - ");
+            drawNotice(stateText());
         else if (m_playback.state == SdPlaybackStatus::State::Ended)
-            drawMetaText(false, " ", I18n::sdPlayer(SdPlayerKey::PlaylistEnd, m_language), text, text, text, " - ");
+            drawNotice(SdPlayerKey::PlaylistEnd);
         else if (m_playbackId && m_count)
         {
             char title[128];
@@ -1102,7 +1109,7 @@ void SdPlayer::draw()
             drawMetaText(false, m_playback.artist, m_playback.title[0] ? m_playback.title : title);
         }
         else
-            drawMetaText(false, " ", I18n::sdPlayer(SdPlayerKey::NoPlayback, m_language), text, text, text, " - ");
+            drawNotice(SdPlayerKey::NoPlayback);
         namespace D = SL::Details;
         constexpr int detailsW = SL::Cover::W, detailsH = SL::Cover::DETAILS_H, line = SL::Cover::LINE;
         const uint16_t border = farbe(Rolle::GemRahmen);

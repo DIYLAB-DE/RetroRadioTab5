@@ -191,6 +191,8 @@ public:
         int16_t chipTempC10 = 0;                                                                                                 ///< Chiptemperatur in Zehntel Grad Celsius
         bool ftpEnabled = false;                                                                                                 ///< FTP-Dienst eingeschaltet, der Schalter gilt nur im RAM
         BatteryIcon::State battery;                                                                                              ///< Akkuanzeige in der Fußzeile, ohne erkannten Akku bleibt die Fußzeile wie im Original
+        uint16_t batteryCapacityMah = 0;                                                                                         ///< Akkugröße in mAh für die Info-Seite
+        bool batteryLearned = false;                                                                                             ///< Akkugröße stammt aus einer vollständigen Ladung statt aus der Vorgabe
     };
 
     /** @brief Kopierbarer zentraler Auftrag, nur typzugehörige Felder verwenden und Geheimnisse danach löschen. */

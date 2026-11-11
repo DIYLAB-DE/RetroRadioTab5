@@ -1323,12 +1323,16 @@ namespace
             sample.charging = M5.Power.isCharging() == m5::Power_Class::is_charging;
             s_batteryReadUs = micros() - before;
             s_battery.feed(sample);
+            // Eine vollständige Ladung hat die Akkugröße geliefert, der Dienst-Task schreibt sie in den Flash.
+            Tab5Battery::Calibration learned;
+            if (s_battery.takeCalibration(learned))
+                s_services.saveBattery(learned);
             const auto &battery = s_battery.status();
             s_batteryState.present = battery.present;
             s_batteryState.external = battery.external;
             s_batteryState.percent = battery.percent;
             // Fast leer und ohne Strom von außen blinkt das Symbol im Takt des Doppelpunkts der Digitaluhren.
-            s_batteryState.blinkOff = battery.present && !battery.external && battery.percent < BatteryIcon::BlinkBelow && (local.tm_sec & 1);
+            s_batteryState.blinkOff = battery.present && !battery.external && battery.low && (local.tm_sec & 1);
             s_access.setBattery(s_batteryState);
         }
         auto &home = s_homeStatus;
@@ -1359,6 +1363,8 @@ namespace
         auto &status = s_settingsStatus;
         ++status.revision;
         status.battery = s_batteryState;
+        status.batteryCapacityMah = s_battery.status().calibration.capacityMah;
+        status.batteryLearned = s_battery.status().calibration.learned;
         status.timeValid = valid;
         status.ntpConfirmed = home.ntpSynced;
         status.localTime = {home.year, home.month, home.day, home.hour, home.minute};
@@ -1991,7 +1997,7 @@ namespace
             else if (command == '?')
             {
                 const auto ppa = Tab5Render::ppaCounters();
-                LOG_PLAIN_F("UI Ansicht=%u Sperre=%u Schlaf=%u PINSperre=%u Rotation=%u Helligkeit=%u PPAZeitgrenze=%lu PPAVerspaetet=%lu Bilder=%lu", static_cast<unsigned>(s_screen), s_access.active(), s_timeWindow.sleeping(), s_config.pinLock, M5.Display.getRotation(), M5.Display.getBrightness(), static_cast<unsigned long>(ppa.timeouts), static_cast<unsigned long>(ppa.late), static_cast<unsigned long>(Tab5Render::frames()));
+                LOG_PLAIN_F("UI Ansicht=%u Sperre=%u Schlaf=%u PINSperre=%u Rotation=%u Helligkeit=%u PPA=%u PPAAuftraege=%lu PPAZeitgrenze=%lu PPAVerspaetet=%lu Bilder=%lu", static_cast<unsigned>(s_screen), s_access.active(), s_timeWindow.sleeping(), s_config.pinLock, M5.Display.getRotation(), M5.Display.getBrightness(), ppa.ready, static_cast<unsigned long>(ppa.jobs), static_cast<unsigned long>(ppa.timeouts), static_cast<unsigned long>(ppa.late), static_cast<unsigned long>(Tab5Render::frames()));
                 {
                     int16_t x, y, z;
                     s_orientation.raw(x, y, z);
@@ -2008,6 +2014,7 @@ namespace
                 {
                     const auto &battery = s_battery.status();
                     LOG_PLAIN_F("AKKU Erkannt=%u Prozent=%u Netz=%u Simulation=%u Messung=%u mV=%u Glatt=%u mA=%d Laden=%u Wechsel=%u Schwankung=%u LesenUs=%lu", battery.present, battery.percent, battery.external, battery.simulated, battery.measured, battery.millivolts, battery.smoothed, battery.milliamps, battery.charging, battery.toggles, battery.spread, static_cast<unsigned long>(s_batteryReadUs));
+                    LOG_PLAIN_F("AKKUSTAND Zaehler=%u.%u Voll=%u Kapazitaet=%u Gelernt=%u Ri=%u Geladen=%u Lernlauf=%u", battery.level10 / 10, battery.level10 % 10, battery.full, battery.calibration.capacityMah, battery.calibration.learned, battery.calibration.resistanceMohm, battery.chargedMah, battery.learning);
                 }
                 LOG_PLAIN_F("AUDIO Rate=%lu Bitrate=%lu Codec=%u Puffer=%lu Luecken=%lu LueckenMs=%lu", static_cast<unsigned long>(status.sampleRate), static_cast<unsigned long>(status.bitRate), static_cast<unsigned>(status.codec), static_cast<unsigned long>(status.inputBytes), static_cast<unsigned long>(status.pcmGaps), static_cast<unsigned long>(status.pcmGapMs));
                 {
@@ -2130,6 +2137,9 @@ void setup()
         }
     }
     // Vor jedem begin(), das Farben in Sprites oder Symbolcaches einbrennt. Ein Wechsel wirkt nach dem Neustart.
+    Tab5Battery::Calibration batteryCalibration;
+    if (Tab5Config::loadBattery(batteryCalibration))
+        s_battery.setCalibration(batteryCalibration);
     ModernFarben modern;
     const bool modernStored = Tab5Config::loadModern(modern);
     setzeModernFarben(modern);
