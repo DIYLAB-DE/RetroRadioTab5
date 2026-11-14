@@ -126,6 +126,7 @@ namespace RadioTab5Layout
         constexpr float KNOB_R = 19.5f;    ///< Original 13
         constexpr float KNOB_THICKNESS = 4.5f; ///< Original 3
         constexpr float KNOB_FILL_R = 15.0f;   ///< Original 10
+        constexpr int HOLD_TOLERANCE = 9;  ///< Weg, den der Finger beim Halten auf dem Knopf wandern darf, Original 6
     }
 
     /** @brief Rechter unterer Bereich für Visualizer, Uhren und Tasten: Originalbereich 341..800 x 354..480 1,5-fach, rechts unten bündig. */

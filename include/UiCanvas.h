@@ -29,6 +29,13 @@ public:
     void blendColumnFrom(UiCanvas &source, int sx, int sy, int dx, int dy, int h, uint16_t color, float alpha);
     /** @brief Schreibt die Spalten [x0, x0 + count) zeilenweise nach target: Zeile i enthält Spalte x0 + i mit height() Pixeln in RGB565 ohne Bytetausch (Byteordnung des DSI-Framebuffers), bei reverse von unten nach oben. Gekachelt, damit Lesen und Schreiben im PSRAM zusammenhängend bleiben. @param target Mindestens count * height() Pixel. */
     void columnsToRows(uint16_t *target, int x0, int count, bool reverse);
+
+    /** @brief Zeichnet eine geglättete Linie mit runden Enden zwischen Punkten mit Bruchteilkoordinaten in Pixeln. drawWideLine nimmt nur ganze Pixel, gerundete Endpunkte verschieben kleine Formen sichtbar. @param r Radius der Linie in Pixeln, die Linie wird rund doppelt so breit. @param color RGB565-Farbe. */
+    void drawWideLineSubpixel(float x0, float y0, float x1, float y1, float r, uint16_t color)
+    {
+        draw_wedgeline(x0, y0, x1, y1, r, r, lgfx::convert_to_rgb888(color));
+    }
+
     /** @brief Zeichnet einen geglätteten Kreisring. Mittelpunkt, Radius und Dicke in Pixeln, Farben in RGB565. Nichtpositive Radien oder Dicken zeichnen nichts. */
     void drawSmoothCircle(int xc, int yc, float r, float thickness, uint16_t color, uint16_t bg);
     /** @brief Zeichnet eine geglättete Ellipsenkontur. Mittelpunkt, Halbachsen und Dicke in Pixeln, Farben in RGB565. Nichtpositive Radien oder Dicken zeichnen nichts. */

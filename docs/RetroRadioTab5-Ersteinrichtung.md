@@ -4,7 +4,7 @@
 
 Diese Anleitung führt Dich vom fabrikneuen M5Stack Tab5 zum gestarteten RetroRadioTab5. Du bereitest das Projekt unter Windows, Linux oder macOS in Visual Studio Code mit PlatformIO vor und überträgst die Firmware über ein einziges USB-C-Kabel. Beim ersten Mal sichert der Upload zuerst die Werksfirmware des Tab5 auf Deinem Rechner. Danach kannst Du denselben Projektordner zum Lesen und Bearbeiten des Quellcodes und für spätere Aktualisierungen verwenden.
 
-**Stand: 10.11.2026.** Der Ablauf wurde unter Linux praktisch bestätigt: Am 22.10.2026 wurden zwei Tab5 mit Werksfirmware, eines mit ST7123- und eines mit ST7121-Display, erstmals eingerichtet und danach mehrfach aktualisiert. Die Schritte für Windows und macOS stützen sich auf die offiziellen Software- und Treiberunterlagen, eigene Durchläufe auf diesen Systemen stehen noch aus. Der optionale Bluetooth-Sender wurde ebenfalls nur unter Linux geflasht.
+**Stand: 13.11.2026.** Der Ablauf wurde unter Linux praktisch bestätigt: Am 22.10.2026 wurden zwei Tab5 mit Werksfirmware, eines mit ST7123- und eines mit ST7121-Display, erstmals eingerichtet und danach mehrfach aktualisiert. Unter Windows 11 lief die Erstinstallation am 13.11.2026 in PowerShell an einem Tab5 mit Werksfirmware durch. Die Schritte für macOS stützen sich auf die offiziellen Software- und Treiberunterlagen, ein eigener Durchlauf steht dort noch aus. Der optionale Bluetooth-Sender wurde ebenfalls nur unter Linux geflasht.
 
 > Beginne mit dem Tab5 allein, ohne Bluetooth-Sender am M5-Bus. Die ab Werk installierte Demo wird durch RetroRadioTab5 ersetzt, eine Zwischen-Firmware ist nicht erforderlich. Die Sicherung der Werksfirmware entsteht dabei automatisch.
 
@@ -105,7 +105,7 @@ RetroRadioTab5 verwendet nicht den gewöhnlichen Upload von PlatformIO, sondern 
 | Gerät | Was der Upload tut |
 | --- | --- |
 | Falsche Chiprevision | Bricht ab, bevor etwas geschrieben wird. |
-| Tab5 mit Werksfirmware | Bricht ab und nennt die gefundene Tabelle, solange Du die Erstinstallation nicht ausdrücklich freigibst (Abschnitt 7). |
+| Tab5 mit Werksfirmware | Bricht ab, nennt die gefundene Tabelle und startet die Werksfirmware wieder, solange Du die Erstinstallation nicht ausdrücklich freigibst (Abschnitt 7). |
 | Tab5 mit RetroRadioTab5 | Schreibt nur die Firmware, prüft sie und stellt erst danach die Tabelle um. Einstellungen, PIN, WLAN-Zugangsdaten und Sender bleiben erhalten. |
 
 Die Firmware des WLAN-Chips ESP32-C6 im Tab5 wird in keinem Fall verändert.
@@ -125,6 +125,8 @@ TAB5_ERSTFLASH=1 pio run -e tab5_basis -t upload
 ```text
 $env:TAB5_ERSTFLASH="1"; pio run -e tab5_basis -t upload; Remove-Item Env:TAB5_ERSTFLASH
 ```
+
+Die Zeile für Linux und macOS versteht PowerShell nicht. Sie meldet dann, die Benennung „TAB5_ERSTFLASH=1“ sei nicht als Name eines Cmdlet erkannt worden, und am Tab5 passiert nichts. Der letzte Teil der Zeile nimmt die Freigabe wieder zurück.
 
 **Windows, Eingabeaufforderung:** die drei Zeilen nacheinander eingeben.
 
@@ -231,6 +233,14 @@ Schließe serielle Monitore und andere Programme, die auf denselben Port zugreif
 
 Verwende das in Abschnitt 7 beschriebene PlatformIO-Terminal in VS Code und warte, bis die Erweiterung fertig eingerichtet ist. Ein gewöhnliches Systemterminal kennt den Installationspfad möglicherweise noch nicht. Dafür ist keine zweite PlatformIO-Installation erforderlich. Für die Nutzung außerhalb von VS Code beschreibt PlatformIO die [Einrichtung der Shell-Befehle](https://docs.platformio.org/en/latest/core/installation/shell-commands.html).
 
+Alternativ rufst Du das PlatformIO der Erweiterung mit vollem Pfad auf. Unter Linux und macOS liegt es unter `~/.platformio/penv/bin/pio`, unter Windows unter `~\.platformio\penv\Scripts\pio`. Die Erstinstallation in PowerShell lautet damit, die drei Zeilen nacheinander eingegeben:
+
+```text
+$env:TAB5_ERSTFLASH="1"
+~\.platformio\penv\Scripts\pio run -e tab5_basis -t upload
+Remove-Item Env:TAB5_ERSTFLASH
+```
+
 ### `pio` bricht mit `resultcallback` ab
 
 Erscheint nach dem Befehl ein langer Python-Fehler mit `platformio==4.3.4`, `/usr/bin/pio` und `resultcallback`, startet das Terminal ein veraltetes PlatformIO aus den Paketquellen der Linux-Distribution, etwa bei Linux Mint oder Ubuntu. Es passt nicht zu aktuellen Python-Bibliotheken und bricht schon beim Start ab, bevor es das Tab5 anspricht. Der Build über VS Code gelingt trotzdem, weil die Erweiterung ihr eigenes PlatformIO verwendet. Öffne das Terminal über **PlatformIO: New Terminal** und prüfe mit `pio --version`, dass dort 6.1 oder neuer erscheint. Alternativ rufst Du das PlatformIO der Erweiterung mit vollem Pfad auf:
@@ -249,6 +259,6 @@ Prüfe die Internetverbindung und die Fehlermeldung im Terminalbereich. Bei eine
 
 Der geschützte Upload ist in `scripts/tab5_upload.py` und `scripts/flash_tab5.py` umgesetzt und in `platformio.ini` eingebunden. Der gewöhnliche Upload von PlatformIO würde zusätzliche Daten in den Einstellungsbereich schreiben, deshalb ist er ersetzt. Die Partitionstabelle steht in [partitions_tab5.csv](../partitions_tab5.csv). Die Firmware ist für die ESP32-P4-Chiprevisionen 0.x bis 1.x gebaut, ein Gerät mit Revision 3.x bräuchte andere vorkompilierte Bibliotheken des Arduino-Kerns. Die Displayausführung erkennt die Grafikbibliothek M5GFX bei jedem Start selbst, die [Hinweise von M5Stack zum Displaywechsel](https://docs.m5stack.com/en/core/Tab5) beschreiben die drei Ausführungen.
 
-Die Erstinstallation wurde unter Linux an zwei Tab5 mit Werksfirmware und ESP32-P4 Revision 1.3 geprüft, eines mit ST7123- und eines mit ST7121-Display. Updates wurden unter Linux an allen drei Displayausführungen ausgeführt. Die Hinweise für Windows und macOS basieren auf den offiziellen Software- und Treiberunterlagen. Ein vollständiger Installationsdurchlauf unter diesen Systemen steht noch aus.
+Die Erstinstallation wurde unter Linux an zwei Tab5 mit Werksfirmware und ESP32-P4 Revision 1.3 geprüft, eines mit ST7123- und eines mit ST7121-Display. Updates wurden unter Linux an allen drei Displayausführungen ausgeführt. Unter Windows 11 lief die Erstinstallation am 13.11.2026 an einem Tab5 mit Werksfirmware und ESP32-P4 Revision 1.3 in PowerShell durch, samt Sicherung und Start der Firmware. Die Hinweise für macOS basieren auf den offiziellen Software- und Treiberunterlagen, ein vollständiger Installationsdurchlauf steht dort noch aus.
 
 [RetroRadioTab5](../README.md) > [Dokumentation](../README.md#dokumentation) > RetroRadioTab5: Erste Inbetriebnahme

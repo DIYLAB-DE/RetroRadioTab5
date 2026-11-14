@@ -83,6 +83,7 @@ void SdPlayer::hide()
     m_sleep.cancel();
     m_visualizer->cancelTouch();
     m_hit = Hit::None;
+    m_trackTouch.reset();
     m_playbackId = m_confirmedId = m_pending = 0;
     m_stopping = false;
     m_repeat = RepeatMode::Off;
@@ -140,6 +141,7 @@ void SdPlayer::setServices(const SdServiceStatus &status)
         m_scrollVelocity = 0;
         m_confirmClear = false;
         m_hit = Hit::None;
+        m_trackTouch.reset();
         const bool stopping = m_playbackId && request(SdPlayerAction::Type::Stop);
         if (!stopping)
             m_pending = 0;
@@ -643,6 +645,7 @@ bool SdPlayer::touch(const SdTouch &physical)
         m_hit = Hit::None;
         m_cancelled = true;
         m_pressed = -1;
+        m_trackTouch.reset();
         m_scrollVelocity = 0;
         m_dragged = false;
         m_visualizer->cancelTouch();
@@ -655,6 +658,9 @@ bool SdPlayer::touch(const SdTouch &physical)
         m_dirty |= Controls | Progress;
         return true;
     }
+    // Ein Dialog übernimmt die Berührung, eine angefangene Haltegeste an den Reglern verfällt.
+    if (m_explorer.active() || m_messageBox.active() || m_sleep.isActive())
+        m_trackTouch.reset();
     if (m_explorer.active())
     {
         m_explorer.touch(e);
@@ -705,6 +711,17 @@ bool SdPlayer::touch(const SdTouch &physical)
         m_visualizer->preferences(after);
         if (before.mode != after.mode || memcmp(before.styles, after.styles, 8))
             request(SdPlayerAction::Type::VisualizerChanged);
+    };
+    // Die Knopfmitten kommen aus dem bestätigten Stand, wie drawTracks sie zeichnet.
+    const auto trackTouch = [&](bool touched)
+    {
+        const int positions[AudioSliderTouch::COUNT] = {AudioSliderTouch::position(0, m_state.balance), AudioSliderTouch::position(1, m_state.tone[0]), AudioSliderTouch::position(2, m_state.tone[1]), AudioSliderTouch::position(3, m_state.tone[2])};
+        return m_trackTouch.update(touched, e.x - RL::Tracks::X, e.y - RL::Tracks::Y, positions, e.now);
+    };
+    const auto trackRequest = [&](const AudioSliderTouch::Target &track)
+    {
+        if (track.index >= 0)
+            request(track.index ? SdPlayerAction::Type::Tone : SdPlayerAction::Type::Balance, 0, nullptr, AudioSliderTouch::value(track.index, track.y), track.index - 1);
     };
     int row = -1;
     const auto hit = hitAt(e.x, e.y, row);
@@ -763,12 +780,9 @@ bool SdPlayer::touch(const SdTouch &physical)
                     request(SdPlayerAction::Type::Volume, 0, nullptr, v);
             }
         }
-        const int p = e.y - RL::Tracks::Y;
-        if (m_hit >= Hit::Balance && m_hit <= Hit::High && p > RL::Tracks::PIXEL_MAX - 1 && p < RL::Tracks::PIXEL_MIN + 1)
-        {
-            const int i = static_cast<int>(m_hit) - static_cast<int>(Hit::Balance);
-            request(i ? SdPlayerAction::Type::Tone : SdPlayerAction::Type::Balance, 0, nullptr, i ? (p > RL::Tracks::PIXEL_ZERO ? map(p, RL::Tracks::PIXEL_MIN, RL::Tracks::PIXEL_ZERO, -12, 0) : map(p, RL::Tracks::PIXEL_ZERO, RL::Tracks::PIXEL_MAX, 0, 12)) : map(p, RL::Tracks::PIXEL_MIN, RL::Tracks::PIXEL_MAX, -16, 16), i - 1);
-        }
+        // Wie im Radio auch aus einer freien Stelle heraus, etwa dem Rand eines Knopfs am Bahnende. Playlist, Fortschritt, Drehknopf, Visualizer und Tasten behalten ihre Berührung.
+        if (m_hit == Hit::None || (m_hit >= Hit::Balance && m_hit <= Hit::High))
+            trackRequest(trackTouch(true));
         if (m_hit == Hit::Progress)
         {
             m_seekTarget = static_cast<uint64_t>(std::clamp<int>(e.x - SL::Progress::X, 0, SL::Progress::W)) * m_playback.durationSeconds / SL::Progress::W;
@@ -815,6 +829,8 @@ bool SdPlayer::touch(const SdTouch &physical)
             m_dirty |= Scroll;
         if (pressed == Hit::Track && e.now - m_lastTouchTime >= 100)
             m_scrollVelocity = 0; // Finger ruhte vor dem Loslassen: kein Wurf
+        // Ein kurzer Tipp auf einen Reglerknopf wirkt erst beim Loslassen.
+        trackRequest(trackTouch(false));
         if (pressed == Hit::Visualizer)
             visualizerTouch(false);
         else if (pressed == Hit::Progress)

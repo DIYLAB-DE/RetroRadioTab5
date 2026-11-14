@@ -20,7 +20,7 @@ Bricht ein Stream ab, zeigt die Infozeile **Stream unterbrochen**. Das Radio sta
 
 Der Lautstärkeknopf reicht von 0 bis 100 und reagiert auf eine Drehbewegung am äußeren Bereich. Die Markierung folgt dabei Deinem Finger. Ein Tipp in die Mitte schaltet stumm beziehungsweise hebt die Stummschaltung auf. Auch beim Herunterdrehen auf Lautstärke null erscheint das Mute-Symbol und die Visualisierungen gehen auf null. Durch Hochdrehen wird die Wiedergabe wieder hörbar, sofern sie nicht zusätzlich per Tipp stummgeschaltet wurde. Ist ein Bluetooth-Kopfhörer verbunden, regelt der Knopf dessen Lautstärke.
 
-Balance (-16 bis 16) sowie Tiefen, Mitten und Höhen (je -12 bis 12 dB) stellst Du durch Ziehen der Schieberegler ein. Bei welchen Frequenzen die drei Klangregler ansetzen, legst Du unter [Einstellungen -> Klang](Bedienung.md#klang) fest. Sendernamen, Streamadressen und Favoriten pflegst Du in der [Weboberfläche](Weboberfläche.md#radiosteuerung-und-senderpflege).
+Balance (-16 bis 16) sowie Tiefen, Mitten und Höhen (je -12 bis 12 dB) stellst Du durch Ziehen der Schieberegler ein. Hältst Du den Knopf eines Reglers etwa 0,8 Sekunden ruhig gedrückt, springt nur dieser Regler auf die Mittellinie (Balance 0 oder 0 dB). Bei welchen Frequenzen die drei Klangregler ansetzen, legst Du unter [Einstellungen -> Klang](Bedienung.md#klang) fest. Sendernamen, Streamadressen und Favoriten pflegst Du in der [Weboberfläche](Weboberfläche.md#radiosteuerung-und-senderpflege).
 
 [![Lautstärke null im Radio](bilder/bedienung/radio-lautstaerke-null-klein.png)](bilder/bedienung/radio-lautstaerke-null.png)
 

@@ -194,8 +194,15 @@ def backup_flash(base, root, mac, info):
     return directory
 
 
+def restart_after_abort(base):
+    """Startet das Tab5 nach einer Prüfung ohne Schreiben neu. esptool lässt es nach den Lesezugriffen mit --after no-reset im Download-Modus stehen, dort bleibt der Bildschirm dunkel. Ein Fehler beim Neustart überdeckt den Abbruchgrund nicht."""
+    print("Abbruch vor dem Schreiben, das Tab5 startet unverändert neu.", flush=True)
+    if subprocess.run([*base, "--after", "hard-reset", "read-mac"], check=False, capture_output=True, text=True).returncode != 0:
+        print("Neustart nicht gelungen. Das Tab5 bitte einmal aus- und wieder einschalten.", flush=True)
+
+
 def flash(esptool, port, images, bootloader=None, first_flash=False, recovery_root=".pio/recovery"):
-    """Prüft Anschluss, Chiprevision und Gerätetabelle. Umgestellte Geräte: App schreiben und verifizieren, erst danach die Tabelle umstellen. Werksgeräte nur mit first_flash: ganzen Flash sichern, NVS und Senderdaten löschen, dann Bootloader, Tabelle und App schreiben."""
+    """Prüft Anschluss, Chiprevision und Gerätetabelle. Umgestellte Geräte: App schreiben und verifizieren, erst danach die Tabelle umstellen. Werksgeräte nur mit first_flash: ganzen Flash sichern, NVS und Senderdaten löschen, dann Bootloader, Tabelle und App schreiben. Bricht eine Prüfung oder die Sicherung ab, ist nichts geschrieben und das Tab5 startet neu."""
     port = select_port(port)
     base = [*esptool, "--chip", "esp32p4", "--port", port, "--baud", "921600"]
     table = next(Path(path) for offset, path in images if offset == TABLE_OFFSET)
@@ -203,26 +210,34 @@ def flash(esptool, port, images, bootloader=None, first_flash=False, recovery_ro
     new = partitions(table.read_bytes())
     info, revision, mac = chip_info(base)
     print(info.strip(), flush=True)
-    check_revision(app, revision)
     options = ["write-flash", "--flash-mode", "qio", "--flash-freq", "80m", "--flash-size", "16MB"]
-    with tempfile.TemporaryDirectory(prefix="tab5-partitionen-") as temporary:
-        before = Path(temporary) / "partitions.bin"
-        subprocess.run([*base, "--after", "no-reset", "read-flash", hex(TABLE_OFFSET), hex(SECTOR_SIZE), str(before)], check=True)
-        try:
-            old = partitions(before.read_bytes())
-        except ValueError:
-            old = None
-    if old is not None and known_layout(old):
-        validate_upload(old, new, images)
+    # Im try stehen nur Prüfungen und Lesezugriffe. Ein ValueError nach dem ersten Schreiben darf keinen Neustart in ein halb geschriebenes Abbild auslösen.
+    try:
+        check_revision(app, revision)
+        with tempfile.TemporaryDirectory(prefix="tab5-partitionen-") as temporary:
+            before = Path(temporary) / "partitions.bin"
+            subprocess.run([*base, "--after", "no-reset", "read-flash", hex(TABLE_OFFSET), hex(SECTOR_SIZE), str(before)], check=True)
+            try:
+                old = partitions(before.read_bytes())
+            except ValueError:
+                old = None
+        update = old is not None and known_layout(old)
+        if update:
+            validate_upload(old, new, images)
+        elif not first_flash:
+            raise ValueError(f"Gerätetabelle ist nicht das RetroRadioTab5-Layout ({describe(old)}). Ein Werksgerät wird einmalig mit {FIRST_FLASH_VARIABLE}=1 eingerichtet, vorher wird der ganze Flash gesichert.")
+        else:
+            validate_first_flash(new, images, table, app, bootloader)
+            backup = backup_flash(base, recovery_root, mac, info)
+    except ValueError:
+        restart_after_abort(base)
+        raise
+    if update:
         print(f"Tab5 geprüft: App {app.stat().st_size} Bytes, Reserve {WEB_APP[3] - app.stat().st_size} Bytes. Bootloader, alte App und sämtliche Daten bleiben erhalten.", flush=True)
         subprocess.run([*base, "--after", "no-reset", *options, hex(WEB_APP[2]), str(app)], check=True)
         subprocess.run([*base, "--after", "no-reset", "verify-flash", hex(WEB_APP[2]), str(app)], check=True)
         subprocess.run([*base, "--after", "hard-reset", *options, hex(TABLE_OFFSET), str(table)], check=True)
         return
-    if not first_flash:
-        raise ValueError(f"Gerätetabelle ist nicht das RetroRadioTab5-Layout ({describe(old)}). Ein Werksgerät wird einmalig mit {FIRST_FLASH_VARIABLE}=1 eingerichtet, vorher wird der ganze Flash gesichert.")
-    validate_first_flash(new, images, table, app, bootloader)
-    backup = backup_flash(base, recovery_root, mac, info)
     print(f"Werksgerät gesichert unter {backup}. NVS und Senderdaten werden gelöscht, dann Bootloader, Tabelle und App geschrieben.", flush=True)
     for name in FIRST_FLASH_ERASE:
         subprocess.run([*base, "--after", "no-reset", "erase-region", hex(new[name][2]), hex(new[name][3])], check=True)

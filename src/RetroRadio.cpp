@@ -982,6 +982,7 @@ bool RetroRadio::show()
         return false;
     m_touchActive = false;
     m_pressed = -1;
+    m_trackTouch.reset();
     m_scene.setTouch(0, 0, false);
     m_visualizer->handleTouch(0, 0, false);
     m_startOnShow = true;
@@ -1535,6 +1536,19 @@ RetroRadio::Input RetroRadio::touch(TouchPhase phase, int x, int y, uint32_t now
     };
     constexpr int knobX = NL::Knob::X + NL::Knob::MID, knobY = NL::Knob::Y + NL::Knob::MID;
     const bool down = phase == TouchPhase::Press || phase == TouchPhase::Move;
+    // Die Knopfmitten kommen aus dem bestätigten Stand, wie drawTracks sie zeichnet.
+    const auto trackTouch = [&](bool touched)
+    {
+        const int positions[AudioSliderTouch::COUNT] = {AudioSliderTouch::position(0, m_state.balance), AudioSliderTouch::position(1, m_state.tone[0]), AudioSliderTouch::position(2, m_state.tone[1]), AudioSliderTouch::position(3, m_state.tone[2])};
+        return m_trackTouch.update(touched, x - NL::Tracks::X, y - NL::Tracks::Y, positions, now);
+    };
+    const auto trackCommand = [&](const AudioSliderTouch::Target &track)
+    {
+        auto out = command(track.index == 0 ? Action::Balance : Action::Tone);
+        out.control = track.index - 1;
+        out.value = AudioSliderTouch::value(track.index, track.y);
+        return out;
+    };
     if (phase == TouchPhase::Cancel)
     {
         m_scene.setTouch(-1, -1, true);
@@ -1544,12 +1558,15 @@ RetroRadio::Input RetroRadio::touch(TouchPhase phase, int x, int y, uint32_t now
         m_message.cancelTouch();
         m_touchActive = false;
         m_pressed = -1;
+        m_trackTouch.reset();
         m_visualizer->cancelTouch();
         m_toolbarDirty = true;
         return {};
     }
     if (modal())
     {
+        // Der Dialog übernimmt die Berührung, eine angefangene Haltegeste an den Reglern verfällt.
+        m_trackTouch.reset();
         m_dialogTime = now;
         m_scene.setTouch(x, y, down);
         if (m_message.active())
@@ -1657,21 +1674,9 @@ RetroRadio::Input RetroRadio::touch(TouchPhase phase, int x, int y, uint32_t now
             m_pressed = -1;
             m_toolbarDirty = true;
         }
-        const int pixel = y - NL::Tracks::Y;
-        if (pixel > NL::Tracks::PIXEL_MAX - 1 && pixel < NL::Tracks::PIXEL_MIN + 1)
-        {
-            for (int i = 0; i < 4; ++i)
-            {
-                const int left = NL::Tracks::X + NL::Tracks::SLIDER_X0 + NL::Tracks::SLIDER_STEP * i;
-                if (x < left || x > left + NL::Tracks::TOUCH_W)
-                    continue;
-                auto out = command(i == 0 ? Action::Balance : Action::Tone);
-                out.control = i - 1;
-                out.value = i == 0 ? map(pixel, NL::Tracks::PIXEL_MIN, NL::Tracks::PIXEL_MAX, -16, 16) : pixel > NL::Tracks::PIXEL_ZERO ? map(pixel, NL::Tracks::PIXEL_MIN, NL::Tracks::PIXEL_ZERO, -12, 0)
-                                                                                                                                        : map(pixel, NL::Tracks::PIXEL_ZERO, NL::Tracks::PIXEL_MAX, 0, 12);
-                return out;
-            }
-        }
+        const auto track = trackTouch(true);
+        if (track.index >= 0)
+            return trackCommand(track);
     }
     if (phase == TouchPhase::Release)
     {
@@ -1679,6 +1684,10 @@ RetroRadio::Input RetroRadio::touch(TouchPhase phase, int x, int y, uint32_t now
         m_pressed = -1;
         m_touchActive = false;
         m_toolbarDirty = true;
+        // Ein kurzer Tipp auf einen Reglerknopf wirkt erst beim Loslassen.
+        const auto track = trackTouch(false);
+        if (track.index >= 0)
+            return trackCommand(track);
         if (target >= 0 && target < 5 && hitButton(x, y) == target && now - m_pressTime < 2000)
         {
             if (target == 1 || target == 2)
@@ -1772,6 +1781,7 @@ void RetroRadio::hide()
     m_retryAt = m_retryDelay = 0;
     m_touchActive = false;
     m_pressed = -1;
+    m_trackTouch.reset();
     m_scene.setTouch(-1, -1, false);
     if (m_visualizer)
         m_visualizer->cancelTouch();

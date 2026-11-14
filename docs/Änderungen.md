@@ -4,6 +4,23 @@
 
 Hier steht, was sich von Version zu Version ändert, die neueste Version steht oben. Jede Version erscheint als [Release auf GitHub](https://github.com/DIYLAB-DE/RetroRadioTab5/releases) mit eigener Nummer. Die Nummer zeigt das Tab5 unter Einstellungen -> Info & Neustart und die Weboberfläche im Abschnitt System. Sie ändert sich nur mit einem neuen Release, auch wenn Du die Firmware selbst baust.
 
+## v26.11.14 vom 14.11.2026
+
+Die vierte Vorabversion, [v26.11.14 auf GitHub](https://github.com/DIYLAB-DE/RetroRadioTab5/releases/tag/v26.11.14).
+
+### Neu
+
+- Neu: In Radio und SD-Player springt ein Klangregler auf die Mittellinie (Balance 0 oder 0 dB), wenn Du seinen Knopf etwa 0,8 Sekunden ruhig gedrückt hältst. Die anderen Regler bleiben, wie sie sind. Ziehen und Tippen funktionieren wie bisher ([Lautstärke und Klang](Radio-und-Musik.md#lautstärke-und-klang)).
+
+### Geändert
+
+- Geändert: Die Erstinstallation und die Fehlerhilfe erklären, warum PowerShell unter Windows die Zeile `TAB5_ERSTFLASH=1 pio ...` ablehnt, und nennen die passende PowerShell-Zeile, auch mit vollem Pfad zum PlatformIO der Erweiterung.
+
+### Behoben
+
+- Behoben: Brach der Upload bei einem Tab5 mit Werksfirmware ab, weil die Erstinstallation nicht freigegeben war, blieb der Bildschirm dunkel, bis man das Tab5 aus- und wieder einschaltete. Jetzt startet das Tab5 nach jedem Abbruch vor dem Schreiben von selbst neu.
+- Behoben: Im SD-Player standen die Zähne der Wickeldorne je nach Kassettendesign ein kleines Stück über ihren Ring hinaus. Sie enden jetzt bei allen acht Kassetten bündig am Ring.
+
 ## v26.11.11 vom 11.11.2026
 
 Die dritte Vorabversion, [v26.11.11 auf GitHub](https://github.com/DIYLAB-DE/RetroRadioTab5/releases/tag/v26.11.11).

@@ -1,6 +1,7 @@
 #ifndef SD_PLAYER_H
 #define SD_PLAYER_H
 
+#include "AudioSliderTouch.h"
 #include "FileExplorer.h"
 #include "SleepTimerDialog.h"
 #include "SettingsDialogs.h"
@@ -360,6 +361,7 @@ private:
     /** @brief Aktualisiert nur den mit drei Sekunden Periodendauer pulsierenden Pauseknopf. */
     void drawPause();
     bool m_cancelled = false, m_dragged = false, m_held = false; ///< Kontakt verworfen. Finger hat die Wischschwelle überschritten. Taste wurde gehalten und wiederholt
+    AudioSliderTouch m_trackTouch; ///< Ziehen, Tippen und Haltegeste an Balance und Klangreglern
     uint32_t m_pressTime = 0, m_lastSeek = 0, m_seekTarget = 0, m_now = 0; ///< Zeiten in ms: Aufsetzen, letztes Spulen. Zielposition in Sekunden, letzte update-Zeit
     // Maße nativ aus SdPlayerTab5Layout, Originalwerte stehen dort.
     static constexpr int PLAYLIST_W = SdPlayerTab5Layout::Playlist::W;     ///< Breite der Playlist

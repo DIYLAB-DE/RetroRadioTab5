@@ -260,21 +260,24 @@ void SdPlayer::buildWrapSprite()
     const CassetteDesign &d = m_cassetteDesigns[m_cassetteDesignIdx];
     // Originalmaße in Pixeln der 285er Vorlage, mit dem Faktor der jeweiligen Vorlage gezeichnet
     const float f = d.scale;
+    constexpr float RIM_R = 14.5f;   ///< Außenkante des Zahnkranzes
+    constexpr float TOOTH_R = 1.8f;  ///< Radius der Zähne, die Zähne werden rund doppelt so breit
+    constexpr float TOOTH_IN = 9.0f; ///< Inneres Zahnende
 
     // SD.Transparenz ist zugleich Grund der Kantenglättung: Die Kreise mischen ihren Rand gegen den Schlüssel, der Saum bleibt nur unsichtbar, solange er so dunkel ist wie die Kassette um die Nabe.
     m_sprWrap->clear(farbe(Rolle::SDTransparenz));
     m_sprWrap->fillSmoothCircle(MID, MID, d.hubCoverR, farbe(Rolle::SDNabeRing));
     m_sprWrap->fillSmoothCircle(MID, MID, 16.0f * f, hubDark);
-    m_sprWrap->drawSmoothCircle(MID, MID, 14.5f * f, 2.6f * f, rim, hubDark);
+    m_sprWrap->drawSmoothCircle(MID, MID, RIM_R * f, 2.6f * f, rim, hubDark);
 
-    // 6 Zähne ragen vom Ring nach innen (bei 0°, 60°, 120°, 180°, 240°, 300°)
+    // 6 Zähne ragen vom Ring nach innen (bei 0°, 60°, 120°, 180°, 240°, 300°). Die runde Spitze endet genau an der Außenkante des Rings. Die Endpunkte bleiben ungerundet, weil auf ganze Pixel gerundete Endpunkte die Spitzen je nach Faktor der Vorlage bis fast einen Pixel über den Ring schieben.
+    const float toothOut = (RIM_R - TOOTH_R) * f;
     for (int i = 0; i < 6; ++i)
     {
         const float a = i * 60.0f * 3.1415927f / 180.0f;
         const float sx = sinf(a);
         const float cy = cosf(a);
-        m_sprWrap->drawWideLine((int)roundf(MID + 13.0f * f * sx), (int)roundf(MID - 13.0f * f * cy),
-                                (int)roundf(MID + 9.0f * f * sx), (int)roundf(MID - 9.0f * f * cy), 1.8f * f, rim);
+        m_sprWrap->drawWideLineSubpixel(MID + toothOut * sx, MID - toothOut * cy, MID + TOOTH_IN * f * sx, MID - TOOTH_IN * f * cy, TOOTH_R * f, rim);
     }
 
     m_sprWrap->fillSmoothCircle(MID, MID, 2.5f * f, farbe(Rolle::SDNabeAchse));

@@ -1,5 +1,6 @@
 #ifndef RETRO_RADIO_H
 #define RETRO_RADIO_H
+#include "AudioSliderTouch.h"
 #include "VisualizerView.h"
 #include "UiCanvas.h"
 #include "StationManager.h"
@@ -149,6 +150,7 @@ private:
     bool m_tuning = false, m_allowStart = false, m_arrived = false, m_motionDrawing = true, m_touchActive = false, m_eyeDone = false, m_startOnShow = false; ///< Zeiger fährt, Start nach Ankunft erlaubt, Zeiger angekommen, Zeiger während der Fahrt zeichnen, Touchkontakt aktiv, Augenwechsel dieses Kontakts erledigt, Sender nach show() neu wählen
     int m_target = -1, m_pressed = -1, m_oldNeedle = -1, m_oldNeedleSub = -1, m_lastGoodPosition = -1, m_eyeLevel = -1, m_lastDrawnSecond = -1; ///< Zielsender, gedrückte Fläche (0..4 Tasten, 6 Auge, 7 Knopfring, 8 Knopfmitte), zuletzt gezeichneter Zeiger in ganzen Pixeln und in Teilschritten (NEEDLE_SUBSTEPS je Pixel), Zeigerposition vor der Fahrt, zuletzt gezeichneter Augenwert, zuletzt gezeichnete Uhrsekunde, -1 = ungültig
     float m_needleX = RadioTab5Layout::Scale::STATION_X0, m_needleTarget = RadioTab5Layout::Scale::STATION_X0, m_needleVelocity = 0, m_totalDegrees = 0, m_lastAngle = 0; ///< Zeigerposition und -ziel in Skalenpixeln, Zeigergeschwindigkeit in Pixel/s, Knopfdrehung in Grad (36 je Lautstärkestufe) und letzter Touchwinkel
+    AudioSliderTouch m_trackTouch;                ///< Ziehen, Tippen und Haltegeste an Balance und Klangreglern
     uint8_t m_eyeStyle = 0;                       ///< Bauform des magischen Auges 0..3
 
     /** @brief Zähler der laufenden Nadelfahrt für die Logzeile NADEL bei Ankunft. */
