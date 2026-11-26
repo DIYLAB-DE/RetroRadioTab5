@@ -219,7 +219,6 @@ private:
     enum class Hit : uint8_t
     {
         None,       ///< Nichts
-        Home,       ///< Zurück zum MainScreen
         Mute,       ///< Stumm
         Browse,     ///< Dateidialog öffnen
         Clear,      ///< Playlist leeren, nach Rückfrage
@@ -232,7 +231,7 @@ private:
         Track,      ///< Zeile der Playlist
         Tape,       ///< Kassette, ein Druck wechselt das Design
         Reset,      ///< Zurücksetzen, nach Rückfrage
-        Power,      ///< Schlaftimer
+        Power,      ///< Haus: kurz Hauptmenü, gehalten Schlaftimer
         Knob,       ///< Lautstärkeknopf
         Balance,    ///< Regler Balance
         Low,        ///< Regler Tiefen
@@ -360,7 +359,7 @@ private:
     void updateScrollPhysics(uint32_t now);
     /** @brief Aktualisiert nur den mit drei Sekunden Periodendauer pulsierenden Pauseknopf. */
     void drawPause();
-    bool m_cancelled = false, m_dragged = false, m_held = false; ///< Kontakt verworfen. Finger hat die Wischschwelle überschritten. Taste wurde gehalten und wiederholt
+    bool m_cancelled = false, m_dragged = false, m_held = false; ///< Kontakt verworfen. Finger hat die Wischschwelle überschritten. Taste wurde gehalten: Vor- oder Rücklauf wiederholt oder Schlaftimer über das Haus geöffnet
     AudioSliderTouch m_trackTouch; ///< Ziehen, Tippen und Haltegeste an Balance und Klangreglern
     uint32_t m_pressTime = 0, m_lastSeek = 0, m_seekTarget = 0, m_now = 0; ///< Zeiten in ms: Aufsetzen, letztes Spulen. Zielposition in Sekunden, letzte update-Zeit
     // Maße nativ aus SdPlayerTab5Layout, Originalwerte stehen dort.

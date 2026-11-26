@@ -65,7 +65,7 @@ public:
         int selectedStation = -1, streamStation = -1;                        ///< Gewählter Sender der Zentrale und Sender des laufenden Streams, -1 ohne
         AudioManager::State streamState = AudioManager::State::Unavailable;  ///< Zustand des Audioworkers
         bool wifiConnected = false, muted = true, requestFailed = false, timeValid = false; ///< WLAN verbunden, stumm, Senderwahl oder Start abgelehnt, Uhrzeit plausibel
-        uint8_t wifiSignalPercent = 0;                                       ///< WLAN-Stärke 0..100 wie auf dem MainScreen, 2 x (dBm + 100), 0 ohne gültigen Wert
+        uint8_t wifiSignalPercent = 0;                                       ///< WLAN-Stärke 0..100, 2 x (dBm + 100), 0 ohne gültigen Wert
         uint8_t hour = 0, minute = 0, second = 0, volume = 10;              ///< Uhrzeit, Lautstärke 0..100
         int8_t balance = 0, tone[3]{};                                       ///< Balance -16..16, Klangbänder tief, mittel, hoch in dB
         uint32_t sampleRate = 0, bitRate = 0;                                ///< Abtastrate in Hz, Bitrate in bit/s
@@ -132,7 +132,7 @@ private:
     UiCanvas m_scale, m_div, m_footer, m_stereo, m_codec, m_knob, m_tracks, m_eye, m_analogClock, m_digitalClock; ///< Sprites für Skala, Skalenteiler, Infozeile, Stereo-Symbol, Codec-Feld, Drehknopf, Regler, Auge und beide Uhren
     UiCanvas m_strip;                             ///< Zwischenpuffer NEEDLE_STAGING_W x Skalenhöhe, aus dem die Nadelstreifen ans Display gehen. Der Cacheabgleich der Quelle umfasst so nur den Streifen
     UiCanvas *m_sprRetroScale = &m_scale, *m_sprRetroDiv = &m_div, *m_sprRetroFooter = &m_footer, *m_sprRetroStereo = &m_stereo, *m_sprRetroKnob = &m_knob, *m_sprRetroTracks = &m_tracks, *m_sprMagicEye = &m_eye; ///< Zeiger auf die Sprites in den übernommenen Zeichenfunktionen
-    UiButton m_buttons[5];                        ///< Tasten: Favoriten, voriger Sender, nächster Sender, Reset, Sleep-Timer/Aus
+    UiButton m_buttons[5];                        ///< Tasten: Favoriten, voriger Sender, nächster Sender, Reset, Haus (kurz Hauptmenü, gehalten Sleep-Timer)
     RadioPresetDialog m_presets{&m_scene};        ///< Favoritendialog
     SleepTimerDialog m_sleep{&m_scene};           ///< Sleep-Timer-Dialog samt Countdown
     SettingsMessageBox m_message;                 ///< Rückfrage vor dem Zurücksetzen
@@ -148,6 +148,7 @@ private:
     Input m_pending{};                            ///< Vorgemerkte Anforderung für takeRequest()
     bool m_ready = false, m_haveState = false, m_dirty = true, m_scaleDirty = true, m_metadataDirty = true, m_toolbarDirty = true, m_knobDirty = true, m_tracksDirty = true, m_bulk = false; ///< begin() erfolgreich, Status übernommen, Szene/Skala/Infozeile/Tasten/Drehknopf/Schieberegler neu zeichnen, Übertragung bis zum Sammelblock zurückgestellt
     bool m_tuning = false, m_allowStart = false, m_arrived = false, m_motionDrawing = true, m_touchActive = false, m_eyeDone = false, m_startOnShow = false; ///< Zeiger fährt, Start nach Ankunft erlaubt, Zeiger angekommen, Zeiger während der Fahrt zeichnen, Touchkontakt aktiv, Augenwechsel dieses Kontakts erledigt, Sender nach show() neu wählen
+    bool m_homeHeld = false;                      ///< Halten des Hauses hat den Sleep-Timer geöffnet, der übrige Kontakt bleibt bis zum Loslassen ohne Wirkung, auch auf den Tasten des Dialogs
     int m_target = -1, m_pressed = -1, m_oldNeedle = -1, m_oldNeedleSub = -1, m_lastGoodPosition = -1, m_eyeLevel = -1, m_lastDrawnSecond = -1; ///< Zielsender, gedrückte Fläche (0..4 Tasten, 6 Auge, 7 Knopfring, 8 Knopfmitte), zuletzt gezeichneter Zeiger in ganzen Pixeln und in Teilschritten (NEEDLE_SUBSTEPS je Pixel), Zeigerposition vor der Fahrt, zuletzt gezeichneter Augenwert, zuletzt gezeichnete Uhrsekunde, -1 = ungültig
     float m_needleX = RadioTab5Layout::Scale::STATION_X0, m_needleTarget = RadioTab5Layout::Scale::STATION_X0, m_needleVelocity = 0, m_totalDegrees = 0, m_lastAngle = 0; ///< Zeigerposition und -ziel in Skalenpixeln, Zeigergeschwindigkeit in Pixel/s, Knopfdrehung in Grad (36 je Lautstärkestufe) und letzter Touchwinkel
     AudioSliderTouch m_trackTouch;                ///< Ziehen, Tippen und Haltegeste an Balance und Klangreglern

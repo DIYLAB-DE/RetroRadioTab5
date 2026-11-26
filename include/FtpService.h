@@ -8,7 +8,7 @@
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 
-/** @brief FTP-Dienst auf lwIP-Sockets für genau einen Client im eigenen IPv4-Netz: Steuerkanal Port 21, Datenkanal nur passiv (PASV/EPSV) auf FtpProtocol::PassiveFirst bis PassiveFirst + PassiveCount - 1. Ein eigener Task mit Stack im PSRAM bedient die Sockets. Jede Kartenarbeit geht als Auftrag an den Dienstworker und hält die Kartensperre, die der UI-Koordinator vergibt. Der Schalter gilt nur im RAM und ist nach dem Start aus. Senden ist wie im Webportal gedrosselt. */
+/** @brief FTP-Dienst auf lwIP-Sockets für genau einen Client im eigenen IPv4-Netz: Steuerkanal Port 21, Datenkanal nur passiv (PASV/EPSV) auf FtpProtocol::PassiveFirst bis PassiveFirst + PassiveCount - 1. Ein eigener Task mit Stack im PSRAM bedient die Sockets. Jede Kartenarbeit geht als Auftrag an den Dienstworker und hält die Kartensperre, die der UI-Koordinator vergibt. Der Schalter gilt nur im RAM und ist nach dem Start aus. Senden ist mit einer kurzen Pause nach jedem Sendeaufruf gedrosselt. */
 class FtpService : private FtpEnvironment
 {
 public:

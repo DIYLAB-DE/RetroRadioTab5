@@ -129,7 +129,7 @@ bool BtSender::begin()
     m_orders = xQueueCreate(OrderSlots, sizeof(Order));
     if (!m_orders)
         return false;
-    // Der Stack liegt im PSRAM wie beim FTP-Dienst: Der Task schreibt nie in den Flash.
+    // Der Stack liegt im PSRAM. Das ist zulässig, weil der Task nie in den Flash schreibt.
     if (xTaskCreatePinnedToCoreWithCaps(task, "bt", StackBytes, this, 1, &m_task, 0, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT) == pdPASS)
         return true;
     m_task = nullptr;

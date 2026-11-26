@@ -1230,7 +1230,7 @@ bool SdPlayer::prepareGraphics()
         !m_knob.prepare(NL::Knob::SIZE, NL::Knob::SIZE) || !m_sliders.prepare(NL::Tracks::WIDTH, NL::Tracks::HEIGHT) || !m_playlist.prepare(PLAYLIST_W, SL::Playlist::H) || !m_meta.prepare(SL::WIDTH, SL::Footer::HEIGHT) ||
         !m_details.prepare(COVER_W, SL::Cover::DETAILS_H) || !m_progress.prepare(SL::Progress::W, SL::Progress::H) || !m_digitalClock.prepare(NL::Clock::DIGITAL_W, NL::Clock::DIGITAL_H) || !m_battery.prepare(NL::Battery::W, NL::Battery::H) || !m_analogClock.prepare(NL::Clock::ANALOG_SIZE, NL::Clock::ANALOG_SIZE))
         return false;
-    // Ziffern der Analoguhr wie beim Radio: nächstgrößere unskalierte Originalschrift statt DejaVu9
+    // Ziffern der Analoguhr: nächstgrößere unskalierte Originalschrift statt DejaVu9
     m_analogClock.setFont(&fonts::DejaVu12);
     // Themen mit Graustufen rechnen die Palette jedes Bilds einmal um: Kassetten als Abbildung zwischen Tinte und Papier, ihre Randecken in der Retro-Fläche werden Gem.Flaeche. Das Platzhalter-Cover ist eine helle Zeichnung auf dem Retro-Grund der Detailzeile und wird umgekehrt.
     const bool grau = themaAktiv().merkmale & MerkmalGraustufen;

@@ -30,7 +30,7 @@ Die Taste mit dem **Kreispfeil** öffnet die Rückfrage **ZURÜCKSETZEN?**. Mit 
 
 Der Stern öffnet **FAVORITEN** mit bis zu zehn markierten Sendern. Ein Tipp startet den Sender, **abbruch** schließt den Dialog. Welche Sender Favoriten sind, legst Du in der [Weboberfläche](Weboberfläche.md#radiosteuerung-und-senderpflege) fest.
 
-Das Haus unten rechts öffnet den **SLEEP-TIMER** mit **5, 15, 25, 45 und 60 Minuten**. Ein Tipp auf das Haus im Dialog beendet die Wiedergabe sofort und führt zurück ins Hauptmenü. **abbruch** schließt den Dialog. Nach Auswahl einer Zeit läuft die Wiedergabe bis zum Ablauf weiter, die Uhr zeigt die Restzeit. Ein laufender Timer lässt sich im selben Dialog mit **stopp** beenden. Ist die Zeit abgelaufen, schalten sich Ton und Display aus. Eine Berührung weckt das Tab5, bei eingeschalteter PIN-Sperre folgt zuerst der Sperrbildschirm. Die Dialoge schließen sich nach zehn Sekunden ohne Berührung von selbst.
+Ein kurzer Tipp auf das Haus unten rechts beendet die Wiedergabe sofort und führt zurück ins Hauptmenü. Hältst Du das Haus mindestens **0,8 Sekunden** gedrückt, öffnet sich schon bei aufliegendem Finger der **SLEEP-TIMER** mit **5, 15, 25, 45 und 60 Minuten**. Das anschließende Loslassen löst nichts weiter aus. Rutschst Du vorher vom Haus ab, passiert nichts. Auch das Haus im Dialog beendet die Wiedergabe und führt ins Hauptmenü. **abbruch** schließt den Dialog. Nach Auswahl einer Zeit läuft die Wiedergabe bis zum Ablauf weiter, die Uhr zeigt die Restzeit. Ein laufender Timer lässt sich im selben Dialog mit **stopp** beenden. Ist die Zeit abgelaufen, schalten sich Ton und Display aus. Eine Berührung weckt das Tab5, bei eingeschalteter PIN-Sperre folgt zuerst der Sperrbildschirm. Der Favoritendialog schließt sich nach zehn Sekunden ohne Berührung von selbst, der Sleep-Timer zehn Sekunden nach dem Öffnen.
 
 ## Alle acht Visualisierungen
 
@@ -98,7 +98,7 @@ Das **Ordnersymbol** öffnet die Dateiauswahl. Ein kurzer Tipp öffnet einen Ord
 
 Ein ausgewählter Ordner bringt seine Titel nach Namen sortiert mit, danach die seiner Unterordner. Die Titelliste fasst höchstens 300 Einträge, gesammelt wird bis 20 Ordnerebenen tief. Wird eine Grenze erreicht, meldet der Dialog **Auswahlgrenze erreicht**. Verwaltungsdateien von Windows und macOS, etwa `._Titel.mp3`, `.DS_Store` oder `System Volume Information`, blendet die Dateiauswahl aus.
 
-Die Titel werden über die Wiedergabetaste gestartet. Der **Papierkorb** entfernt nach der Rückfrage **LISTE LEEREN?** die Titelliste, nicht die Musikdateien auf der SD-Karte. Das Haus unten rechts öffnet wie im Radio den Sleep-Timer. Lautstärke, Balance, Klang, der **Kreispfeil** zum Zurücksetzen und Visualisierungswechsel funktionieren wie im Radio.
+Die Titel werden über die Wiedergabetaste gestartet. Der **Papierkorb** entfernt nach der Rückfrage **LISTE LEEREN?** die Titelliste, nicht die Musikdateien auf der SD-Karte. Ein kurzer Tipp auf das Haus unten rechts beendet wie im Radio die Wiedergabe und führt ins Hauptmenü, Halten ab **0,8 Sekunden** öffnet den Sleep-Timer. Lautstärke, Balance, Klang, der **Kreispfeil** zum Zurücksetzen und Visualisierungswechsel funktionieren wie im Radio.
 
 Die Abbildungen zeigen vorhandene Musikdateien und ein Cover zur Demonstration. Titel, Künstlernamen und Coverabbildungen dienen als Beispiele, Musikdateien sind nicht Bestandteil des Repositorys.
 

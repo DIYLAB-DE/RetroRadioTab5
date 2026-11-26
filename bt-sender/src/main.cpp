@@ -790,7 +790,7 @@ namespace
             s_i2s = nullptr;
             return false;
         }
-        // Wie bei den Flankenzählern: Ohne Takt vom Tab5 liegen die Eingänge definiert Low und speisen ein ausgeschaltetes Tab5 nicht.
+        // Ohne Takt vom Tab5 liegen die Eingänge definiert Low und speisen ein ausgeschaltetes Tab5 nicht.
         for (int pin : CountPins)
             gpio_set_pull_mode(static_cast<gpio_num_t>(pin), GPIO_PULLDOWN_ONLY);
         return true;

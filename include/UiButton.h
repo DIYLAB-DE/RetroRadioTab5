@@ -74,7 +74,7 @@ public:
 
     /**
      * @brief Gibt den aktuellen UiButton-Text zurück
-     * @return Pointer auf den Text
+     * @return Zeiger auf den Text
      */
     char *getLabelText();
 
@@ -99,7 +99,7 @@ public:
 
     /**
      * @brief Setzt die Schriftart (Legacy-Format)
-     * @param font Pointer auf Font-Daten (uint8_t Array)
+     * @param font Zeiger auf Font-Daten (uint8_t Array)
      */
     void setFont(const uint8_t *font);
 

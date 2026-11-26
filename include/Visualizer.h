@@ -89,7 +89,7 @@ enum class GonioStyle
 /**
  * @brief Farbfassung des analogen VU-Meters
  *
- * Beide Fassungen zeigen dasselbe Blatt in derselben Geometrie. Nur die Farben unterscheiden sich, einschließlich des Zeigers. Umgeschaltet wird mit langem Druck auf die Anzeige, wie bei den anderen Visualisierungen auch.
+ * Beide Fassungen zeigen dasselbe Blatt in derselben Geometrie. Nur die Farben unterscheiden sich, einschließlich des Zeigers. Umgeschaltet wird mit langem Druck auf die Anzeige.
  */
 enum class AnalogVUStyle : uint8_t
 {
@@ -464,12 +464,12 @@ private:
     unsigned long m_lastUpdate_digital = 0;                              ///< Zeitstempel des letzten digitalen Updates
 
     // Sample-Daten in zwei Wechselpuffern, Nutzung im UI-Task serialisiert
-    // Writer schreibt in Puffer [m_writeBufferIdx], dann atomarer Swap. Reader liest immer aus Puffer [m_writeBufferIdx ^ 1].
-    static constexpr uint8_t SAMPLE_BUFFER_COUNT = 2; ///< Anzahl der Double-Buffer
+    // Der Schreiber füllt Puffer [m_writeBufferIdx], danach werden die Puffer atomar getauscht. Der Leser liest immer aus Puffer [m_writeBufferIdx ^ 1].
+    static constexpr uint8_t SAMPLE_BUFFER_COUNT = 2; ///< Anzahl der Wechselpuffer
 
-    PsramUniquePtr<int16_t> m_samplesL[SAMPLE_BUFFER_COUNT]; ///< Double-Buffer für linke Samples [0] und [1]
-    PsramUniquePtr<int16_t> m_samplesR[SAMPLE_BUFFER_COUNT]; ///< Double-Buffer für rechte Samples [0] und [1]
-    uint16_t m_sampleCount[SAMPLE_BUFFER_COUNT] = {0, 0};    ///< Sample-Count pro Puffer (für jeden Puffer separat)
+    PsramUniquePtr<int16_t> m_samplesL[SAMPLE_BUFFER_COUNT]; ///< Wechselpuffer für linke Samples [0] und [1]
+    PsramUniquePtr<int16_t> m_samplesR[SAMPLE_BUFFER_COUNT]; ///< Wechselpuffer für rechte Samples [0] und [1]
+    uint16_t m_sampleCount[SAMPLE_BUFFER_COUNT] = {0, 0};    ///< Anzahl der Samples je Puffer
     uint32_t m_sampleRate[SAMPLE_BUFFER_COUNT] = {0, 0};    ///< Abtastrate in Hz, gemeinsam mit dem jeweiligen Sample-Puffer veröffentlicht
 
     std::atomic<uint8_t> m_writeBufferIdx{0};  ///< Aktueller Schreib-Puffer-Index (0 oder 1). Nach dem Schreiben wird geswappt.

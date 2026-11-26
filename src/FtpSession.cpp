@@ -416,7 +416,7 @@ bool FtpSession::pass(const char *argument)
     FtpProtocol::wipe(secret, sizeof(secret));
     if (valid)
     {
-        // Anders als im Webportal gilt nach Erfolg kein Mindestabstand: Clients bauen nach einer Trennung sofort neu auf.
+        // Nach Erfolg gilt kein Mindestabstand: Clients bauen nach einer Trennung sofort neu auf.
         m_lock = WebValidation::LoginLock{};
         m_loggedIn = true;
         m_failures = 0;

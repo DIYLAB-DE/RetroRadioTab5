@@ -11,7 +11,7 @@
 #include <esp_vfs.h>
 #include <freertos/ringbuf.h>
 #include <sys/stat.h>
-// Wie in Arduinos HWCDC.cpp: Die Registerzugriffe des Headers sind in C++20 als volatile-Verbundzuweisung veraltet.
+// Die Registerzugriffe des Headers sind in C++20 als volatile-Verbundzuweisung veraltet.
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wvolatile"
 #include <hal/usb_serial_jtag_ll.h>
@@ -100,7 +100,7 @@ namespace
         }
         else if (s_usbWritten.exchange(false, std::memory_order_relaxed))
         {
-            // Gesperrt hat sich der Interrupt bei leerem Sendepuffer selbst, oder HWCDC hielt sich beim Schreiben für getrennt. Wie in HWCDC::write schließt das Abschließen der FIFO die Ausgabe ab, die Freigabe holt Liegengebliebenes ab. Ist nichts mehr da, sperrt sich der Interrupt wieder.
+            // Gesperrt hat sich der Interrupt bei leerem Sendepuffer selbst, oder HWCDC hielt sich beim Schreiben für getrennt. Das Abschließen der FIFO schließt die Ausgabe ab, die Freigabe holt Liegengebliebenes ab. Ist nichts mehr da, sperrt sich der Interrupt wieder.
             usb_serial_jtag_ll_txfifo_flush();
             usb_serial_jtag_ll_ena_intr_mask(InEmpty);
         }

@@ -676,7 +676,7 @@ private:
     void resetPinEntry();
     /** @brief Verarbeitet eine Taste des Nummernblocks. @param key Ziffer, 'B' löscht die letzte Stelle, 'C' verwirft die Eingabe. Die vierte Ziffer schließt die erste Eingabe ab, die Wiederholung bestätigt oder verwirft sie. Wartet die Seite auf die PIN zum Ausschalten der Sperre, gibt die vierte Ziffer den Speicherauftrag. */
     void handlePinKey(char key);
-    /** @brief Speichert die PIN-Sperre sofort ohne „speichern“, wie der Log-Schalter nur ihren eigenen Eintrag. @param enabled Gewünschter Zustand. Zum Ausschalten trägt m_pinEntry die aktuelle PIN. Kommt kein Auftrag zustande, bleibt der gespeicherte Zustand stehen. */
+    /** @brief Speichert die PIN-Sperre sofort ohne „speichern“ und schreibt dabei nur ihren eigenen Eintrag. @param enabled Gewünschter Zustand. Zum Ausschalten trägt m_pinEntry die aktuelle PIN. Kommt kein Auftrag zustande, bleibt der gespeicherte Zustand stehen. */
     void changePinLock(bool enabled);
     /** @brief Begrenzt den manuellen Tag auf die Länge des gewählten Monats. */
     void clampManualDay();

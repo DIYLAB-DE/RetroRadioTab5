@@ -45,7 +45,49 @@ namespace
         return audio.state == AudioManager::State::Starting || (audio.file && (audio.state == AudioManager::State::Streaming || audio.state == AudioManager::State::Paused));
     }
 
-    /** @brief Liest Kartenordner für SdFileScan wie Portal und FTP über FATFS (FatDirectory), damit die FAT-Attribute versteckt und System für SystemEntries ankommen. Nur im Dienstworker. Vor jedem Eintrag wird 1 ms abgegeben, damit gleich priorisierte Tasks laufen. */
+    /** @brief Name des WLAN-Energiesparmodus für die Logzeile WLAN_FUNK. */
+    const char *wifiSleepName(wifi_ps_type_t mode)
+    {
+        switch (mode)
+        {
+        case WIFI_PS_NONE:
+            return "aus";
+        case WIFI_PS_MIN_MODEM:
+            return "MIN_MODEM";
+        case WIFI_PS_MAX_MODEM:
+            return "MAX_MODEM";
+        default:
+            return "unbekannt";
+        }
+    }
+
+    /** @brief Name des ausgehandelten Funkmodus für die Logzeile WLAN_FUNK nach der Aufzählung des P4-Kerns. Der C6 zählt nach der Aufzählung seines eigenen ESP-IDF, die davon abweichen kann, deshalb steht der Rohwert mit im Log. */
+    const char *wifiPhyName(wifi_phy_mode_t mode)
+    {
+        switch (mode)
+        {
+        case WIFI_PHY_MODE_LR:
+            return "LR";
+        case WIFI_PHY_MODE_11B:
+            return "11b";
+        case WIFI_PHY_MODE_11G:
+            return "11g";
+        case WIFI_PHY_MODE_11A:
+            return "11a";
+        case WIFI_PHY_MODE_HT20:
+            return "HT20";
+        case WIFI_PHY_MODE_HT40:
+            return "HT40";
+        case WIFI_PHY_MODE_HE20:
+            return "HE20";
+        case WIFI_PHY_MODE_VHT20:
+            return "VHT20";
+        default:
+            return "unbekannt";
+        }
+    }
+
+    /** @brief Liest Kartenordner für SdFileScan über FATFS (FatDirectory), damit die FAT-Attribute versteckt und System für SystemEntries ankommen. Nur im Dienstworker. Vor jedem Eintrag wird 1 ms abgegeben, damit gleich priorisierte Tasks laufen. */
     class CardDirectory : public SdFileScan::Directory
     {
     public:
@@ -334,6 +376,8 @@ bool AppServices::prepareWifi()
     }
     WiFi.persistent(false);
     WiFi.setHostname(m_config.hostname);
+    // Ohne Energiesparmodus bleibt der Funkteil des C6 zwischen den Beacons wach, der Router muss keine Pakete zurückhalten. Mit Energiesparmodus und 802.11ax setzt der Stream an einer C6-Firmware 1.4.1 alle 19 bis 35 s für rund 5 s aus. Vor dem Start der Station merkt der Kern den Wert nur vor und setzt ihn mit dem Start.
+    WiFi.setSleep(false);
     LOG_INFO("WLAN: C6-Station initialisieren.");
     m_wifiReady = WiFi.STA.begin(false);
     if (!m_wifiReady)
@@ -350,6 +394,31 @@ bool AppServices::prepareWifi()
         return false;
     }
     return true;
+}
+
+void AppServices::logWifiRadio()
+{
+    const uint32_t started = millis();
+    char sleep[24], protocol[24], phy[24];
+    wifi_ps_type_t ps = WIFI_PS_NONE;
+    esp_err_t result = esp_wifi_get_ps(&ps);
+    if (result == ESP_OK)
+        snprintf(sleep, sizeof(sleep), "%s", wifiSleepName(ps));
+    else
+        snprintf(sleep, sizeof(sleep), "Fehler(0x%x)", static_cast<unsigned>(result));
+    uint8_t bitmap = 0;
+    result = esp_wifi_get_protocol(WIFI_IF_STA, &bitmap);
+    if (result == ESP_OK)
+        snprintf(protocol, sizeof(protocol), "0x%02x", bitmap);
+    else
+        snprintf(protocol, sizeof(protocol), "Fehler(0x%x)", static_cast<unsigned>(result));
+    wifi_phy_mode_t mode = WIFI_PHY_MODE_LR;
+    result = esp_wifi_sta_get_negotiated_phymode(&mode);
+    if (result == ESP_OK)
+        snprintf(phy, sizeof(phy), "%s(%d)", wifiPhyName(mode), static_cast<int>(mode));
+    else
+        snprintf(phy, sizeof(phy), "Fehler(0x%x)", static_cast<unsigned>(result));
+    LOG_PLAIN_F("WLAN_FUNK Energiesparmodus=%s Protokoll=%s Funkmodus=%s Dauer=%lu ms", sleep, protocol, phy, static_cast<unsigned long>(millis() - started));
 }
 
 void AppServices::applyTime()
@@ -392,6 +461,7 @@ void AppServices::connectProfiles()
     else if (step == WifiSequence::Step::Connected)
     {
         LOG_INFO_F("WLAN verbunden IP=%s RSSI=%d", WiFi.localIP().toString().c_str(), WiFi.RSSI());
+        logWifiRadio();
         applyTime();
     }
     m_wifiConnecting.store(m_sequence.active());
@@ -560,6 +630,7 @@ void AppServices::execute()
                     for (int i = 0; i < 4; ++i)
                         m_result.ip[i] = ip[i];
                     LOG_PLAIN_F("WLAN VERBUNDEN IP=%s RSSI=%d", ip.toString().c_str(), WiFi.RSSI());
+                    logWifiRadio();
                 }
                 else
                 {

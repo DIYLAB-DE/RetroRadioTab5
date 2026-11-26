@@ -376,8 +376,10 @@ private:
     static std::atomic<bool> s_rtcSyncPending;
     /** @brief Führt ausschließlich hier langsame Dienste aus. */
     static void worker(void *context);
-    /** @brief Initialisiert einmalig die C6-Station (SDIO-Pins, Hostname) und prüft die MAC. @return false bei Pin-, Start- oder MAC-Fehler. */
+    /** @brief Initialisiert einmalig die C6-Station (SDIO-Pins, Hostname, WLAN-Energiesparmodus aus) und prüft die MAC. @return false bei Pin-, Start- oder MAC-Fehler. */
     bool prepareWifi();
+    /** @brief Schreibt die Logzeile WLAN_FUNK mit Energiesparmodus, Protokollmaske und ausgehandeltem Funkmodus der Station, alle drei vom C6 zurückgelesen, dazu die Dauer der drei Abfragen. Nur im Dienstworker und nur bei bestehender Verbindung, vorher steht der Funkmodus nicht fest. */
+    void logWifiRadio();
     /** @brief Führt den kopierten Auftrag m_work aus (Speichern, Zurücksetzen, Zeit setzen, WLAN-Suche, Verbindungstest), reiht das Ergebnis ein und löscht danach Auftrag und Ergebnis. */
     void execute();
     /** @brief Übernimmt Zeitzone und, bei bestehender WLAN-Verbindung, den NTP-Abgleich. Erhöht timeRevision(). */

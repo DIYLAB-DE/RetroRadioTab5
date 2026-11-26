@@ -24,6 +24,7 @@ namespace
     constexpr int ListX = SL::Playlist::X, ListY = SL::Playlist::Y, ListWidth = SL::Playlist::W, RowHeight = SL::Playlist::ROW_H, ListHeight = SL::Playlist::H;
     constexpr uint32_t HoldDelay = 600, SeekRepeat = 400, SeekStep = 10;
     constexpr uint32_t RepeatHold = 800; ///< Haltezeit von Play in ms, ab der die ganze Playlist wiederholt wird, Original 800
+    constexpr uint32_t HomeHold = 800;   ///< Haltezeit des Hauses in ms, ab der statt des Hauptmenüs der Schlaftimer öffnet
     constexpr int KnobX = RL::Knob::X + RL::Knob::MID, KnobY = RL::Knob::Y + RL::Knob::MID; ///< Drehknopfmitte, Original (53,426)
 
     /** @brief Länge des Ordneranteils von path einschließlich des letzten Schrägstrichs, 0 ohne Schrägstrich. */
@@ -537,9 +538,6 @@ void SdPlayer::activate(Hit hit, int row)
 {
     switch (hit)
     {
-    case Hit::Home:
-        request(SdPlayerAction::Type::Home);
-        break;
     case Hit::Stop:
         stop();
         break;
@@ -562,8 +560,14 @@ void SdPlayer::activate(Hit hit, int row)
             openDialog(hit);
         break;
     case Hit::Reset:
-    case Hit::Power:
         openDialog(hit);
+        break;
+    case Hit::Power:
+        // Kurz getippt beendet das Haus die Wiedergabe und führt ohne Dialog ins Hauptmenü, gehalten öffnet es den Schlaftimer.
+        if (static_cast<int32_t>(m_now - m_pressTime) < static_cast<int32_t>(HomeHold))
+            request(SdPlayerAction::Type::Home);
+        else
+            openDialog(hit);
         break;
     case Hit::Tape:
         m_cassetteDesignIdx = (m_cassetteDesignIdx + 1) % 8;
@@ -658,6 +662,16 @@ bool SdPlayer::touch(const SdTouch &physical)
         m_dirty |= Controls | Progress;
         return true;
     }
+    // Hat Halten des Hauses den Schlaftimer geöffnet, bleibt der übrige Kontakt bis zum Loslassen ohne Wirkung, auch auf den Tasten des Dialogs.
+    if (m_hit == Hit::Power && m_held)
+    {
+        if (e.phase == SdTouchPhase::Release)
+        {
+            m_hit = Hit::None;
+            m_dirty |= Controls;
+        }
+        return true;
+    }
     // Ein Dialog übernimmt die Berührung, eine angefangene Haltegeste an den Reglern verfällt.
     if (m_explorer.active() || m_messageBox.active() || m_sleep.isActive())
         m_trackTouch.reset();
@@ -702,7 +716,7 @@ bool SdPlayer::touch(const SdTouch &physical)
             presentRect(RL::Dialog::SLEEP_X, RL::Dialog::SLEEP_Y, RL::Dialog::SLEEP_W, RL::Dialog::SLEEP_H);
         return true;
     }
-    // Der Visualizer erhält wie beim Radio Koordinaten relativ zu seiner Fläche.
+    // Der Visualizer erhält Koordinaten relativ zu seiner Fläche.
     const auto visualizerTouch = [&](bool contact)
     {
         RadioPreferences before, after;
@@ -1262,6 +1276,14 @@ void SdPlayer::update(uint32_t now, AudioManager &audio)
     }
     if (m_messageBox.active() || m_sleep.isActive())
     {
+        audio.consumeAudioData();
+        return;
+    }
+    // Gehalten öffnet das Haus den Schlaftimer noch bei aufliegendem Finger.
+    if (m_hit == Hit::Power && !m_cancelled && !m_held && static_cast<int32_t>(now - m_pressTime) >= static_cast<int32_t>(HomeHold))
+    {
+        m_held = true;
+        openDialog(Hit::Power);
         audio.consumeAudioData();
         return;
     }

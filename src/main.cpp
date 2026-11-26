@@ -1009,7 +1009,7 @@ namespace
         return s_source == Source::Sd || uxQueueMessagesWaiting(s_sdActions);
     }
 
-    /** @brief Beantwortet eine wartende Anforderung der Kartensperre durch den FTP-Dienst nach derselben Regel wie beim Webportal: keine Sperre bei laufender oder wartender SD-Wiedergabe und keine, solange das Webportal sie hält. */
+    /** @brief Beantwortet eine wartende Anforderung der Kartensperre durch den FTP-Dienst: keine Sperre bei laufender oder wartender SD-Wiedergabe und keine, solange das Webportal sie hält. */
     void processFtp()
     {
         if (!s_ftpReady)
@@ -1436,7 +1436,7 @@ namespace
         radio.acknowledgedRequestId = s_radioAck;
         radio.selectedStation = s_selectedStation;
         radio.streamRequestId = s_radioStream;
-        // Jeder Senderwechsel stoppt den Stream zuerst, ein laufender gehört also stets zu s_selectedStation. Anders als audio.stationIndex folgt der Wert einem Umsortieren im Webportal.
+        // Jeder Senderwechsel stoppt den Stream zuerst, ein laufender gehört also stets zu s_selectedStation. Der Wert folgt auch einem Umsortieren im Webportal.
         radio.streamStation = current && s_source == Source::Radio ? s_selectedStation : -1;
         radio.streamState = s_source == Source::Radio ? (current ? audio.state : AudioManager::State::Starting) : AudioManager::State::Idle;
         radio.requestFailed = s_radioFailed;
@@ -1997,7 +1997,7 @@ namespace
             else if (command == '?')
             {
                 const auto ppa = Tab5Render::ppaCounters();
-                LOG_PLAIN_F("UI Ansicht=%u Sperre=%u Schlaf=%u PINSperre=%u Rotation=%u Helligkeit=%u PPA=%u PPAAuftraege=%lu PPAZeitgrenze=%lu PPAVerspaetet=%lu Bilder=%lu", static_cast<unsigned>(s_screen), s_access.active(), s_timeWindow.sleeping(), s_config.pinLock, M5.Display.getRotation(), M5.Display.getBrightness(), ppa.ready, static_cast<unsigned long>(ppa.jobs), static_cast<unsigned long>(ppa.timeouts), static_cast<unsigned long>(ppa.late), static_cast<unsigned long>(Tab5Render::frames()));
+                LOG_PLAIN_F("UI Ansicht=%u Sperre=%u Schlaf=%u PINSperre=%u Rotation=%u Helligkeit=%u PPA=%u PPAAuftraege=%lu PPAZeitgrenze=%lu PPAVerspaetet=%lu PPAAbgesichert=%lu Bilder=%lu", static_cast<unsigned>(s_screen), s_access.active(), s_timeWindow.sleeping(), s_config.pinLock, M5.Display.getRotation(), M5.Display.getBrightness(), ppa.ready, static_cast<unsigned long>(ppa.jobs), static_cast<unsigned long>(ppa.timeouts), static_cast<unsigned long>(ppa.late), static_cast<unsigned long>(ppa.guarded), static_cast<unsigned long>(Tab5Render::frames()));
                 {
                     int16_t x, y, z;
                     s_orientation.raw(x, y, z);

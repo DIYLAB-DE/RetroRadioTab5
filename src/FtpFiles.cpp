@@ -75,7 +75,7 @@ void AppServices::executeFtpFile()
         job->status = Status::NoCard;
     else if (opening && !cardAnswers())
     {
-        // Wie beim Sammeln im SD-Player: Eine verlorene Karte erscheint sonst als leerer Ordner oder kurze Datei.
+        // Ohne diese Prüfung erschiene eine verlorene Karte als leerer Ordner oder kurze Datei.
         job->status = Status::NoCard;
         m_card.failed();
     }

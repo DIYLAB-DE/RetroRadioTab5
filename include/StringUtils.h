@@ -178,7 +178,7 @@ namespace stringutils
     /**
      * @brief URL-Kodierung für HTTP-Parameter
      * @param in Eingabetext
-     * @param out Ausgabe-Buffer
+     * @param out Ausgabepuffer
      * @param outSize Größe des Ausgabepuffers
      * @details Codiert Sonderzeichen gemäß RFC 3986
      */

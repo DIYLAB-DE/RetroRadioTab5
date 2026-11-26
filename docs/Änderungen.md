@@ -4,6 +4,24 @@
 
 Hier steht, was sich von Version zu Version ändert, die neueste Version steht oben. Jede Version erscheint als [Release auf GitHub](https://github.com/DIYLAB-DE/RetroRadioTab5/releases) mit eigener Nummer. Die Nummer zeigt das Tab5 unter Einstellungen -> Info & Neustart und die Weboberfläche im Abschnitt System. Sie ändert sich nur mit einem neuen Release, auch wenn Du die Firmware selbst baust.
 
+## v26.11.26 vom 26.11.2026
+
+Das erste reguläre Release nach vier Vorabversionen, [v26.11.26 auf GitHub](https://github.com/DIYLAB-DE/RetroRadioTab5/releases/tag/v26.11.26).
+
+### Neu
+
+- Neu: Das serielle Log nennt nach jeder WLAN-Verbindung in der Zeile `WLAN_FUNK` den Energiesparmodus und den ausgehandelten Funkstandard (`HT20` und `HT40` sind Wi-Fi 4, `HE20` ist Wi-Fi 6). Das hilft bei der Fehlersuche im WLAN. Die Ausgabe schaltest Du in den Einstellungen unter Serielle Logs ein ([Allgemein](Bedienung.md#allgemein)).
+
+### Geändert
+
+- Geändert: Ein kurzer Tipp auf das Haus unten rechts beendet in Radio und SD-Player die Wiedergabe sofort und führt direkt ins Hauptmenü. Den Sleep-Timer öffnest Du, indem Du das Haus mindestens 0,8 Sekunden gedrückt hältst. Er erscheint schon, während Dein Finger noch aufliegt, das anschließende Loslassen löst nichts weiter aus. Rutschst Du vorher vom Haus ab, passiert nichts. Bisher öffnete das Haus immer zuerst den Sleep-Timer ([Favoriten und Sleep-Timer](Radio-und-Musik.md#favoriten-und-sleep-timer)).
+- Geändert: Die Audio-Bibliothek audio-lite liegt nicht mehr als Kopie im Projekt. RetroRadioTab5 verwendet jetzt die eigenständige Bibliothek [audio-lite](https://github.com/DIYLAB-DE/audio-lite) in Version 0.2.0. PlatformIO lädt sie beim ersten Build von selbst, wie M5GFX und M5Unified. Am Build ändert sich für Dich nichts, der Ordner `lib/audio-lite` entfällt. Die bisherigen Korrekturen an der Wiedergabe sind in der Bibliothek enthalten. Laut ihren Release-Notes kommen Korrekturen beim Spulen in FLAC-Dateien und beim Einlesen von M4A-Dateien hinzu.
+
+### Behoben
+
+- Behoben: An Routern mit Wi-Fi 6 im 2,4-GHz-Band setzte der Ton im Radio immer wieder für rund 5 bis 10 Sekunden aus, bei manchen Sendern im Abstand von etwa einer halben Minute. Sender, die viel Vorrat schicken, liefen dabei unauffällig. Betroffen sind Tab5, deren WLAN-Chip die Firmware 1.4.1 trägt, bisher bei Geräten mit den Displays ST7123 und ST7121 gesehen. Der Energiesparmodus des WLAN-Chips verträgt sich in dieser Kombination nicht mit Wi-Fi 6. Das Tab5 schaltet ihn jetzt ab. An der Firmware des WLAN-Chips und am Router musst Du nichts ändern. Wer das 2,4-GHz-Band seines Routers deswegen auf Wi-Fi 4 gestellt hat, kann das zurückstellen.
+- Behoben: Sehr selten blieb auf dem Display ein kleines fremdes Bildstück stehen, zum Beispiel ein Stück der Digitaluhr oben in der Senderskala oder ein Balkenstück unter dem Spektrum. Es verschwand erst beim nächsten Wechsel der Ansicht. Die Ursache ist sehr wahrscheinlich ein bekannter Fehler im Grafikbeschleuniger des ESP32-P4, den der Treiber bei gedrehten Bildflächen nicht immer umgeht. Das Tab5 übergibt dem Beschleuniger jetzt nur noch Flächen, die dieser Fehler nicht trifft, den schmalen Rest überträgt der Prozessor selbst.
+
 ## v26.11.14 vom 14.11.2026
 
 Die vierte Vorabversion, [v26.11.14 auf GitHub](https://github.com/DIYLAB-DE/RetroRadioTab5/releases/tag/v26.11.14).

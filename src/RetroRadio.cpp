@@ -24,6 +24,7 @@ static constexpr float MaxStepSeconds = .04f;            ///< Längster Zeitschr
 static constexpr int EyeRowsPerStep = 7;                  ///< Spritezeilen je Zeichenschritt des Auges, 15 Schritte je Bild. Während der Nadelfahrt passen so mehrere Schritte in die Restzeit eines Displaybildes
 static constexpr uint32_t FrameReserveUs = 6000;         ///< Reserve je Displaybild für die übrige Hauptschleife (Touch, Sensoren, Dienste, rund 4 ms) und den nächsten Nadelschritt
 static constexpr uint32_t StereoStableMs = 500;          ///< Mindestdauer eines gleichen Mono-/Stereo-Ergebnisses vor dem Wechsel des Symbols
+static constexpr uint32_t HomeHoldMs = 800;              ///< Haltezeit des Hauses, ab der statt des Hauptmenüs der Sleep-Timer öffnet
 // Selektive Originalzeichenpfade: RetroRadio ea4229a34fb39faaff23619092cf09cafb8c51cf. Skala, Infozeile und Auge nativ nach RadioTab5Layout.
 
 void RetroRadio::drawScale()
@@ -1286,6 +1287,17 @@ void RetroRadio::update(uint32_t now, AudioManager &audio)
         return;
     if (m_tuning && m_motion.leaveUs)
         m_motion.maxOutsideUs = std::max(m_motion.maxOutsideUs, static_cast<uint32_t>(micros() - m_motion.leaveUs));
+    // Gehalten öffnet das Haus den Sleep-Timer noch bei aufliegendem Finger. Die Prüfung hängt nicht an Touchereignissen, weil ein Kontakt aus der USB-Fernsteuerung zwischen Druck und Loslassen keine meldet. Vorzeichenbehaftet, weil ein solcher Kontakt einen späteren Zeitstempel als diese Schleife tragen kann.
+    if (m_touchActive && m_pressed == 4 && static_cast<int32_t>(now - m_pressTime) >= static_cast<int32_t>(HomeHoldMs))
+    {
+        m_touchActive = false;
+        m_pressed = -1;
+        m_homeHeld = true;
+        // Regler und Visualizer erfahren das Ende des Kontakts hier, sein Loslassen erreicht sie nicht mehr.
+        m_trackTouch.reset();
+        m_visualizer->cancelTouch();
+        openDialog(4, now);
+    }
     const bool wasModal = modal();
     m_sleep.update();
     m_presets.update();
@@ -1557,10 +1569,17 @@ RetroRadio::Input RetroRadio::touch(TouchPhase phase, int x, int y, uint32_t now
         m_scene.setTouch(-1, -1, false);
         m_message.cancelTouch();
         m_touchActive = false;
+        m_homeHeld = false;
         m_pressed = -1;
         m_trackTouch.reset();
         m_visualizer->cancelTouch();
         m_toolbarDirty = true;
+        return {};
+    }
+    if (m_homeHeld)
+    {
+        if (phase == TouchPhase::Release)
+            m_homeHeld = false;
         return {};
     }
     if (modal())
@@ -1700,6 +1719,12 @@ RetroRadio::Input RetroRadio::touch(TouchPhase phase, int x, int y, uint32_t now
                         return selectStation(index, now);
                 }
             }
+            else if (target == 4 && static_cast<int32_t>(now - m_pressTime) < static_cast<int32_t>(HomeHoldMs))
+            {
+                // Ein kurzer Tipp auf das Haus beendet die Wiedergabe und führt ohne Dialog ins Hauptmenü.
+                cancelPendingStart();
+                return command(Action::Home);
+            }
             else
                 openDialog(target, now);
         }
@@ -1780,6 +1805,7 @@ void RetroRadio::hide()
     m_pending = {};
     m_retryAt = m_retryDelay = 0;
     m_touchActive = false;
+    m_homeHeld = false;
     m_pressed = -1;
     m_trackTouch.reset();
     m_scene.setTouch(-1, -1, false);

@@ -6,7 +6,7 @@ Nach der [Erstinstallation](RetroRadioTab5-Ersteinrichtung.md) zeigt das Hauptme
 
 [![Hauptmenü](bilder/bedienung/hauptmenue-klein.png)](bilder/bedienung/hauptmenue.png)
 
-Das Haus unten rechts führt aus jeder Anwendung zurück ins Hauptmenü. Bei Radio und SD-Player öffnet es zuerst den Sleep-Timer: Tippe dort erneut auf das Haus, um die Wiedergabe sofort zu beenden und ins Hauptmenü zu wechseln.
+Das Haus unten rechts führt aus jeder Anwendung zurück ins Hauptmenü. In Radio und SD-Player beendet ein kurzer Tipp dabei sofort die Wiedergabe. Hältst Du das Haus dort mindestens 0,8 Sekunden gedrückt, öffnet sich stattdessen der Sleep-Timer.
 
 Ein kurzer Tipp wählt eine Taste oder ein Feld. Listen lassen sich mit dem Finger verschieben. Ein längerer Druck oder Wischen hat nur an den jeweils beschriebenen Stellen eine Zusatzfunktion. Eingabedialoge besitzen eigene Bestätigungs- und Abbruchmöglichkeiten.
 

@@ -138,9 +138,6 @@ void UiButton::setLabelText(const char *label)
     stringutils::safeCopy(m_label, label);
 }
 
-/**
- * @brief Gibt den UiButton-Text zurück
- */
 char *UiButton::getLabelText()
 {
     return m_label;

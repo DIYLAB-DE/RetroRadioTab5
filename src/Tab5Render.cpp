@@ -1,5 +1,6 @@
 #include "Tab5Render.h"
 #include "Tab5PixelTransfer.h"
+#include "Tab5PpaGuard.h"
 #include "Logger.h"
 #include <lgfx/v1/platforms/esp32p4/Panel_DSI.hpp>
 #include <lgfx/v1/platforms/esp32p4/Bus_DSI.hpp>
@@ -32,6 +33,7 @@ namespace
     bool s_pending = false;                 ///< Der Auftrag s_jobs wartet nach der Zeitgrenze noch auf seine Meldung, bis dahin überträgt die CPU
     uint32_t s_timeouts = 0;                ///< Zeitgrenzen seit dem Start, nur UI-Task
     uint32_t s_late = 0;                    ///< Verspätete Meldungen seit dem Start, nur UI-Task
+    uint32_t s_guarded = 0;                 ///< Flächen, von denen wegen Tab5PpaGuard::unprotected nur ein Teil oder nichts an die PPA ging, nur UI-Task
     StaticSemaphore_t s_frameStorage;       ///< Speicher des Bild-Semaphors im internen RAM
     SemaphoreHandle_t s_frame = nullptr;    ///< Gibt onRefreshDone im Interrupt, nimmt waitFrame
     std::atomic<uint32_t> s_frames{0};      ///< Bildfertigmeldungen seit dem Start, schreibt onRefreshDone
@@ -226,14 +228,35 @@ void Tab5Render::pushRegion(lgfx::LGFX_Device &display, const uint16_t *source, 
         bool transferred = false;
         const int w = right - left, h = bottom - top;
         checkPending();
-        if (s_mode == 2 && s_ppa && !s_pending && w * h >= 1024)
+        // Überträgt einen Teil der begrenzten Fläche über die CPU, Koordinaten im Querformat.
+        const auto cpu = [&](int partLeft, int partTop, int partWidth, int partHeight)
+        {
+            const uint16_t *part = source + (partTop - y) * stride + partLeft - x;
+            if (rotation == 3)
+                Tab5PixelTransfer::rotate3(s_framebuffer, 720, 1280, part, stride, partLeft, partTop, partWidth, partHeight);
+            else
+                Tab5PixelTransfer::rotate1(s_framebuffer, 720, 1280, part, stride, partLeft, partTop, partWidth, partHeight);
+        };
+        bool usePpa = s_mode == 2 && s_ppa && !s_pending && w * h >= 1024;
+        // pw x ph ist der Teil ab der linken oberen Ecke, der an die PPA geht.
+        int pw = w, ph = h;
+        // Der Treiber sichert diese Maße bei der Drehung nicht gegen den Chipfehler DIG-734 ab, die 2D-DMA kann ihren Restblock falsch zählen. Die PPA bekommt nur den Teil ohne solchen Restblock, den Rand rechts und unten überträgt die CPU.
+        if (usePpa && Tab5PpaGuard::unprotected(w, h))
+        {
+            const auto part = Tab5PpaGuard::safePart(w, h);
+            pw = static_cast<int>(part.width);
+            ph = static_cast<int>(part.height);
+            usePpa = pw * ph >= 1024;
+            ++s_guarded;
+        }
+        if (usePpa)
         {
             ppa_srm_oper_config_t op{};
             op.in.buffer = source;
             op.in.pic_w = stride;
             op.in.pic_h = height;
-            op.in.block_w = w;
-            op.in.block_h = h;
+            op.in.block_w = pw;
+            op.in.block_h = ph;
             op.in.block_offset_x = left - x;
             op.in.block_offset_y = top - y;
             op.in.srm_cm = PPA_SRM_COLOR_MODE_RGB565;
@@ -244,11 +267,11 @@ void Tab5Render::pushRegion(lgfx::LGFX_Device &display, const uint16_t *source, 
             if (rotation == 3)
             {
                 op.out.block_offset_x = top;
-                op.out.block_offset_y = 1280 - right;
+                op.out.block_offset_y = 1280 - left - pw;
             }
             else
             {
-                op.out.block_offset_x = 720 - bottom;
+                op.out.block_offset_x = 720 - top - ph;
                 op.out.block_offset_y = left;
             }
             op.out.srm_cm = PPA_SRM_COLOR_MODE_RGB565;
@@ -259,11 +282,11 @@ void Tab5Render::pushRegion(lgfx::LGFX_Device &display, const uint16_t *source, 
             op.mode = PPA_TRANS_MODE_NON_BLOCKING;
             const uint32_t job = s_jobs + 1;
             op.user_data = reinterpret_cast<void *>(static_cast<uintptr_t>(job));
-            // Nur der UI-Task schreibt ins Display. Vor DMA die CPU-Änderungen der gelesenen Quellzeilen und der beschriebenen Panelzeilen sichern, danach die CPU-Kopie der Panelzeilen verwerfen. Der Block belegt im Panel die Zeilen [firstRow, firstRow + w) zu je 1440 Byte zusammenhängend. Der Abgleich des ganzen Framebuffers kostete je Übertragung rund 2 ms.
-            const int firstRow = rotation == 3 ? 1280 - right : left;
+            // Nur der UI-Task schreibt ins Display. Vor DMA die CPU-Änderungen der gelesenen Quellzeilen und der beschriebenen Panelzeilen sichern, danach die CPU-Kopie der Panelzeilen verwerfen. Der Block belegt im Panel die Zeilen [firstRow, firstRow + pw) zu je 1440 Byte zusammenhängend. Der Abgleich des ganzen Framebuffers kostete je Übertragung rund 2 ms.
+            const int firstRow = rotation == 3 ? 1280 - left - pw : left;
             auto *target = reinterpret_cast<uint8_t *>(s_framebuffer) + static_cast<size_t>(firstRow) * 720 * 2;
-            const size_t targetBytes = static_cast<size_t>(w) * 720 * 2;
-            syncCache(source + static_cast<ptrdiff_t>(top - y) * stride, static_cast<size_t>(h) * stride * 2, ESP_CACHE_MSYNC_FLAG_DIR_C2M);
+            const size_t targetBytes = static_cast<size_t>(pw) * 720 * 2;
+            syncCache(source + static_cast<ptrdiff_t>(top - y) * stride, static_cast<size_t>(ph) * stride * 2, ESP_CACHE_MSYNC_FLAG_DIR_C2M);
             syncCache(target, targetBytes, ESP_CACHE_MSYNC_FLAG_DIR_C2M);
             // Eine übrig gebliebene Meldung eines früheren Auftrags darf dieses Warten nicht beenden.
             xSemaphoreTake(s_done, 0);
@@ -280,7 +303,7 @@ void Tab5Render::pushRegion(lgfx::LGFX_Device &display, const uint16_t *source, 
                 // Die Transaktion kann noch laufen und später in diesen Bereich des Framebuffers schreiben. Bis ihre Meldung kommt, überträgt die CPU und die PPA bekommt keinen weiteren Auftrag.
                 s_pending = true;
                 ++s_timeouts;
-                LOG_PLAIN_F("PPA_ZEITGRENZE Auftrag=%lu Region=%d,%d,%dx%d Rotation=%u Zeitgrenze=%lu", static_cast<unsigned long>(job), left, top, w, h, static_cast<unsigned>(rotation), static_cast<unsigned long>(s_timeouts));
+                LOG_PLAIN_F("PPA_ZEITGRENZE Auftrag=%lu Region=%d,%d,%dx%d Rotation=%u Zeitgrenze=%lu", static_cast<unsigned long>(job), left, top, pw, ph, static_cast<unsigned>(rotation), static_cast<unsigned long>(s_timeouts));
             }
             else
             {
@@ -289,11 +312,14 @@ void Tab5Render::pushRegion(lgfx::LGFX_Device &display, const uint16_t *source, 
             }
         }
         if (!transferred)
+            cpu(left, top, w, h);
+        else
         {
-            if (rotation == 3)
-                Tab5PixelTransfer::rotate3(s_framebuffer, 720, 1280, source + (top - y) * stride + left - x, stride, left, top, w, h);
-            else
-                Tab5PixelTransfer::rotate1(s_framebuffer, 720, 1280, source + (top - y) * stride + left - x, stride, left, top, w, h);
+            // Erst nach der Fertigmeldung und dem Verwerfen der CPU-Kopie: Der untere Rand liegt in denselben Panelzeilen wie der Teil der PPA.
+            if (pw < w)
+                cpu(left + pw, top, w - pw, h);
+            if (ph < h)
+                cpu(left, top + ph, pw, h - ph);
         }
         // Die unveränderte Panelimplementierung schreibt die betroffenen Cachezeilen für DSI zurück.
         display.panel()->display(left, top, right - left, bottom - top);
@@ -322,7 +348,7 @@ void Tab5Render::pushSprite(lgfx::LGFX_Device *display, lgfx::LGFX_Sprite &sprit
 Tab5Render::PpaCounters Tab5Render::ppaCounters()
 {
     checkPending();
-    return {s_timeouts, s_late, s_mode == 2 && s_ppa, s_jobs};
+    return {s_timeouts, s_late, s_mode == 2 && s_ppa, s_jobs, s_guarded};
 }
 
 const char *Tab5Render::panelName(lgfx::LGFX_Device &display)

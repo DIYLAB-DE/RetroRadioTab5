@@ -34,7 +34,10 @@ public:
     Target update(bool touched, int x, int y, const int (&positions)[COUNT], uint32_t now);
 
     /** @brief Beendet die aktuelle Berührung ohne Ergebnis, etwa wenn ein Dialog sie übernimmt oder der Kontakt ohne Loslassen entzogen wird. Die nächste Meldung beginnt eine neue Berührung. */
-    void reset() { m_phase = Phase::Idle; }
+    void reset()
+    {
+        m_phase = Phase::Idle;
+    }
 
     /**
      * @brief Rechnet einen Reglerwert in die Knopfmitte um, wie die Zeichnung der Regler.

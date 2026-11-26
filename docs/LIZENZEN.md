@@ -10,9 +10,9 @@ Der RetroRadioTab5-Quellcode steht wie RetroRadio unter der **GNU GPL Version 3*
 | --- | --- | --- |
 | RetroRadioTab5 | DIYLAB-DE, GPL-3.0 | [GPLv3](../LICENSE) |
 | Übernommene Teile aus RetroRadio | Radio, SD-Player, Hauptmenü, Einstellungen, Visualisierungen, Weboberfläche, Schriften und Bilder aus DIYLAB-DE/RetroRadio, GPL-3.0 | [Lizenz des Quellprojekts](../referenz/RetroRadio-LICENSE) |
-| audio-lite | Veränderte Fassung von Wolle/schreibfaul1s ESP32-audioI2S 3.4.7, GPL-3.0 | [Herkunft und Änderungen](../lib/audio-lite/README.md), [Lizenz](../lib/audio-lite/LICENSE) |
+| audio-lite | Veränderte Fassung von Wolle/schreibfaul1s ESP32-audioI2S 3.4.7, GPL-3.0 | Wird von PlatformIO als [DIYLAB-DE/audio-lite](https://github.com/DIYLAB-DE/audio-lite/tree/v0.2.0) 0.2.0 geladen: [Herkunft](https://github.com/DIYLAB-DE/audio-lite/blob/v0.2.0/docs/PROVENANCE.md), [Änderungen](https://github.com/DIYLAB-DE/audio-lite/blob/v0.2.0/docs/UPSTREAM.md), [Lizenzen](https://github.com/DIYLAB-DE/audio-lite/blob/v0.2.0/docs/LICENSES.md) |
 | MP3-Decoder in audio-lite | Auf Helix von RealNetworks basierend, siehe [Helix-Herkunft](#helix-herkunft) | [Helix-Hinweis](lizenzen/Helix-LICENSE.txt), [RPSL](lizenzen/Helix-RPSL.txt), [RCSL](lizenzen/Helix-RCSL.txt) |
-| AAC-Decoder in audio-lite | libfaad2, M. Bakker/Nero AG, GPL-2.0-or-later laut Dateiköpfen | [GPLv2](lizenzen/GPL-2.txt), Urhebervermerke unter `lib/audio-lite/src/aac_decoder/` |
+| AAC-Decoder in audio-lite | libfaad2, M. Bakker/Nero AG, GPL-2.0-or-later laut Dateiköpfen | [GPLv2](lizenzen/GPL-2.txt), Urhebervermerke unter `src/aac_decoder/` der Bibliothek |
 | Vorbis-Decoder in audio-lite | Xiph.Org Foundation, Dateikopf nennt Copyright 1994-2007 und BSD-Bedingungen | [Xiph-Lizenztext](lizenzen/Xiph-Vorbis-COPYING.txt), ursprüngliche Vermerke im Decoder |
 | KISS FFT | Mark Borgerding, Copyright 2003-2010, BSD-3-Clause | [COPYING](../lib/kissfft/COPYING), [BSD-Bedingungen](../lib/kissfft/LICENSES/BSD-3-Clause) |
 | Button-Klasse `UiButton` | Erweiterte Fassung von LGFX_Button aus LovyanGFX, über RetroRadio übernommen, Herkunftsvermerke in den Dateiköpfen | [Lizenzbeilage](../referenz/RetroRadio-Button-LICENSE.txt) |
@@ -28,7 +28,7 @@ Die Firmware des Bluetooth-Senders unter `bt-sender/` gehört zum Projekt und st
 
 ### Helix-Herkunft
 
-audio-lite übernimmt den MP3-Decoder aus [ESP32-audioI2S 3.4.7, Commit 59bf36b](https://github.com/schreibfaul1/ESP32-audioI2S/tree/59bf36b214580ad2d1157748cd0268c9376d6640). Der [Dateikopf dieses Stands](https://github.com/schreibfaul1/ESP32-audioI2S/blob/59bf36b214580ad2d1157748cd0268c9376d6640/src/mp3_decoder/mp3_decoder.h) nennt Helix als Grundlage. Die Änderungen sind unter [audio-lite](../lib/audio-lite/README.md) beschrieben.
+audio-lite übernimmt den MP3-Decoder aus [ESP32-audioI2S 3.4.7, Commit 59bf36b](https://github.com/schreibfaul1/ESP32-audioI2S/tree/59bf36b214580ad2d1157748cd0268c9376d6640). Der [Dateikopf dieses Stands](https://github.com/schreibfaul1/ESP32-audioI2S/blob/59bf36b214580ad2d1157748cd0268c9376d6640/src/mp3_decoder/mp3_decoder.h) nennt Helix als Grundlage. Die Änderungen sind unter [audio-lite](https://github.com/DIYLAB-DE/audio-lite/blob/v0.2.0/docs/UPSTREAM.md) beschrieben.
 
 Die öffentlich belegbaren Stationen der Herkunft sind:
 
@@ -36,7 +36,7 @@ Die öffentlich belegbaren Stationen der Herkunft sind:
 | --- | --- |
 | 15. Januar 2019 | Der [Import 2d96710](https://github.com/schreibfaul1/ESP32-audioI2S/commit/2d96710ebfd1e80899bee8aaae1edb6e9d45b98e) enthält den MP3-Decoder, die [damalige README](https://github.com/schreibfaul1/ESP32-audioI2S/blob/2d96710ebfd1e80899bee8aaae1edb6e9d45b98e/README.md) nennt den enthaltenen Helix-MP3-Decoder. |
 | 5. September 2019 | Wolle/schreibfaul1 fügt mit [Commit 2e43c40 die GPLv3](https://github.com/schreibfaul1/ESP32-audioI2S/blob/2e43c4089fd571d776e95d2a9f625eb4d7a80e16/LICENSE) hinzu und bestätigt die ergänzte Lizenz in [Issue 5](https://github.com/schreibfaul1/ESP32-audioI2S/issues/5#issuecomment-528328654). |
-| Übernahme für RetroRadio | Grundlage ist ESP32-audioI2S 3.4.7. Herkunft, Änderungen und die GPLv3 des Herkunftsprojekts bleiben in audio-lite dokumentiert. RetroRadioTab5 übernimmt audio-lite aus RetroRadio. |
+| Übernahme für RetroRadio | Grundlage ist ESP32-audioI2S 3.4.7. Herkunft, Änderungen und die GPLv3 des Herkunftsprojekts bleiben in audio-lite dokumentiert. RetroRadioTab5 bezieht audio-lite als gemeinsame Bibliothek [DIYLAB-DE/audio-lite](https://github.com/DIYLAB-DE/audio-lite) in fester Version. |
 
 Die separat beigelegten ursprünglichen Helix-Hinweise stammen aus der erhaltenen Fassung unter [ESP8266Audio/libhelix-mp3](https://github.com/earlephilhower/ESP8266Audio/tree/master/src/libhelix-mp3) und nennen Copyright 1995-2004 RealNetworks sowie RPSL/RCSL. Damit sind die Herkunft aus ESP32-audioI2S und dessen GPLv3-Angabe nachvollziehbar belegt. Die genaue Zuordnung der ursprünglichen Helix-Lizenzbedingungen zum übernommenen Decoder und eine zusätzliche GPL-Lizenzoption für dessen RealNetworks-Anteile sind damit noch nicht abschließend geklärt.
 

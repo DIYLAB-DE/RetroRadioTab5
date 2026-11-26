@@ -21,14 +21,18 @@ namespace
 int AudioSliderTouch::position(int index, int value)
 {
     if (index == 0)
-        return mapRange(value < -16 ? -16 : value > 16 ? 16 : value, -16, 16, T::PIXEL_MIN, T::PIXEL_MAX);
-    const int db = value < -12 ? -12 : value > 12 ? 12 : value;
+        return mapRange(value < -16 ? -16 : value > 16 ? 16
+                                                       : value,
+                        -16, 16, T::PIXEL_MIN, T::PIXEL_MAX);
+    const int db = value < -12 ? -12 : value > 12 ? 12
+                                                  : value;
     return db <= 0 ? mapRange(db, -12, 0, T::PIXEL_MIN, T::PIXEL_ZERO) : mapRange(db, 0, 12, T::PIXEL_ZERO, T::PIXEL_MAX);
 }
 
 int AudioSliderTouch::value(int index, int y)
 {
-    const int pixel = y < T::PIXEL_MAX ? T::PIXEL_MAX : y > T::PIXEL_MIN ? T::PIXEL_MIN : y;
+    const int pixel = y < T::PIXEL_MAX ? T::PIXEL_MAX : y > T::PIXEL_MIN ? T::PIXEL_MIN
+                                                                         : y;
     if (index == 0)
         return mapRange(pixel, T::PIXEL_MIN, T::PIXEL_MAX, -16, 16);
     return pixel > T::PIXEL_ZERO ? mapRange(pixel, T::PIXEL_MIN, T::PIXEL_ZERO, -12, 0) : mapRange(pixel, T::PIXEL_ZERO, T::PIXEL_MAX, 0, 12);
